@@ -4,7 +4,5 @@
 
 #include "includes/gene.h"
 
-gene::gene(double w)
-{
-    weight = w;
-}
+gene::gene(double w) : weight(w) {}
+

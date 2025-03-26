@@ -1,10 +1,4 @@
 #
-#   Set variables for lib linking
-#
-
-set(GENETIC_LIB_NAME ${LIB_NAME}_genetic)
-
-#
 #   Add subdirs
 #
 

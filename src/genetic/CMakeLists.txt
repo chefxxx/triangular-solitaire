@@ -1,5 +1,5 @@
 #
-#   Find source files
+#   Load source files
 #
 
 file(GLOB LIB_SOURCES

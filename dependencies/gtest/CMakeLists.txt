@@ -1,14 +1,15 @@
-# -------------------------------
-# Fetch GTEST from github...
-# -------------------------------
+#
+#   Fetch GTEST from github...
+#
 
 include(FetchContent)
 
 FetchContent_Declare(
-        libGTEST
+        googletest
         GIT_REPOSITORY https://github.com/google/googletest
         GIT_TAG main
         GIT_PROGRESS   TRUE
 )
 
-FetchContent_MakeAvailable(libGTEST)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)

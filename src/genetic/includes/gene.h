@@ -5,14 +5,11 @@
 #ifndef TRIANGULARSOLITAIRE_GENE_H
 #define TRIANGULARSOLITAIRE_GENE_H
 
-#include <functional>
-
 class gene
 {
+    double weight;
 public:
     gene(double w);
-private:
-    double weight;
 };
 
 
