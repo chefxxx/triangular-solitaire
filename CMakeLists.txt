@@ -1,6 +1,31 @@
-cmake_minimum_required(VERSION 3.26)
-project(TriangularSolitaire)
+#
+#   Project setup
+#
 
-set(CMAKE_CXX_STANDARD 20)
+set(EXEC_NAME "TriangularSolitaire")
+set(LIB_NAME ${EXEC_NAME}_lib)
+set(TEST_NAME UnitTestsTarget)
+
+cmake_minimum_required(VERSION 3.26)
+project(${EXEC_NAME} CXX)
+
+set(PROJECT_NAME ${EXEC_NAME})
+set(PROJECT_VERSION "1.0")
+
+set(CMAKE_CXX_STANDARD_REQUIRED 20)
+
+#
+#   Load project
+#
 
 add_subdirectory(src)
+add_subdirectory(dependencies)
+
+#
+#   Add test target
+#
+
+add_subdirectory(tests)
+
+
+

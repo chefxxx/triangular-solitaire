@@ -1,2 +1,25 @@
+#
+#   Set variables for lib linking
+#
+
+set(GENETIC_LIB_NAME ${LIB_NAME}_genetic)
+
+#
+#   Add subdirs
+#
+
 add_subdirectory(genetic)
-add_subdirectory(gui-game)
+
+#
+#   Define executables
+#
+
+add_executable(${EXEC_NAME}_genetic
+        genetic_main.cpp
+)
+
+#
+#   Link lib to executable
+#
+
+target_link_libraries(${EXEC_NAME}_genetic PRIVATE ${GENETIC_LIB_NAME})
