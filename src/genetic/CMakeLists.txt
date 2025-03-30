@@ -21,3 +21,9 @@ add_library(${GENETIC_LIB_NAME} STATIC
 target_include_directories(${GENETIC_LIB_NAME} PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/includes"
 )
+
+#
+#   Link "game" lib
+#
+
+target_link_libraries(${GENETIC_LIB_NAME} PRIVATE ${GAME_LIB_NAME})

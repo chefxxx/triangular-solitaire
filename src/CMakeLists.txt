@@ -3,6 +3,7 @@
 #
 
 add_subdirectory(genetic)
+add_subdirectory(game)
 
 #
 #   Define executables

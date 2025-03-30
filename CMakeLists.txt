@@ -22,6 +22,7 @@ set(CMAKE_CXX_FLAGS
 #
 
 set(GENETIC_LIB_NAME ${LIB_NAME}_genetic)
+set(GAME_LIB_NAME ${LIB_NAME}_game)
 
 #
 #   Load project
