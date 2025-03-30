@@ -13,6 +13,9 @@ set(PROJECT_NAME ${EXEC_NAME})
 set(PROJECT_VERSION "1.0")
 
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
+set(CMAKE_CXX_FLAGS
+        -std=c++20
+)
 
 #
 #   Set variables for lib linking
