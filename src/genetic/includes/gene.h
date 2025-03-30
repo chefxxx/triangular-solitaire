@@ -9,7 +9,7 @@ class gene
 {
     double weight;
 public:
-    gene(double w);
+    explicit gene(double w);
 };
 
 
