@@ -6,17 +6,19 @@
 #define TRIANGULARSOLITAIRE_BOARD_H
 
 #define MAX_SIZE 64
-#define BYTE_SIZE 8
+#define BOARD_LENGTH 8
 
 #include <cstdlib>
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <bitset>
 
 class board
 {
 private:
     uint64_t default_state;
     int board_size;
-
     uint64_t generate_board() const;
 public:
     explicit board(int size = 5);

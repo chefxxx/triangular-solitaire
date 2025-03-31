@@ -7,6 +7,15 @@
 
 TEST(BoardTest, generateDefaultBoard)
 {
-    board B{5};
-    std::cout << "default_state = " << std::bitset<64>(B.get_default_state()) << "\n";
+    std::vector<board> boards{
+            board(5),
+            board(6),
+            board(7),
+            board(8)
+    };
+
+    for (int i = 0; i < boards.size(); ++i)
+    {
+        std::cout << "board " << i << " default_state = " << std::bitset<64>(boards[i].get_default_state()) << "\n";
+    }
 }
