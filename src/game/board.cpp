@@ -14,11 +14,14 @@ board::board(int size)
 uint64_t board::generate_board() const
 {
     uint64_t state = 0;
-    uint64_t tmp = 128;
+    uint64_t mask = 128;
+    uint64_t tmp = mask;
     int level = BOARD_LENGTH - 2;
-    for (; level >= BOARD_LENGTH - this->board_size ; --level)
+    for (;level >= BOARD_LENGTH - this->board_size ; --level)
     {
         state = state | tmp << (level * BOARD_LENGTH);
+        mask /= 2;
+        tmp += mask;
     }
     return state;
 }

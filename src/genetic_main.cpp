@@ -6,7 +6,7 @@
 
 int main()
 {
-    board B{5};
+    board B{7};
     B.print_board(B.get_default_state());
     return 0;
 }
