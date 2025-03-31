@@ -19,3 +19,18 @@ TEST(BoardTest, generateDefaultBoard)
         std::cout << "board " << i << " default_state = " << std::bitset<64>(boards[i].get_default_state()) << "\n";
     }
 }
+
+TEST(BoarTest, printBoards)
+{
+    std::vector<board> boards{
+            board(5),
+            board(6),
+            board(7),
+            board(8)
+    };
+
+    for (auto board : boards)
+    {
+        board.print_board(board.get_default_state());
+    }
+}

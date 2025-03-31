@@ -14,8 +14,8 @@ board::board(int size)
 uint64_t board::generate_board() const
 {
     uint64_t state = 0;
-    uint64_t mask = 128;
-    uint64_t tmp = mask;
+    uint64_t mask = 64;
+    uint64_t tmp = 192;
     int level = BOARD_LENGTH - 2;
     for (;level >= BOARD_LENGTH - this->board_size ; --level)
     {
@@ -34,16 +34,25 @@ void board::print_board(uint64_t board_state) const
     std::stringstream buffer;
     buffer << std::bitset<64>(board_state);
     auto str = buffer.str();
+    int level = 0;
     for (int i = 0; i < MAX_SIZE; ++i)
     {
         if (i % BOARD_LENGTH == 0)
             std::cout << "| ";
         if (i < BOARD_LENGTH * this->board_size)
-            std::cout << str[i] << " ";
+        {
+            if (i % BOARD_LENGTH > level)
+                std::cout << "x ";
+            else
+                std::cout << str[i] << " ";
+        }
         else
             std::cout << "x ";
         if ((i + 1) % BOARD_LENGTH == 0)
+        {
+            level++;
             std::cout << "|\n";
+        }
     }
     std::cout << "*-----------------*\n";
 }
