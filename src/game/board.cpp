@@ -13,11 +13,12 @@ board::board(int size)
 
 uint64_t board::generate_board() const
 {
-    uint64_t state;
-    int level = 7;
+    uint64_t state = 0;
+    uint64_t tmp = 1;
+    int level = BYTE_SIZE;
     for (int i = 1; i < this->board_size; i++)
     {
-        state = state | 1 << (level * 8);
+        state = state | tmp << (level * 8);
         level--;
     }
     return state;
@@ -25,16 +26,23 @@ uint64_t board::generate_board() const
 
 void board::print_board(uint64_t board_state) const
 {
-    for (int i = 64; i > 0; --i)
+    for (int i = MAX_SIZE; i > 0; --i)
     {
-        uint64_t tmp = 1;
-        tmp = board_state & (tmp << i);
-        tmp = tmp >> i;
-        if (tmp == 1)
-            std::cout << "1 ";
+        if (i > 64 - this->board_size * BYTE_SIZE)
+        {
+            uint64_t tmp = 1;
+            tmp = board_state & (tmp << i);
+            tmp = tmp >> i;
+            if (tmp == 1)
+                std::cout << "1 ";
+            else
+                std::cout << "0 ";
+        }
         else
-            std::cout << "0 ";
-        if (i % 8 == 1)
+        {
+            std::cout << "x ";
+        }
+        if (i % BYTE_SIZE == 1)
             std::cout << "\n";
     }
 }

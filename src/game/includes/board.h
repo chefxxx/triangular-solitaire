@@ -5,6 +5,9 @@
 #ifndef TRIANGULARSOLITAIRE_BOARD_H
 #define TRIANGULARSOLITAIRE_BOARD_H
 
+#define MAX_SIZE 64
+#define BYTE_SIZE 8
+
 #include <cstdlib>
 #include <iostream>
 
