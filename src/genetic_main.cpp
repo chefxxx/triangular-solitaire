@@ -1,13 +1,12 @@
 //
 // Created by Mateusz Mikiciuk on 25/03/2025.
 //
-#include <iostream>
-#include <vector>
+
+#include "board.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
-    std::vector<int> v1{1,2,3,4};
-    auto v2 = 1;
+    board B{5};
+    B.print_board(B.get_default_state());
     return 0;
 }

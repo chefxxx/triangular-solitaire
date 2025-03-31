@@ -21,7 +21,7 @@ add_executable(${TEST_NAME}
 #
 
 target_link_libraries(
-        ${TEST_NAME} PRIVATE ${GENETIC_LIB_NAME} GTest::gtest_main
+        ${TEST_NAME} PRIVATE ${GENETIC_LIB_NAME} ${GAME_LIB_NAME} GTest::gtest_main
 )
 
 include(GoogleTest)
