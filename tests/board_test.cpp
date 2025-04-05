@@ -5,21 +5,6 @@
 #include <bitset>
 #include "board.h"
 
-TEST(BoardTest, generateDefaultBoard)
-{
-    std::vector<board> boards{
-            board(5),
-            board(6),
-            board(7),
-            board(8)
-    };
-
-    for (int i = 0; i < boards.size(); ++i)
-    {
-        std::cout << "board " << i << " default_state = " << std::bitset<64>(boards[i].get_default_state()) << "\n";
-    }
-}
-
 TEST(BoardTest, printBoards)
 {
     std::vector<board> boards{
@@ -29,23 +14,8 @@ TEST(BoardTest, printBoards)
             board(8)
     };
 
-    for (auto board : boards)
+    for (auto const& b: boards)
     {
-        board.print_board(board.get_default_state());
-    }
-}
-
-TEST(BoardTest, printAreaMask)
-{
-    std::vector<board> boards{
-            board(5),
-            board(6),
-            board(7),
-            board(8)
-    };
-
-    for (auto board : boards)
-    {
-        board.print_board(board.get_area_mask());
+        b.print_current_board();
     }
 }

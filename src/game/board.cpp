@@ -2,45 +2,42 @@
 // Created by Mateusz Mikiciuk on 30/03/2025.
 //
 
-#include <cstdlib>
 #include <iostream>
 #include <sstream>
 #include <bitset>
 #include "includes/board.h"
+#include "includes/bit_operations.h"
 
-
-#define MAX_SIZE 64
-#define BOARD_LENGTH 8
-
+constexpr int MAX_SIZE = 64;
+constexpr int BOARD_LENGTH = 8;
 
 board::board(int size)
-{
-    this->board_size = size;
-    this->default_state = generate_board();
-    this->board_area_mask = this->default_state | uint64_t(1) << 63;
-}
+    : board_size(size),
+    current_state(generate_board()),
+    board_area_mask(current_state | MaxMsb)
+{}
 
 uint64_t board::generate_board() const
 {
     uint64_t state = 0;
-    uint64_t mask = 64;
-    uint64_t tmp = 192;
+    uint64_t mask = MinMsb << 6;
+    uint64_t tmp = mask | MinMsb << 7;
     for (int level = BOARD_LENGTH - 2; level >= BOARD_LENGTH - this->board_size; --level)
     {
         state = state | tmp << (level * BOARD_LENGTH);
         mask >>= 1;
-        tmp += mask;
+        tmp |= mask;
     }
     return state;
 }
 
-void board::print_board(uint64_t board_state) const
+void board::print_current_board() const
 {
     std::cout << "*-----------------*\n";
     std::cout << "*--CURRENT BOARD--*\n";
     std::cout << "*-----------------*\n";
     std::stringstream buffer;
-    buffer << std::bitset<MAX_SIZE>(board_state);
+    buffer << std::bitset<MAX_SIZE>(this->current_state);
     auto str = buffer.str();
     int level = 0;
     for (int i = 0; i < MAX_SIZE; ++i)
@@ -63,12 +60,4 @@ void board::print_board(uint64_t board_state) const
         }
     }
     std::cout << "*-----------------*\n";
-}
-
-uint64_t board::get_default_state() const {
-    return default_state;
-}
-
-uint64_t board::get_area_mask() const {
-    return board_area_mask;
 }
