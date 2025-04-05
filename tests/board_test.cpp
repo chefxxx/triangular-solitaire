@@ -16,6 +16,6 @@ TEST(BoardTest, printBoards)
 
     for (auto const& b: boards)
     {
-        b.print_current_board();
+        print_current_board(b.current_state, b.board_size);
     }
 }

@@ -31,20 +31,26 @@ uint64_t board::generate_board() const
     return state;
 }
 
-void board::print_current_board() const
+void board::move_peg(PegPositions peg_start, PegPositions peg_dest)
+{
+    // not implemented
+
+}
+
+void print_current_board(uint64_t state, int b_size)
 {
     std::cout << "*---------------------*\n";
     std::cout << "*----CURRENT BOARD----*\n";
     std::cout << "*---a-b-c-d-e-f-g-h---*\n";
     std::stringstream buffer;
-    buffer << std::bitset<MAX_SIZE>(this->current_state);
+    buffer << std::bitset<MAX_SIZE>(state);
     auto str = buffer.str();
     int level = 0;
     for (int i = 0; i < MAX_SIZE; ++i)
     {
         if (i % BOARD_LENGTH == 0)
             std::cout << level + 1 << " | ";
-        if (i < BOARD_LENGTH * this->board_size)
+        if (i < BOARD_LENGTH * b_size)
         {
             if (i % BOARD_LENGTH > level)
                 std::cout << "  ";
