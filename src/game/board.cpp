@@ -33,9 +33,9 @@ uint64_t board::generate_board() const
 
 void board::print_current_board() const
 {
-    std::cout << "*-----------------*\n";
-    std::cout << "*--CURRENT BOARD--*\n";
-    std::cout << "*-----------------*\n";
+    std::cout << "*---------------------*\n";
+    std::cout << "*----CURRENT BOARD----*\n";
+    std::cout << "*---a-b-c-d-e-f-g-h---*\n";
     std::stringstream buffer;
     buffer << std::bitset<MAX_SIZE>(this->current_state);
     auto str = buffer.str();
@@ -43,21 +43,22 @@ void board::print_current_board() const
     for (int i = 0; i < MAX_SIZE; ++i)
     {
         if (i % BOARD_LENGTH == 0)
-            std::cout << "| ";
+            std::cout << level + 1 << " | ";
         if (i < BOARD_LENGTH * this->board_size)
         {
             if (i % BOARD_LENGTH > level)
-                std::cout << "x ";
+                std::cout << "  ";
             else
                 std::cout << str[i] << " ";
         }
         else
-            std::cout << "x ";
+            std::cout << "  ";
         if ((i + 1) % BOARD_LENGTH == 0)
         {
+            std::cout << "| " << level + 1 << "\n";
             level++;
-            std::cout << "|\n";
         }
     }
-    std::cout << "*-----------------*\n";
+    std::cout << "*---a-b-c-d-e-f-g-h---*\n";
+    std::cout << "*---------------------*\n";
 }

@@ -21,9 +21,10 @@ struct board
     uint64_t board_area_mask;
 
     // ------------------------------
-    // Functions
+    // Basic functions
     // ------------------------------
     void print_current_board() const;
+    //void move_peg()
 private:
     [[nodiscard("Generates starting board and returns it's bitmask.")]] uint64_t generate_board() const;
 };
