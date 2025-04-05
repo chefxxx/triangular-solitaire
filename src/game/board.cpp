@@ -17,6 +17,7 @@ board::board(int size)
 {
     this->board_size = size;
     this->default_state = generate_board();
+    this->board_area_mask = this->default_state | uint64_t(1) << 63;
 }
 
 uint64_t board::generate_board() const
@@ -66,4 +67,8 @@ void board::print_board(uint64_t board_state) const
 
 uint64_t board::get_default_state() const {
     return default_state;
+}
+
+uint64_t board::get_area_mask() const {
+    return board_area_mask;
 }

@@ -20,7 +20,7 @@ TEST(BoardTest, generateDefaultBoard)
     }
 }
 
-TEST(BoarTest, printBoards)
+TEST(BoardTest, printBoards)
 {
     std::vector<board> boards{
             board(5),
@@ -32,5 +32,20 @@ TEST(BoarTest, printBoards)
     for (auto board : boards)
     {
         board.print_board(board.get_default_state());
+    }
+}
+
+TEST(BoardTest, printAreaMask)
+{
+    std::vector<board> boards{
+            board(5),
+            board(6),
+            board(7),
+            board(8)
+    };
+
+    for (auto board : boards)
+    {
+        board.print_board(board.get_area_mask());
     }
 }
