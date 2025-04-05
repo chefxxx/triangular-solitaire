@@ -5,16 +5,27 @@
 #ifndef TRIANGULARSOLITAIRE_BOARD_H
 #define TRIANGULARSOLITAIRE_BOARD_H
 
-class board
+struct board
 {
-private:
+    // ------------------------------
+    // Class creation
+    // ------------------------------
+    explicit board(int size = 5);
+    ~board() = default;
+
+    // ------------------------------
+    // Fields
+    // ------------------------------
     int board_size;
     uint64_t current_state;
     uint64_t board_area_mask;
-    [[nodiscard("Generates starting board and returns it's bitmask.")]] uint64_t generate_board() const;
-public:
-    explicit board(int size = 5);
+
+    // ------------------------------
+    // Functions
+    // ------------------------------
     void print_current_board() const;
+private:
+    [[nodiscard("Generates starting board and returns it's bitmask.")]] uint64_t generate_board() const;
 };
 
 #endif //TRIANGULARSOLITAIRE_BOARD_H
