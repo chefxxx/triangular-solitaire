@@ -2,11 +2,9 @@
 // Created by Mateusz Mikiciuk on 25/03/2025.
 //
 
-#include "board.h"
+#include <iostream>
 
 int main()
 {
-    board B{7};
-    B.print_board(B.get_default_state());
-    return 0;
+    std::cout << "Hello genetic!\n";
 }

@@ -5,15 +5,6 @@
 #ifndef TRIANGULARSOLITAIRE_BOARD_H
 #define TRIANGULARSOLITAIRE_BOARD_H
 
-#define MAX_SIZE 64
-#define BOARD_LENGTH 8
-
-#include <cstdlib>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <bitset>
-
 class board
 {
 private:
