@@ -12,9 +12,9 @@ constexpr int MAX_SIZE = 64;
 constexpr int BOARD_LENGTH = 8;
 
 board::board(int size)
-    : board_size(size),
-    current_state(generate_board()),
-    board_area_mask(current_state | MaxMsb)
+    : board_size{size},
+    current_state{generate_board()},
+    board_area_mask{current_state | MaxMsb}
 {}
 
 uint64_t board::generate_board() const
