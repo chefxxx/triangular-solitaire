@@ -15,6 +15,12 @@ add_library(${GAME_LIB_NAME} STATIC
 )
 
 #
+#   Link
+#
+
+target_link_libraries(${GAME_LIB_NAME} PUBLIC libExpected)
+
+#
 #   Add include directories
 #
 

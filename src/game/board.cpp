@@ -11,17 +11,28 @@
 constexpr int MAX_SIZE = 64;
 constexpr int BOARD_LENGTH = 8;
 
-board::board(int size)
+board::board(const int size)
     : board_size{size},
     current_state{generate_board()},
-    board_area_mask{current_state | MaxMsb}
+    board_area_mask{current_state | max_msb}
 {}
+
+// std::expected<void, board_error> board::move_peg(const peg_position from, const peg_position to)
+// {
+//     if (!check_bit_at_index(board_area_mask, static_cast<int>(from)) || check_bit_at_index(board_area_mask, static_cast<int>(to)))
+//         return std::unexpected{board_error::out_of_bound};
+//     if (!check_bit_at_index(current_state, static_cast<int>(from)))
+//         return std::unexpected{board_error::peg_does_not_exist};
+//     if (check_bit_at_index(current_state, static_cast<int>(to)))
+//         return std::unexpected{board_error::position_is_occupied};
+//     return{};
+// }
 
 uint64_t board::generate_board() const
 {
     uint64_t state = 0;
-    uint64_t mask = MinMsb << 6;
-    uint64_t tmp = mask | MinMsb << 7;
+    uint64_t mask = min_msb << 6;
+    uint64_t tmp = mask | min_msb << 7;
     for (int level = BOARD_LENGTH - 2; level >= BOARD_LENGTH - this->board_size; --level)
     {
         state = state | tmp << (level * BOARD_LENGTH);
@@ -31,20 +42,14 @@ uint64_t board::generate_board() const
     return state;
 }
 
-void board::move_peg(PegPositions peg_start, PegPositions peg_dest)
-{
-    // not implemented
-
-}
-
-void print_current_board(uint64_t state, int b_size)
+void print_current_board(const uint64_t state, const int b_size)
 {
     std::cout << "*---------------------*\n";
     std::cout << "*----CURRENT BOARD----*\n";
     std::cout << "*---a-b-c-d-e-f-g-h---*\n";
     std::stringstream buffer;
     buffer << std::bitset<MAX_SIZE>(state);
-    auto str = buffer.str();
+    const auto str = buffer.str();
     int level = 0;
     for (int i = 0; i < MAX_SIZE; ++i)
     {
