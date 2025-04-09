@@ -17,16 +17,18 @@ board::board(const int size)
     board_area_mask{current_state | max_msb}
 {}
 
-// std::expected<void, board_error> board::move_peg(const peg_position from, const peg_position to)
-// {
-//     if (!check_bit_at_index(board_area_mask, static_cast<int>(from)) || check_bit_at_index(board_area_mask, static_cast<int>(to)))
-//         return std::unexpected{board_error::out_of_bound};
-//     if (!check_bit_at_index(current_state, static_cast<int>(from)))
-//         return std::unexpected{board_error::peg_does_not_exist};
-//     if (check_bit_at_index(current_state, static_cast<int>(to)))
-//         return std::unexpected{board_error::position_is_occupied};
-//     return{};
-// }
+tl::expected<void, board_error_info> board::move_peg(const peg_position& from, const peg_position& to) const
+{
+    if (!check_bit_at_index(board_area_mask, static_cast<int>(from)))
+        return tl::unexpected{board_error_info(board_error::out_of_bound, from)};
+    if (!check_bit_at_index(board_area_mask, static_cast<int>(to)))
+        return tl::unexpected{board_error_info(board_error::out_of_bound, to)};
+    if (!check_bit_at_index(current_state, static_cast<int>(from)))
+        return tl::unexpected{board_error_info(board_error::peg_does_not_exist, from)};
+    if (check_bit_at_index(current_state, static_cast<int>(to)))
+        return tl::unexpected{board_error_info(board_error::position_is_occupied, to)};
+    return{};
+}
 
 uint64_t board::generate_board() const
 {
