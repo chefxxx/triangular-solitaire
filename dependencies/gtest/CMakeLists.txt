@@ -1,7 +1,7 @@
 #
 #   Fetch GTEST from github...
 #
-
+message(STATUS "Adding gtest...")
 include(FetchContent)
 
 FetchContent_Declare(

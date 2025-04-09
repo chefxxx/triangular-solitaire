@@ -6,6 +6,8 @@
 #define BOARD_ERROR_H
 
 #include <ostream>
+#include <sstream>
+#include "peg_position.h"
 
 enum class board_error
 {
@@ -36,5 +38,28 @@ inline std::ostream& operator<<(std::ostream& os, const board_error& err)
     }
     return os;
 }
+
+struct board_error_info
+{
+    board_error error_code;
+    peg_position from;
+    peg_position to;
+
+    board_error_info(
+        const board_error &error_code,
+        const peg_position &from,
+        const peg_position &to) : error_code{error_code}, from {from}, to{to} {}
+
+    ~board_error_info() = default;
+
+    [[nodiscard]] std::string message() const
+    {
+        std::ostringstream os;
+        os << error_code;
+        os << " from peg: " << peg_to_idx(from);
+        os << " to peg: " << peg_to_idx(to);
+        return os.str();
+    }
+};
 
 #endif //BOARD_ERROR_H
