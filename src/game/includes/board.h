@@ -25,6 +25,7 @@ enum class peg_position : int
     #undef DECLARE_PEG_POS
 };
 
+
 struct board_error_info
 {
     board_error error_code;
@@ -46,20 +47,21 @@ struct board
     // ------------------------------
     // Class creation
     // ------------------------------
-    explicit board(int size = 5);
+    explicit board(int size);
     ~board() = default;
 
     // ------------------------------
     // Fields
     // ------------------------------
-    int board_size;
+    const int board_size;
+    const uint64_t board_area_mask;
     uint64_t current_state;
-    uint64_t board_area_mask;
 
     // ------------------------------
     // Basic functions
     // ------------------------------
     [[nodiscard]] tl::expected<void, board_error_info> move_peg(const peg_position& from, const peg_position& to) const;
+    [[nodiscard]] uint64_t find_all_valid_jumps(const peg_position& from) const;
 private:
     [[nodiscard]] uint64_t generate_board() const;
 };

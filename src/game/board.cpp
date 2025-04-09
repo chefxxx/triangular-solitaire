@@ -5,16 +5,17 @@
 #include <iostream>
 #include <sstream>
 #include <bitset>
+#include <algorithm>
 #include "includes/board.h"
 #include "includes/bit_operations.h"
 
 constexpr int MAX_SIZE = 64;
-constexpr int BOARD_LENGTH = 8;
+constexpr int BOARD_SIDE = 8;
 
 board::board(const int size)
     : board_size{size},
-    current_state{generate_board()},
-    board_area_mask{current_state | max_msb}
+    board_area_mask{generate_board()},
+    current_state{a_without_b(board_area_mask, max_msb >> (BOARD_SIDE - 1))}
 {}
 
 tl::expected<void, board_error_info> board::move_peg(const peg_position& from, const peg_position& to) const
@@ -32,46 +33,40 @@ tl::expected<void, board_error_info> board::move_peg(const peg_position& from, c
 
 uint64_t board::generate_board() const
 {
-    uint64_t state = 0;
-    uint64_t mask = min_msb << 6;
-    uint64_t tmp = mask | min_msb << 7;
-    for (int level = BOARD_LENGTH - 2; level >= BOARD_LENGTH - this->board_size; --level)
+    uint64_t mask = (min_msb << 56);
+    uint64_t state = mask;
+    uint64_t tmp = mask;
+    for (int i = 0; i < this->board_size - 1; ++i)
     {
-        state = state | tmp << (level * BOARD_LENGTH);
-        mask >>= 1;
-        tmp |= mask;
+        mask >>= 7;
+        tmp = (tmp >> BOARD_SIDE) | mask;
+        state = state | tmp;
     }
     return state;
 }
 
 void print_current_board(const uint64_t state, const int b_size)
 {
-    std::cout << "*---------------------*\n";
-    std::cout << "*----CURRENT BOARD----*\n";
-    std::cout << "*---a-b-c-d-e-f-g-h---*\n";
-    std::stringstream buffer;
-    buffer << std::bitset<MAX_SIZE>(state);
-    const auto str = buffer.str();
-    int level = 0;
-    for (int i = 0; i < MAX_SIZE; ++i)
+    std::cout << "*-------------------*\n";
+    std::cout << "*---CURRENT BOARD---*\n";
+    std::cout << "*--a-b-c-d-e-f-g-h--*\n";
+    const std::bitset<MAX_SIZE> bin_rep(state);
+    const auto bin_num = bin_rep.to_string();
+    std::vector<std::string> tmp;
+    tmp.reserve(BOARD_SIDE);
+    for (int i = 0; i < BOARD_SIDE; ++i)
     {
-        if (i % BOARD_LENGTH == 0)
-            std::cout << level + 1 << " | ";
-        if (i < BOARD_LENGTH * b_size)
-        {
-            if (i % BOARD_LENGTH > level)
-                std::cout << "  ";
-            else
-                std::cout << str[i] << " ";
-        }
-        else
-            std::cout << "  ";
-        if ((i + 1) % BOARD_LENGTH == 0)
-        {
-            std::cout << "| " << level + 1 << "\n";
-            level++;
-        }
+        tmp.push_back(bin_num.substr(i * BOARD_SIDE, BOARD_SIDE));
+        std::ranges::reverse(tmp[i]);
     }
-    std::cout << "*---a-b-c-d-e-f-g-h---*\n";
-    std::cout << "*---------------------*\n";
+    int level = 1;
+    for (auto const& str : tmp)
+    {
+        std::cout << level <<"| ";
+        for (const char& i : str)
+            std::cout << i << " ";
+        std::cout << "|" << level++ << "\n";
+    }
+    std::cout << "*--a-b-c-d-e-f-g-h--*\n";
+    std::cout << "*-------------------*\n";
 }
