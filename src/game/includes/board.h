@@ -8,6 +8,7 @@
 #include "tl/expected.hpp"
 #include "board_error.h"
 #include "peg_position.h"
+#include <cstdint>
 
 struct board
 {

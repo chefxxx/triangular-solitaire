@@ -45,28 +45,34 @@ tl::expected<void, board_error_info> board::move_peg(const peg_position &from, c
 
 // TODO: attack mask?
 // TODO: how to know what peg to erase!!!
+// ANS: I think it is possible to decide which peg to erase in checking which side was using in jump;
 // TODO: finding all possible attack moves??
 
 uint64_t board::find_all_valid_jumps(const peg_position &from) const
 {
     const uint64_t from_mask = min_msb << peg_to_idx(from); //TODO: it may be a good idea to store those masks
-    const uint64_t north_mask = shiftNorth(a_without_b(shiftNorth(from_mask), current_empty)) & board_area_mask;
-    const uint64_t south_mask = shiftSouth(a_without_b(shiftSouth(from_mask), current_empty)) & board_area_mask;
-    return north_mask | south_mask;
+    // TODO: Check and choose version
+    // Mateusz version:
+    // const uint64_t north_mask = a_without_b(shiftNorth(a_without_b(shiftNorth(from_mask), current_empty)),
+    //                                         current_state) & board_area_mask;
+    // const uint64_t south_mask = a_without_b(shiftSouth(a_without_b(shiftSouth(from_mask), current_empty)),
+    //                                         current_state) & board_area_mask;
+    // Mykhailo version:
+    const uint64_t north_mask = shiftNorth(shiftNorth(from_mask) & current_state) & current_empty & board_area_mask;
+    const uint64_t south_mask = shiftSouth(shiftSouth(from_mask) & current_state) & current_empty & board_area_mask;
+    const uint64_t east_mask = shiftEast(shiftEast(from_mask) & current_state & notAB_Files) & current_empty & board_area_mask;
+    const uint64_t west_mask = shiftWest(shiftWest(from_mask) & current_state & notGH_Files) & current_empty & board_area_mask;
+    return north_mask | south_mask | east_mask | west_mask;
 }
 
 uint64_t board::generate_board() const
 {
     uint64_t mask = min_msb << (MAX_SIZE - BOARD_SIDE);
-    uint64_t state = mask;
-    uint64_t tmp = mask;
-    for (int i = 0; i < this->board_size - 1; ++i)
+    for (int i = 0; i < board_size - 1; ++i)
     {
-        mask >>= 7;
-        tmp = (tmp >> BOARD_SIDE) | mask;
-        state = state | tmp;
+        mask = mask | mask >> 7 | mask >> BOARD_SIDE;
     }
-    return state;
+    return mask;
 }
 
 int board::init_pegs_left() const

@@ -26,5 +26,7 @@ inline constexpr uint64_t notGH_Files = 0xFCFCFCFCFCFCFCFC;
 
 constexpr uint64_t shiftNorth(const uint64_t &a) {return a << 8;}
 constexpr uint64_t shiftSouth(const uint64_t &a) {return a >> 8;}
+constexpr uint64_t shiftEast(const uint64_t &a) {return a >> 1;}
+constexpr uint64_t shiftWest(const uint64_t &a) {return a << 1;}
 
 #endif //TRIANGULARSOLITAIRE_BIT_OPERATIONS_H

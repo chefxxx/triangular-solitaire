@@ -63,3 +63,29 @@ TEST(BoardTest, MoveTest1)
     board board{5};
     auto result = board.move_peg(peg_position::a3, peg_position::a1);
 }
+
+
+// TODO: change in tests, something here is wrong!!!
+TEST(BoardTest, MoveTest2)
+{
+    board board{8};
+    board.current_state = 36205685112832000; // 0 0 0 0 0 0 0 0
+    //                                          1 0 0 0 0 0 0 0
+    //                                          1 0 1 0 0 0 0 0
+    //                                          1 2 1 0 0 0 0 0
+    //                                          1 1 1 1 1 0 0 0
+    board.current_empty = board.current_state ^ board.board_area_mask;
+    auto result = board.move_peg(peg_position::b4, peg_position::d4);
+}
+
+TEST(BoardTest, MoveTest3)
+{
+    board board{8};
+    board.current_state = 36205685112832000; // 0 0 0 0 0 0 0 0
+    //                                          1 0 0 0 0 0 0 0
+    //                                          1 0 1 0 0 0 0 0
+    //                                          2 1 1 0 0 0 0 0
+    //                                          1 1 1 1 1 0 0 0
+    board.current_empty = board.current_state ^ board.board_area_mask;
+    auto result = board.move_peg(peg_position::a4, peg_position::g4);
+}
