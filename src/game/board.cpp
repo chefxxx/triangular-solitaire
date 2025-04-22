@@ -27,11 +27,13 @@ tl::expected<void, board_error_info> board::move_peg(const peg_position &from, c
         return tl::unexpected{board_error_info(board_error::out_of_bound, from, to)};
     if (!check_bit_at_index(board_area_mask, peg_to_idx(to)))
         return tl::unexpected{board_error_info(board_error::out_of_bound, from, to)};
+    // I think that this not necessary
+#if 0
     if (!check_bit_at_index(current_state, peg_to_idx(from)))
         return tl::unexpected{board_error_info(board_error::peg_does_not_exist, from, to)};
     if (check_bit_at_index(current_state, peg_to_idx(to)))
         return tl::unexpected{board_error_info(board_error::position_is_occupied, from, to)};
-
+#endif
     // Find if given jump qualifies as a valid jump
     uint64_t mask = find_all_valid_jumps(from);
     if (!check_bit_at_index(mask, peg_to_idx(to)))
@@ -53,10 +55,12 @@ uint64_t board::find_all_valid_jumps(const peg_position &from) const
     const uint64_t from_mask = min_msb << peg_to_idx(from); //TODO: it may be a good idea to store those masks
     // TODO: Check and choose version
     // Mateusz version:
-    // const uint64_t north_mask = a_without_b(shiftNorth(a_without_b(shiftNorth(from_mask), current_empty)),
-    //                                         current_state) & board_area_mask;
-    // const uint64_t south_mask = a_without_b(shiftSouth(a_without_b(shiftSouth(from_mask), current_empty)),
-    //                                         current_state) & board_area_mask;
+#if 0
+     const uint64_t north_mask = a_without_b(shiftNorth(a_without_b(shiftNorth(from_mask), current_empty)),
+                                             current_state) & board_area_mask;
+     const uint64_t south_mask = a_without_b(shiftSouth(a_without_b(shiftSouth(from_mask), current_empty)),
+                                             current_state) & board_area_mask;
+#endif
     // Mykhailo version:
     const uint64_t north_mask = shiftNorth(shiftNorth(from_mask) & current_state) & current_empty & board_area_mask;
     const uint64_t south_mask = shiftSouth(shiftSouth(from_mask) & current_state) & current_empty & board_area_mask;
