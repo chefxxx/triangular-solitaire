@@ -27,10 +27,10 @@ tl::expected<void, board_error_info> board::move_peg(const peg_position &from, c
         return tl::unexpected{board_error_info(board_error::out_of_bound, from, to)};
     if (!check_bit_at_index(board_area_mask, peg_to_idx(to)))
         return tl::unexpected{board_error_info(board_error::out_of_bound, from, to)};
-    // I think that this not necessary
-#if 0
     if (!check_bit_at_index(current_state, peg_to_idx(from)))
         return tl::unexpected{board_error_info(board_error::peg_does_not_exist, from, to)};
+    // I think that this not necessary
+#if 0
     if (check_bit_at_index(current_state, peg_to_idx(to)))
         return tl::unexpected{board_error_info(board_error::position_is_occupied, from, to)};
 #endif
@@ -64,8 +64,8 @@ uint64_t board::find_all_valid_jumps(const peg_position &from) const
     // Mykhailo version:
     const uint64_t north_mask = shiftNorth(shiftNorth(from_mask) & current_state) & current_empty & board_area_mask;
     const uint64_t south_mask = shiftSouth(shiftSouth(from_mask) & current_state) & current_empty & board_area_mask;
-    const uint64_t east_mask = shiftEast(shiftEast(from_mask) & current_state & notAB_Files) & current_empty & board_area_mask;
-    const uint64_t west_mask = shiftWest(shiftWest(from_mask) & current_state & notGH_Files) & current_empty & board_area_mask;
+    const uint64_t east_mask = shiftEast(shiftEast(from_mask) & current_state) & current_empty & board_area_mask;
+    const uint64_t west_mask = shiftWest(shiftWest(from_mask) & current_state) & current_empty & board_area_mask;
     return north_mask | south_mask | east_mask | west_mask;
 }
 
