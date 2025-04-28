@@ -39,6 +39,6 @@ private:
 // ------------------------------
 // Helper functions
 // ------------------------------
-void print_current_board(const uint64_t &state);
+void print_current_board(const board &board);
 
 #endif //TRIANGULARSOLITAIRE_BOARD_H

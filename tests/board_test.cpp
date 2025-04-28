@@ -15,7 +15,7 @@ TEST(BoardTest, printCurrBoards)
 
     for (auto const& b: boards)
     {
-        print_current_board(b.current_state);
+        print_current_board(b);
     }
 }
 

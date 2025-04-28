@@ -34,7 +34,7 @@ int main() {
     const int moves = board.pegs_left;
     for (int i = 0; i < moves; i++)
     {
-        print_current_board(board.current_state);
+        print_current_board(board);
         std::cout << "Make a move\n";
         std::getline(std::cin, buffer);
         auto arr = split(buffer, ' ');
@@ -43,8 +43,6 @@ int main() {
         auto res = board.move_peg(from, to);
         if (!res.has_value())
             std::cout << res.error().message();
-        std::cout << "this is empty mask: \n";
-        print_current_board(board.current_empty);
         buffer.clear();
     }
     return 0;

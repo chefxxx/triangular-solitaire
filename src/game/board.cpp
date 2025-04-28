@@ -65,12 +65,11 @@ uint64_t board::generate_board() const
     return mask;
 }
 
-void print_current_board(const uint64_t &state)
+void print_current_board(const board &board)
 {
-    std::cout << "*-------------------*\n";
     std::cout << "*---CURRENT BOARD---*\n";
     std::cout << "*--a-b-c-d-e-f-g-h--*\n";
-    const std::bitset<MAX_SIZE> bin_rep(state);
+    const std::bitset<MAX_SIZE> bin_rep(board.current_state);
     const auto bin_num = bin_rep.to_string();
     std::vector<std::string> tmp;
     tmp.reserve(BOARD_SIDE);
@@ -80,8 +79,9 @@ void print_current_board(const uint64_t &state)
         std::ranges::reverse(tmp[i]);
     }
     int level = 1;
-    for (auto const &str : tmp)
+    for (int j = 0; j < board.board_size; ++j)
     {
+        const auto& str = tmp[j];
         std::cout << level <<"| ";
         for (int i = 0; i < BOARD_SIDE; ++i) {
             if (i < level)
