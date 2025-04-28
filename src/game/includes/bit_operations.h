@@ -18,7 +18,7 @@ inline constexpr uint64_t MaxMsb = MinMsb << 63;
 constexpr bool CheckBitAtIdx(const uint64_t a, const int idx) { return a & (MinMsb << idx); }
 
 /* function clears bits intersecting with b from a */
-constexpr uint64_t ClearIntersect(const uint64_t a, const uint64_t b) { return a ^ (a & b); }
+[[nodiscard]] constexpr uint64_t ClearIntersect(const uint64_t a, const uint64_t b) { return a ^ (a & b); }
 
 /* function counts bits set to one in a */
 constexpr int CountOnes (const uint64_t a) { return std::popcount(a); }

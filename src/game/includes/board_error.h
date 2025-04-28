@@ -57,7 +57,7 @@ struct board_error_info
         std::ostringstream os;
         os << error_code;
         os << " from peg: " << peg_to_idx(from);
-        os << " to peg: " << peg_to_idx(to);
+        os << " to peg: " << peg_to_idx(to) << "\n";
         return os.str();
     }
 };

@@ -7,6 +7,12 @@ file(GLOB GAME_SOURCES
 )
 
 #
+#   Remove game.cpp manually
+#
+
+list(REMOVE_ITEM GAME_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/game.cpp")
+
+#
 #   Define static library
 #
 
@@ -25,5 +31,24 @@ target_link_libraries(${GAME_LIB_NAME} PUBLIC libExpected)
 #
 
 target_include_directories(${GAME_LIB_NAME} PUBLIC
+        "${CMAKE_CURRENT_SOURCE_DIR}/includes"
+)
+
+#
+#   Now build the executable separately
+#
+
+add_executable(Game "${CMAKE_CURRENT_SOURCE_DIR}/game.cpp")
+
+#
+#   Link executable with the game library and libExpected
+#
+
+target_link_libraries(Game PUBLIC ${GAME_LIB_NAME})
+
+#
+#   Add include directories to executable
+#
+target_include_directories(Game PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/includes"
 )

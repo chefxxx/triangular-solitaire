@@ -39,8 +39,9 @@ tl::expected<void, board_error_info> board::move_peg(const peg_position &from, c
     if (!CheckBitAtIdx(current_state, erase_idx))
         return tl::unexpected{board_error_info(board_error::invalid_jump, from, to)};
 
-    const uint64_t erase = MinMsb << erase_idx;
-    ClearIntersect(current_state, erase);
+    const uint64_t erase = MinMsb << erase_idx | MinMsb << peg_to_idx(from);
+    current_state = ClearIntersect(current_state,erase);
+    current_state |= MinMsb << peg_to_idx(to);
 
     current_empty = ClearIntersect(board_area_mask, current_state);
     this->pegs_left--;
@@ -82,8 +83,12 @@ void print_current_board(const uint64_t &state)
     for (auto const &str : tmp)
     {
         std::cout << level <<"| ";
-        for (const char &i : str)
-            std::cout << i << " ";
+        for (int i = 0; i < BOARD_SIDE; ++i) {
+            if (i < level)
+                std::cout << str[i] << " ";
+            else
+                std::cout << "  ";
+        }
         std::cout << "|" << level++ << "\n";
     }
     std::cout << "*--a-b-c-d-e-f-g-h--*\n";
