@@ -21,6 +21,32 @@ col##5 = col_offset + 24, col##6 = col_offset + 16, col##7 = col_offset + 8, col
 #undef DECLARE_PEG_POS
 };
 
-constexpr int peg_to_idx(const peg_position &pos) { return static_cast<int>(pos); }
+/* Convention of jump_dir is similar to such as direction of vectors in linear algebra */
+enum class jump_dir : int
+{
+    INVALID    = 0,
+    NORTH      = 16,
+    SOUTH      = -16,
+    WEST       = 2,
+    EAST       = -2,
+    NORTH_WEST = 14,
+    SOUTH_EAST = -14,
+};
+
+constexpr int peg_to_idx(const peg_position pos) { return static_cast<int>(pos); }
+constexpr int dir_to_idx(const jump_dir dir) { return static_cast<int>(dir); }
+
+inline jump_dir calculate_jump_dir(const peg_position &from, const peg_position &to) {
+    switch (int delta = peg_to_idx(to) - peg_to_idx(from)) {
+        case 16:  return jump_dir::NORTH;
+        case -16: return jump_dir::SOUTH;
+        case 2:   return jump_dir::WEST;
+        case -2:  return jump_dir::EAST;
+        case 14:  return jump_dir::NORTH_WEST;
+        case -14: return jump_dir::SOUTH_EAST;
+        default:
+            return jump_dir::INVALID;
+    }
+}
 
 #endif //PEG_POSITION_H

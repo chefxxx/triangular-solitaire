@@ -31,10 +31,9 @@ struct board
     // Basic functions
     // ------------------------------
     [[nodiscard]] tl::expected<void, board_error_info> move_peg(const peg_position &from, const peg_position &to);
-    [[nodiscard]] uint64_t find_all_valid_jumps(const peg_position &from) const;
+    [[nodiscard]] tl::expected<void, board_error_info> move_peg(int from, int to);
 private:
     [[nodiscard]] uint64_t generate_board() const;
-    [[nodiscard]] int init_pegs_left() const;
 };
 
 // ------------------------------

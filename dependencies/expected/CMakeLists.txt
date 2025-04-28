@@ -1,7 +1,7 @@
 #
 #   Fetch "expected" from github...
 #
-message(STATUS "Adding expected")
+message(STATUS "Adding expected...")
 include(FetchContent)
 
 FetchContent_Declare(
