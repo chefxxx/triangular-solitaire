@@ -24,7 +24,7 @@ constexpr bool CheckBitAtIdx(const uint64_t a, const int idx) { return a & (MinM
 constexpr int CountOnes (const uint64_t a) { return std::popcount(a); }
 
 /* generalized bit shift */
-inline uint64_t GenShift(const u_int64_t mask, const int shift)
+inline uint64_t GenShift(const uint64_t mask, const int shift)
     { return (shift > 0) ? (mask << shift) : (mask >> -shift); }
 
 // ------------------------------
