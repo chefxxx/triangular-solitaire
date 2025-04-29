@@ -12,16 +12,14 @@ file(GLOB TEST_SOURCES
 #   Define executable
 #
 
-add_executable(${TEST_NAME}
-        ${TEST_SOURCES}
-)
+add_executable(${TEST_NAME} ${TEST_SOURCES})
 
 #
 #   Link with libs and gtest
 #
 
 target_link_libraries(
-        ${TEST_NAME} PRIVATE ${GENETIC_LIB_NAME} GTest::gtest_main
+        ${TEST_NAME} PRIVATE ${GENETIC_LIB_NAME} ${GAME_LIB_NAME} GTest::gtest_main
 )
 
 include(GoogleTest)

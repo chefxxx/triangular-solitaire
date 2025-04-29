@@ -1,0 +1,52 @@
+//
+// Created by Mateusz Mikiciuk on 09/04/2025.
+//
+
+#ifndef PEG_POSITION_H
+#define PEG_POSITION_H
+
+enum class peg_position : int
+{
+#define DECLARE_PEG_POS(col, col_offset) \
+col##1 = col_offset + 56, col##2 = col_offset + 48, col##3 = col_offset + 40, col##4 = col_offset + 32, \
+col##5 = col_offset + 24, col##6 = col_offset + 16, col##7 = col_offset + 8, col##8 = col_offset
+    DECLARE_PEG_POS(a, 0),
+    DECLARE_PEG_POS(b, 1),
+    DECLARE_PEG_POS(c, 2),
+    DECLARE_PEG_POS(d, 3),
+    DECLARE_PEG_POS(e, 4),
+    DECLARE_PEG_POS(f, 5),
+    DECLARE_PEG_POS(g, 6),
+    DECLARE_PEG_POS(h, 7),
+#undef DECLARE_PEG_POS
+};
+
+/* Convention of jump_dir is similar to such as direction of vectors in linear algebra */
+enum class jump_dir : int
+{
+    INVALID    = 0,
+    NORTH      = 16,
+    SOUTH      = -16,
+    WEST       = 2,
+    EAST       = -2,
+    NORTH_WEST = 14,
+    SOUTH_EAST = -14,
+};
+
+constexpr int peg_to_idx(const peg_position pos) { return static_cast<int>(pos); }
+constexpr int dir_to_idx(const jump_dir dir) { return static_cast<int>(dir); }
+
+inline jump_dir calculate_jump_dir(const peg_position &from, const peg_position &to) {
+    switch (int delta = peg_to_idx(to) - peg_to_idx(from)) {
+        case 16:  return jump_dir::NORTH;
+        case -16: return jump_dir::SOUTH;
+        case 2:   return jump_dir::WEST;
+        case -2:  return jump_dir::EAST;
+        case 14:  return jump_dir::NORTH_WEST;
+        case -14: return jump_dir::SOUTH_EAST;
+        default:
+            return jump_dir::INVALID;
+    }
+}
+
+#endif //PEG_POSITION_H

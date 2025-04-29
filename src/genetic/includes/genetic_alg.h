@@ -8,6 +8,7 @@
 #include <vector>
 #include <functional>
 #include "chromosome.h"
+#include "board.h"
 
 class genetic_alg
 {

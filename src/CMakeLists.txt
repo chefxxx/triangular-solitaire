@@ -1,8 +1,11 @@
+SET(CMAKE_BUILD_TYPE Debug)
+
 #
 #   Add subdirs
 #
 
 add_subdirectory(genetic)
+add_subdirectory(game)
 
 #
 #   Define executables
@@ -16,4 +19,4 @@ add_executable(${EXEC_NAME}_genetic
 #   Link lib to executable
 #
 
-target_link_libraries(${EXEC_NAME}_genetic PRIVATE ${GENETIC_LIB_NAME})
+target_link_libraries(${EXEC_NAME}_genetic PRIVATE ${GENETIC_LIB_NAME} ${GAME_LIB_NAME})
