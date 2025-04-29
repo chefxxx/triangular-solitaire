@@ -13,7 +13,11 @@ set(PROJECT_NAME ${EXEC_NAME})
 set(PROJECT_VERSION "1.0")
 
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
-set(CMAKE_CXX_FLAGS "-g -std=c++20 -Wall -fsanitize=address")
+IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "-g -std=c++20 -Wall")
+ELSE ()
+    set(CMAKE_CXX_FLAGS "-g -std=c++20 -Wall -fsanitize=address")
+ENDIF ()
 
 #
 #   Set variables for lib linking
