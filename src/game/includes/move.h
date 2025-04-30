@@ -5,10 +5,9 @@
 #ifndef MOVE_H
 #define MOVE_H
 
-#include <board.h>
-
-#include "peg_position.h"
 #include <vector>
+#include "board.h"
+#include "peg_position.h"
 
 struct Move
 {

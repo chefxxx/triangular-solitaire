@@ -21,7 +21,7 @@ col##5 = col_offset + 24, col##6 = col_offset + 16, col##7 = col_offset + 8, col
 #undef DECLARE_PEG_POS
 };
 
-/* Convention of jump_dir is similar to such as direction of vectors in linear algebra */
+/* like vectors in linear algebra */
 enum class jump_dir : int
 {
     INVALID    = 0,
