@@ -8,7 +8,6 @@
 #include "tl/expected.hpp"
 #include "board_error.h"
 #include "peg_position.h"
-#include "bit_operations.h"
 #include <cstdint>
 
 struct Board
@@ -33,24 +32,13 @@ struct Board
     // ------------------------------
     [[nodiscard]] tl::expected<void, board_error_info> move_peg(const peg_position &from, const peg_position &to);
     [[nodiscard]] tl::expected<void, board_error_info> move_peg(int from, int to);
-private:
+
+    // ------------------------------
+    // Useful helpers
+    // ------------------------------
+    void SetState(uint64_t state);
     [[nodiscard]] uint64_t generate_board() const;
-    [[nodiscard]] constexpr uint64_t generate_start_state(const int size) const
-    {
-        uint64_t state = MinMsb;
-        switch (size)
-        {
-            case 6: case 8:
-                state <<= peg_to_idx(peg_position::c5);
-                break;
-            case 7:
-                state <<= peg_to_idx(peg_position::a3);
-                break;
-            default:
-                state <<= peg_to_idx(peg_position::a1);
-        }
-        return state;
-    }
+    [[nodiscard]] uint64_t generate_start_state() const;
 };
 
 // ------------------------------

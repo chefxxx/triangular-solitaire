@@ -7,6 +7,7 @@
 #include <bitset>
 #include <algorithm>
 #include "board.h"
+#include "bit_operations.h"
 
 constexpr int MAX_SIZE = 64;
 constexpr int BOARD_SIDE = 8;
@@ -14,10 +15,34 @@ constexpr int BOARD_SIDE = 8;
 Board::Board(const int size)
     : board_size{size},
       board_area_mask{generate_board()},
-      current_state{ClearIntersect(board_area_mask, generate_start_state(size))},
+      current_state{ClearIntersect(board_area_mask, generate_start_state())},
       current_empty{ClearIntersect(board_area_mask, current_state)},
       pegs_left{CountOnes(current_state)}
 {}
+
+void Board::SetState(const uint64_t state)
+{
+    current_state = state;
+    current_empty = ClearIntersect(board_area_mask, current_state);
+    pegs_left = CountOnes(current_state);
+}
+
+uint64_t Board::generate_start_state() const
+{
+    uint64_t state = MinMsb;
+    switch (board_size)
+    {
+        case 6: case 8:
+            state <<= peg_to_idx(peg_position::c5);
+        break;
+        case 7:
+            state <<= peg_to_idx(peg_position::a3);
+        break;
+        default:
+            state <<= peg_to_idx(peg_position::a1);
+    }
+    return state;
+}
 
 tl::expected<void, board_error_info> Board::move_peg(const peg_position &from, const peg_position &to)
 {

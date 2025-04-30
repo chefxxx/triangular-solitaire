@@ -46,6 +46,6 @@ constexpr uint64_t shiftSouth(const uint64_t a) { return a >> 8; }
 constexpr uint64_t shiftEast(const uint64_t a) { return a >> 1; }
 constexpr uint64_t shiftWest(const uint64_t a) { return a << 1; }
 constexpr uint64_t shiftNorthWest(const uint64_t a) { return a << 7; }
-constexpr uint64_t shiftSouthEast(const uint64_t a) { return a >> 9; }
+constexpr uint64_t shiftSouthEast(const uint64_t a) { return a >> 7; }
 
 #endif //TRIANGULARSOLITAIRE_BIT_OPERATIONS_H

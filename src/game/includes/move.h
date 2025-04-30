@@ -14,19 +14,19 @@ struct Move
 {
     peg_position from;
     peg_position to;
+    jump_dir dir;
 
-    Move(int from, int to);
+    Move(int from, int to, jump_dir dir);
     ~Move() = default;
-
 };
 
 inline std::ostream& operator<<(std::ostream& os, const Move& move) {
-    os << "Move from:" << static_cast<int>(move.from) << " to:" << static_cast<int>(move.to);
+    os << "Move from:" << static_cast<int>(move.from) << " to:" << static_cast<int>(move.to) << " dir:" << move.dir;
     return os;
 };
 
 std::vector<Move> BuildAllMoves(const Board &board);
-void MakeMoves(uint64_t attacks, int offset, std::vector<Move> &moves);
+void MakeMoves(uint64_t attacks, jump_dir offset, std::vector<Move> &moves);
 
 
 #endif //MOVE_H
