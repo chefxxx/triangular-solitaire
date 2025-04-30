@@ -6,6 +6,7 @@
 #define TRIANGULARSOLITAIRE_BIT_OPERATIONS_H
 
 #include <cstdint>
+#include <bit>
 
 // ------------------------------
 // Bit specific
@@ -24,8 +25,14 @@ constexpr bool CheckBitAtIdx(const uint64_t a, const int idx) { return a & (MinM
 constexpr int CountOnes (const uint64_t a) { return std::popcount(a); }
 
 /* generalized bit shift */
-inline uint64_t GenShift(const u_int64_t mask, const int shift)
+inline uint64_t GenShift(const uint64_t mask, const int shift)
     { return (shift > 0) ? (mask << shift) : (mask >> -shift); }
+
+/* returns index of lsb of given bitmask */
+constexpr int GetLbsIdx(const uint64_t a) { return std::countr_zero(a); }
+
+/* retrieves LsbIdx and resets it */
+constexpr int PopLsb(uint64_t& a) { const int ret = GetLbsIdx(a); a &= a - 1; return ret; }
 
 // ------------------------------
 // Board specific
@@ -38,5 +45,7 @@ constexpr uint64_t shiftNorth(const uint64_t a) { return a << 8; }
 constexpr uint64_t shiftSouth(const uint64_t a) { return a >> 8; }
 constexpr uint64_t shiftEast(const uint64_t a) { return a >> 1; }
 constexpr uint64_t shiftWest(const uint64_t a) { return a << 1; }
+constexpr uint64_t shiftNorthWest(const uint64_t a) { return a << 7; }
+constexpr uint64_t shiftSouthEast(const uint64_t a) { return a >> 9; }
 
 #endif //TRIANGULARSOLITAIRE_BIT_OPERATIONS_H

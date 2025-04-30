@@ -33,6 +33,7 @@ enum class jump_dir : int
     SOUTH_EAST = -14,
 };
 
+constexpr peg_position IdxToPos(const int idx) { return static_cast<peg_position>(idx); }
 constexpr int peg_to_idx(const peg_position pos) { return static_cast<int>(pos); }
 constexpr int dir_to_idx(const jump_dir dir) { return static_cast<int>(dir); }
 

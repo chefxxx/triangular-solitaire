@@ -12,8 +12,9 @@ project(${EXEC_NAME} CXX)
 set(PROJECT_NAME ${EXEC_NAME})
 set(PROJECT_VERSION "1.0")
 
-set(CMAKE_CXX_STANDARD_REQUIRED 20)
-set(CMAKE_CXX_FLAGS "-g -std=c++20 -Wall -fsanitize=address")
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "-g -Wall -fsanitize=address")
 
 #
 #   Set variables for lib linking

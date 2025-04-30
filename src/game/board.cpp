@@ -12,7 +12,7 @@
 constexpr int MAX_SIZE = 64;
 constexpr int BOARD_SIDE = 8;
 
-board::board(const int size)
+Board::Board(const int size)
     : board_size{size},
       board_area_mask{generate_board()},
       current_state{ClearIntersect(board_area_mask, MaxMsb >> (BOARD_SIDE - 1))},
@@ -20,7 +20,7 @@ board::board(const int size)
       pegs_left{CountOnes(current_state)}
 {}
 
-tl::expected<void, board_error_info> board::move_peg(const peg_position &from, const peg_position &to)
+tl::expected<void, board_error_info> Board::move_peg(const peg_position &from, const peg_position &to)
 {
     if (!CheckBitAtIdx(board_area_mask, peg_to_idx(from)))
         return tl::unexpected{board_error_info(board_error::out_of_bound, from, to)};
@@ -48,14 +48,14 @@ tl::expected<void, board_error_info> board::move_peg(const peg_position &from, c
     return{};
 }
 
-tl::expected<void, board_error_info> board::move_peg(const int from, const int to)
+tl::expected<void, board_error_info> Board::move_peg(const int from, const int to)
 {
     const peg_position p_from{from};
     const peg_position p_to{to};
     return move_peg(p_from, p_to);
 }
 
-uint64_t board::generate_board() const
+uint64_t Board::generate_board() const
 {
     uint64_t mask = MinMsb << (MAX_SIZE - BOARD_SIDE);
     for (int i = 0; i < board_size - 1; ++i)
@@ -65,7 +65,7 @@ uint64_t board::generate_board() const
     return mask;
 }
 
-void print_current_board(const board &board)
+void print_current_board(const Board &board)
 {
     std::cout << "*---CURRENT BOARD---*\n";
     std::cout << "*--a-b-c-d-e-f-g-h--*\n";

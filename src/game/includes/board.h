@@ -10,13 +10,13 @@
 #include "peg_position.h"
 #include <cstdint>
 
-struct board
+struct Board
 {
     // ------------------------------
     // Class creation
     // ------------------------------
-    explicit board(int size);
-    ~board() = default;
+    explicit Board(int size);
+    ~Board() = default;
 
     // ------------------------------
     // Fields
@@ -39,6 +39,6 @@ private:
 // ------------------------------
 // Helper functions
 // ------------------------------
-void print_current_board(const board &board);
+void print_current_board(const Board &board);
 
 #endif //TRIANGULARSOLITAIRE_BOARD_H
