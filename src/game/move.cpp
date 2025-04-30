@@ -25,7 +25,7 @@ std::vector<Move> BuildAllMoves(const Board &board)
     const uint64_t west = shiftWest(shiftWest(current & notAB_Files) & current & area) & empty & area;
     const uint64_t east = shiftEast(shiftEast(current & notGH_Files) & current & area) & empty & area;
     const uint64_t northWest = shiftNorthWest(shiftNorthWest(current & notAB_Files) & current & area) & empty & area;
-    const uint64_t southEast = shiftSouthEast(shiftSouthEast(current & notGH_Files) & current & area & notGH_Files) & empty & area;
+    const uint64_t southEast = shiftSouthEast(shiftSouthEast(current & notGH_Files) & current & area) & empty & area;
 
     /* Fill possible moves list */
     MakeMoves(north, jump_dir::NORTH, moves);
