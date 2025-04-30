@@ -7,7 +7,6 @@
 #include <bitset>
 #include <algorithm>
 #include "board.h"
-#include "bit_operations.h"
 
 constexpr int MAX_SIZE = 64;
 constexpr int BOARD_SIDE = 8;
@@ -15,7 +14,7 @@ constexpr int BOARD_SIDE = 8;
 Board::Board(const int size)
     : board_size{size},
       board_area_mask{generate_board()},
-      current_state{ClearIntersect(board_area_mask, MaxMsb >> (BOARD_SIDE - 1))},
+      current_state{ClearIntersect(board_area_mask, generate_start_state(size))},
       current_empty{ClearIntersect(board_area_mask, current_state)},
       pegs_left{CountOnes(current_state)}
 {}
@@ -94,3 +93,4 @@ void print_current_board(const Board &board)
     std::cout << "*--a-b-c-d-e-f-g-h--*\n";
     std::cout << "*-------------------*\n";
 }
+

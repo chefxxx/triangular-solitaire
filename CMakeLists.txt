@@ -14,7 +14,12 @@ set(PROJECT_VERSION "1.0")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "-g -Wall -fsanitize=address")
+
+IF (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "-g -Wall")
+ELSE ()
+    set(CMAKE_CXX_FLAGS "-g -Wall -fsanitize=address")
+ENDIF ()
 
 #
 #   Set variables for lib linking
