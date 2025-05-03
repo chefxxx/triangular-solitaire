@@ -7,19 +7,44 @@
 #include <bitset>
 #include <algorithm>
 #include "board.h"
+#include "bit_operations.h"
 
 constexpr int MAX_SIZE = 64;
 constexpr int BOARD_SIDE = 8;
 
-board::board(const int size)
+Board::Board(const int size)
     : board_size{size},
       board_area_mask{generate_board()},
-      current_state{ClearIntersect(board_area_mask, generate_start_state(size))},
+      current_state{ClearIntersect(board_area_mask, generate_start_state())},
       current_empty{ClearIntersect(board_area_mask, current_state)},
       pegs_left{CountOnes(current_state)}
 {}
 
-tl::expected<void, board_error_info> board::move_peg(const peg_position &from, const peg_position &to)
+void Board::SetState(const uint64_t state)
+{
+    current_state = state;
+    current_empty = ClearIntersect(board_area_mask, current_state);
+    pegs_left = CountOnes(current_state);
+}
+
+uint64_t Board::generate_start_state() const
+{
+    uint64_t state = MinMsb;
+    switch (board_size)
+    {
+        case 6: case 8:
+            state <<= peg_to_idx(peg_position::c5);
+        break;
+        case 7:
+            state <<= peg_to_idx(peg_position::a3);
+        break;
+        default:
+            state <<= peg_to_idx(peg_position::a1);
+    }
+    return state;
+}
+
+tl::expected<void, board_error_info> Board::move_peg(const peg_position &from, const peg_position &to)
 {
     if (!CheckBitAtIdx(board_area_mask, peg_to_idx(from)))
         return tl::unexpected{board_error_info(board_error::out_of_bound, from, to)};
@@ -47,14 +72,14 @@ tl::expected<void, board_error_info> board::move_peg(const peg_position &from, c
     return{};
 }
 
-tl::expected<void, board_error_info> board::move_peg(const int from, const int to)
+tl::expected<void, board_error_info> Board::move_peg(const int from, const int to)
 {
     const peg_position p_from{from};
     const peg_position p_to{to};
     return move_peg(p_from, p_to);
 }
 
-uint64_t board::generate_board() const
+uint64_t Board::generate_board() const
 {
     uint64_t mask = MinMsb << (MAX_SIZE - BOARD_SIDE);
     for (int i = 0; i < board_size - 1; ++i)
@@ -64,7 +89,7 @@ uint64_t board::generate_board() const
     return mask;
 }
 
-void print_current_board(const board &board)
+void print_current_board(const Board &board)
 {
     std::cout << "*---CURRENT BOARD---*\n";
     std::cout << "*--a-b-c-d-e-f-g-h--*\n";

@@ -6,11 +6,11 @@
 
 TEST(BoardTest, printCurrBoards)
 {
-    const std::vector<board> boards{
-            board(5),
-            board(6),
-            board(7),
-            board(8)
+    const std::vector<Board> boards{
+            Board(5),
+            Board(6),
+            Board(7),
+            Board(8)
     };
 
     for (auto const& b: boards)
@@ -30,7 +30,7 @@ TEST(BoardTest, pegPositions)
 
 TEST(BoardTest, pegOutOfBounds)
 {
-    board board{5};
+    Board board{5};
     const auto result1 = board.move_peg(peg_position::b1, peg_position::b2);
     ASSERT_EQ(result1.has_value(), false);
     ASSERT_EQ(result1.error().error_code, board_error::out_of_bound);
@@ -38,7 +38,7 @@ TEST(BoardTest, pegOutOfBounds)
 
 TEST(BoardTest, pegDoesNotExist)
 {
-    board board{5};
+    Board board{5};
     auto result1 = board.move_peg(peg_position::a1, peg_position::a4);
     ASSERT_EQ(result1.has_value(), false);
     ASSERT_EQ(result1.error().error_code, board_error::peg_does_not_exist);
@@ -46,7 +46,7 @@ TEST(BoardTest, pegDoesNotExist)
 
 TEST(BoardTest, pegPosIsOccupiedNorth)
 {
-    board board{5};
+    Board board{5};
     auto result1 = board.move_peg(peg_position::a2, peg_position::a4);
     ASSERT_EQ(result1.has_value(), false);
     ASSERT_EQ(result1.error().error_code, board_error::invalid_jump);
@@ -54,13 +54,13 @@ TEST(BoardTest, pegPosIsOccupiedNorth)
 
 TEST(BoardTest, pegCount)
 {
-    const board board{5};
+    const Board board{5};
     ASSERT_EQ(14, board.pegs_left);
 }
 
 TEST(BoardTest, MoveTest1)
 {
-    board board{5};
+    Board board{5};
     auto result = board.move_peg(peg_position::a3, peg_position::a1);
     ASSERT_EQ(result.has_value(), true);
 }
@@ -71,7 +71,7 @@ TEST(BoardTest, MoveTest1)
 
 TEST(BoardTest, MoveTest_LegalMoveEast_expectedHasValue)
 {
-    board board{5};
+    Board board{5};
     board.current_state = 287003119714304; //    a b c d e
     //                                        1  0 0 0 0 0
     //                                        2  1 0 0 0 0
@@ -85,7 +85,7 @@ TEST(BoardTest, MoveTest_LegalMoveEast_expectedHasValue)
 
 TEST(BoardTest, MoveTest_IlegalMoveEast_expectedHasntValueErrorCodeInvalidJump)
 {
-    board board{5};
+    Board board{5};
     board.current_state = 287003119714304  ; //  a b c d e
     //                                       1   0 0 0 0 0
     //                                       2   1 0 0 0 0
@@ -100,7 +100,7 @@ TEST(BoardTest, MoveTest_IlegalMoveEast_expectedHasntValueErrorCodeInvalidJump)
 
 TEST(BoardTest, MoveTest_IlegalMoveEast_expectedHasntValueErrorCodeInvalidJump2)
 {
-    board board{5};
+    Board board{5};
     board.current_state = 287003102937088  ; //  a b c d e
     //                                       1   0 0 0 0 0
     //                                       2   1 0 0 0 0
@@ -115,7 +115,7 @@ TEST(BoardTest, MoveTest_IlegalMoveEast_expectedHasntValueErrorCodeInvalidJump2)
 
 TEST(BoardTest, MoveTest_IlegalMoveEastBiggerBoard_expectedHasntValueErrorCodeInvalidJump2)
 {
-    board board{8};
+    Board board{8};
     board.current_state = 72344597144571567; //  a b c d e f g h
     //                                       1   1 0 0 0 0 0 0 0
     //                                       2   1 0 0 0 0 0 0 0
@@ -133,7 +133,7 @@ TEST(BoardTest, MoveTest_IlegalMoveEastBiggerBoard_expectedHasntValueErrorCodeIn
 
 TEST(BoardTest, MoveTest_LegalMoveEastBiggerBoard_expectedHasValue)
 {
-    board board{8};
+    Board board{8};
     board.current_state = 5510445691027; //      a b c d e f g h
     //                                       1   0 0 0 0 0 0 0 0
     //                                       2   0 0 0 0 0 0 0 0
@@ -153,7 +153,7 @@ TEST(BoardTest, MoveTest_LegalMoveEastBiggerBoard_expectedHasValue)
 // ------------------------------
 TEST(BoardTest, MoveTest_LegalMoveWest_expectedHasValue)
 {
-    board board{5};
+    Board board{5};
     board.current_state = 286998824747008; //    a b c d e
     //                                        1  0 0 0 0 0
     //                                        2  1 0 0 0 0
@@ -167,7 +167,7 @@ TEST(BoardTest, MoveTest_LegalMoveWest_expectedHasValue)
 
 TEST(BoardTest, MoveTest_LegalMoveWest_expectedHasValue2)
 {
-    board board{5};
+    Board board{5};
     board.current_state = 72909728887341056; //  a b c d e
     //                                        1  1 0 0 0 0
     //                                        2  1 1 0 0 0
@@ -181,7 +181,7 @@ TEST(BoardTest, MoveTest_LegalMoveWest_expectedHasValue2)
 
 TEST(BoardTest, MoveTest_LegalMoveWest_expectedHasValue3)
 {
-    board board{5};
+    Board board{5};
     board.current_state = 569598965448704; //    a b c d e
     //                                        1  0 0 0 0 0
     //                                        2  0 1 0 0 0
@@ -195,7 +195,7 @@ TEST(BoardTest, MoveTest_LegalMoveWest_expectedHasValue3)
 
 TEST(BoardTest, MoveTest_IlegalMoveWest_expectedHasntValueErrorCodeInvalidJump)
 {
-    board board{5};
+    Board board{5};
     board.current_state = 72909728887341056; //  a b c d e
     //                                        1  1 0 0 0 0
     //                                        2  1 1 0 0 0
@@ -210,7 +210,7 @@ TEST(BoardTest, MoveTest_IlegalMoveWest_expectedHasntValueErrorCodeInvalidJump)
 
 TEST(BoardTest, MoveTest_IlegalMoveWest_expectedHasntValueErrorCodeInvalidJump2)
 {
-    board board{5};
+    Board board{5};
     board.current_state = 72909728820232192; //  a b c d e
     //                                        1  1 0 0 0 0
     //                                        2  1 1 0 0 0
@@ -225,7 +225,7 @@ TEST(BoardTest, MoveTest_IlegalMoveWest_expectedHasntValueErrorCodeInvalidJump2)
 
 TEST(BoardTest, MoveTest_IlegalMoveWest_expectedHasntValueErrorCodeInvalidJump3)
 {
-    board board{5};
+    Board board{5};
     board.current_state = 7709852172288; //      a b c d e
     //                                        1  0 0 0 0 0
     //                                        2  0 0 0 0 0
@@ -240,7 +240,7 @@ TEST(BoardTest, MoveTest_IlegalMoveWest_expectedHasntValueErrorCodeInvalidJump3)
 
 TEST(BoardTest, MoveTest_LegalMoveWestBiggerBoard_expectedHasValue)
 {
-    board board{8};
+    Board board{8};
     board.current_state = 5510445691027; //      a b c d e f g h
     //                                       1   0 0 0 0 0 0 0 0
     //                                       2   0 0 0 0 0 0 0 0
@@ -257,7 +257,7 @@ TEST(BoardTest, MoveTest_LegalMoveWestBiggerBoard_expectedHasValue)
 
 TEST(BoardTest, MoveTest_LegalMoveWestBiggerBoard_expectedHasValue2)
 {
-    board board{8};
+    Board board{8};
     board.current_state = 72626093192410815; //  a b c d e f g h
     //                                       1   1 0 0 0 0 0 0 0
     //                                       2   0 1 0 0 0 0 0 0
@@ -274,7 +274,7 @@ TEST(BoardTest, MoveTest_LegalMoveWestBiggerBoard_expectedHasValue2)
 
 TEST(BoardTest, MoveTest_LegalMoveWestBiggerBoard_expectedHasValue3)
 {
-    board board{7};
+    Board board{7};
     board.current_state = 6605763380736; //      a b c d e f g
     //                                       1   0 0 0 0 0 0 0
     //                                       2   0 0 0 0 0 0 0
@@ -287,3 +287,4 @@ TEST(BoardTest, MoveTest_LegalMoveWestBiggerBoard_expectedHasValue3)
     auto result = board.move_peg(peg_position::c3, peg_position::a3);
     ASSERT_EQ(result.has_value(), true);
 }
+

@@ -21,7 +21,7 @@ col##5 = col_offset + 24, col##6 = col_offset + 16, col##7 = col_offset + 8, col
 #undef DECLARE_PEG_POS
 };
 
-/* Convention of jump_dir is similar to such as direction of vectors in linear algebra */
+/* like vectors in linear algebra */
 enum class jump_dir : int
 {
     INVALID    = 0,
@@ -33,8 +33,24 @@ enum class jump_dir : int
     SOUTH_EAST = -14,
 };
 
-constexpr int peg_to_idx(const peg_position pos) { return static_cast<int>(pos); }
-constexpr int dir_to_idx(const jump_dir dir) { return static_cast<int>(dir); }
+/* debugging utility */
+inline std::ostream& operator<<(std::ostream &os, const jump_dir &dir) {
+    switch (dir) {
+        case jump_dir::NORTH: os << "NORTH"; break;
+        case jump_dir::SOUTH: os << "SOUTH"; break;
+        case jump_dir::WEST: os << "WEST"; break;
+        case jump_dir::EAST: os << "EAST"; break;
+        case jump_dir::NORTH_WEST: os << "NORTH_WEST"; break;
+        case jump_dir::SOUTH_EAST: os << "SOUTH_EAST"; break;
+        default: os << "INVALID"; break;
+    }
+    return os;
+}
+
+inline peg_position IdxToPos(const int idx) { return static_cast<peg_position>(idx); }
+inline int peg_to_idx(const peg_position pos) { return static_cast<int>(pos); }
+inline int dir_to_idx(const jump_dir dir) { return static_cast<int>(dir); }
+inline jump_dir idx_to_dir(const int idx) { return static_cast<jump_dir>(idx); }
 
 inline jump_dir calculate_jump_dir(const peg_position &from, const peg_position &to) {
     switch (int delta = peg_to_idx(to) - peg_to_idx(from)) {
