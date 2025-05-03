@@ -44,7 +44,7 @@ uint64_t Board::generate_start_state() const
     return state;
 }
 
-tl::expected<void, board_error_info> Board::move_peg(const peg_position &from, const peg_position &to)
+tl::expected<jump_dir, board_error_info> Board::move_peg(const peg_position &from, const peg_position &to)
 {
     if (!CheckBitAtIdx(board_area_mask, peg_to_idx(from)))
         return tl::unexpected{board_error_info(board_error::out_of_bound, from, to)};
@@ -59,7 +59,7 @@ tl::expected<void, board_error_info> Board::move_peg(const peg_position &from, c
     if (dir == jump_dir::INVALID)
         return tl::unexpected{board_error_info(board_error::invalid_jump, from, to)};
 
-    const int erase_idx = peg_to_idx(from) + dir_to_idx(dir) / 2;
+    const int erase_idx = peg_to_idx(from) + dir_to_idx(dir) >> 1;
     if (!CheckBitAtIdx(current_state, erase_idx))
         return tl::unexpected{board_error_info(board_error::invalid_jump, from, to)};
 
@@ -68,16 +68,49 @@ tl::expected<void, board_error_info> Board::move_peg(const peg_position &from, c
     current_state |= MinMsb << peg_to_idx(to);
 
     current_empty = ClearIntersect(board_area_mask, current_state);
-    this->pegs_left--;
-    return{};
+    --this->pegs_left;
+    return{dir};
 }
 
-tl::expected<void, board_error_info> Board::move_peg(const int from, const int to)
+tl::expected<jump_dir, board_error_info> Board::move_peg(const int from, const int to)
 {
     const peg_position p_from{from};
     const peg_position p_to{to};
     return move_peg(p_from, p_to);
 }
+
+tl::expected<void, board_error_info> Board::undo_move(const peg_position &from, const peg_position &to, const jump_dir &dir) {
+    // Same checks as in move_peg function, but in reversed order, now it's necessary that from is free
+    // and to is occupied
+    if (!CheckBitAtIdx(board_area_mask, peg_to_idx(from)))
+        return tl::unexpected{board_error_info(board_error::out_of_bound, from, to)};
+    if (!CheckBitAtIdx(board_area_mask, peg_to_idx(to)))
+        return tl::unexpected{board_error_info(board_error::out_of_bound, from, to)};
+    if (CheckBitAtIdx(current_state, peg_to_idx(from)))
+        return tl::unexpected{board_error_info(board_error::invalid_jump, from, to)};
+    if (!CheckBitAtIdx(current_state, peg_to_idx(to)))
+        return tl::unexpected{board_error_info(board_error::peg_does_not_exist, from, to)};
+
+    const int add_idx = peg_to_idx(from) + dir_to_idx(dir) >> 1;
+    if (CheckBitAtIdx(current_state, add_idx))
+        return tl::unexpected{board_error_info(board_error::invalid_jump, from, to)};
+
+    const uint64_t add = MinMsb << add_idx | MinMsb << peg_to_idx(from);
+    current_state |= add;
+    current_state = ClearIntersect(current_state, MinMsb << peg_to_idx(to));
+
+    current_empty = ClearIntersect(board_area_mask, current_state);
+    ++this->pegs_left;
+    return {};
+}
+
+tl::expected<void, board_error_info> Board::undo_move(int from, int to, const jump_dir &dir)
+{
+    const peg_position p_from{from};
+    const peg_position p_to{to};
+    return undo_move(p_from, p_to, dir);
+}
+
 
 uint64_t Board::generate_board() const
 {

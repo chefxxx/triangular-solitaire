@@ -30,8 +30,12 @@ struct Board
     // ------------------------------
     // Basic functions
     // ------------------------------
-    [[nodiscard]] tl::expected<void, board_error_info> move_peg(const peg_position &from, const peg_position &to);
-    [[nodiscard]] tl::expected<void, board_error_info> move_peg(int from, int to);
+    [[nodiscard]] tl::expected<jump_dir, board_error_info> move_peg(const peg_position &from, const peg_position &to);
+    [[nodiscard]] tl::expected<jump_dir, board_error_info> move_peg(int from, int to);
+    [[nodiscard]] tl::expected<void, board_error_info> Board::undo_move(const peg_position &from,
+                                                                        const peg_position &to,
+                                                                        const jump_dir &dir);
+    [[nodiscard]] tl::expected<void, board_error_info> Board::undo_move(int from, int to, const jump_dir &dir);
 
     // ------------------------------
     // Useful helpers
