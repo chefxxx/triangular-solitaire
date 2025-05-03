@@ -28,7 +28,7 @@ int string_to_pos_idx(const std::string &str)
 
 int main() {
 
-    Board board{8};
+    Board board{6};
     perft(board, false);
     return 0;
 }
