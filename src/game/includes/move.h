@@ -9,6 +9,8 @@
 #include "board.h"
 #include "peg_position.h"
 
+struct Board;
+
 struct Move
 {
     peg_position from;

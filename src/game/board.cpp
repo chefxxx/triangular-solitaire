@@ -7,7 +7,13 @@
 #include <bitset>
 #include <algorithm>
 #include "board.h"
+
+#include <stack>
+#include <tuple>
+#include <unordered_set>
+
 #include "bit_operations.h"
+#include "move.h"
 
 constexpr int MAX_SIZE = 64;
 constexpr int BOARD_SIDE = 8;
@@ -59,7 +65,7 @@ tl::expected<jump_dir, board_error_info> Board::move_peg(const peg_position &fro
     if (dir == jump_dir::INVALID)
         return tl::unexpected{board_error_info(board_error::invalid_jump, from, to)};
 
-    const int erase_idx = peg_to_idx(from) + dir_to_idx(dir) >> 1;
+    const int erase_idx = peg_to_idx(from) + (dir_to_idx(dir) >> 1);
     if (!CheckBitAtIdx(current_state, erase_idx))
         return tl::unexpected{board_error_info(board_error::invalid_jump, from, to)};
 
@@ -79,6 +85,12 @@ tl::expected<jump_dir, board_error_info> Board::move_peg(const int from, const i
     return move_peg(p_from, p_to);
 }
 
+// TODO: Change move_peg and undo_move, that is directly takes things from Move structure
+tl::expected<jump_dir, board_error_info> Board::move_peg(const Move &move)
+{
+    return move_peg(move.from, move.to);
+}
+
 tl::expected<void, board_error_info> Board::undo_move(const peg_position &from, const peg_position &to, const jump_dir &dir) {
     // Same checks as in move_peg function, but in reversed order, now it's necessary that from is free
     // and to is occupied
@@ -91,7 +103,7 @@ tl::expected<void, board_error_info> Board::undo_move(const peg_position &from, 
     if (!CheckBitAtIdx(current_state, peg_to_idx(to)))
         return tl::unexpected{board_error_info(board_error::peg_does_not_exist, from, to)};
 
-    const int add_idx = peg_to_idx(from) + dir_to_idx(dir) >> 1;
+    const int add_idx = peg_to_idx(from) + (dir_to_idx(dir) >> 1);
     if (CheckBitAtIdx(current_state, add_idx))
         return tl::unexpected{board_error_info(board_error::invalid_jump, from, to)};
 
@@ -111,6 +123,10 @@ tl::expected<void, board_error_info> Board::undo_move(int from, int to, const ju
     return undo_move(p_from, p_to, dir);
 }
 
+tl::expected<void, board_error_info> Board::undo_move(const Move &move)
+{
+    return undo_move(move.from, move.to, move.dir);
+}
 
 uint64_t Board::generate_board() const
 {
@@ -152,3 +168,60 @@ void print_current_board(const Board &board)
     std::cout << "*-------------------*\n";
 }
 
+void perft(Board& board, bool debug)
+{
+    std::unordered_set<uint64_t> visited_boards;
+    std::stack<std::tuple<Move, bool>> moves_stack{};
+    auto moves = BuildAllMoves(board);
+    for (const auto& m : moves)
+        moves_stack.push(std::make_tuple(m, false));
+
+    visited_boards.emplace(board.current_state);
+
+    while (!moves_stack.empty())
+    {
+        print_current_board(board);
+        if (debug)
+            getchar();
+
+        const auto [move, state] = moves_stack.top();
+        moves_stack.pop();
+        // If the move is made for the first time
+        if (!state)
+        {
+            moves_stack.push(std::make_tuple(move, true));
+            auto dir = board.move_peg(move);
+            if (!dir.has_value())
+                std::cout <<  dir.error().message() << " in move from " << move.from << "to "
+                            << move.to <<"\n";
+            else
+                std::cout <<  "Move with parameters: dir:"<< move.dir << ", from: "
+                << move.from << ", to: " << move.to << "\n";
+            if (board.pegs_left == 1)
+            {
+                std::cout << "GRATS you win" << std::endl;
+                print_current_board(board);
+                break;
+            }
+            if (std::get<1>(visited_boards.emplace(board.current_state)))
+            {
+                moves = BuildAllMoves(board);
+                for (const auto& m : moves)
+                    moves_stack.push(std::make_tuple(m, false));
+            }
+            else
+            {
+                std::cout << "This position already was searched!" << "\n";
+            }
+        }
+        else
+        {
+            auto exp = board.undo_move(move);
+            if (!exp.has_value())
+                std::cout << exp.error().message() << " in undo move from " << move.from << "to "
+                            << move.to <<"\n";
+            else
+                std::cout << "Return to state before move from:" << move.from << " to " << move.to << "\n";
+        }
+    }
+}

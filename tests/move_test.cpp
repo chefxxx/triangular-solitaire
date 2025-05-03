@@ -53,3 +53,14 @@ TEST(Move, LsbIdxTest) {
     const int idx2 = PopLsb(test1);
     EXPECT_EQ(idx2, 3);
 }
+
+TEST(Move, TestAllTreeOfMoves) {
+    Board board{5};
+    board.SetState(7709852172288); //            a b c d e
+    //                                        1  0
+    //                                        2  0 0
+    //                                        3  1 1 1
+    //                                        4  1 2 0 0
+    //                                        5  1 1 1 0 1
+    perft(board, false);
+}

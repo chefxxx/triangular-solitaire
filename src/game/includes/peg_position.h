@@ -1,9 +1,9 @@
 //
 // Created by Mateusz Mikiciuk on 09/04/2025.
 //
-
 #ifndef PEG_POSITION_H
 #define PEG_POSITION_H
+#include <map>
 
 enum class peg_position : int
 {
@@ -20,6 +20,32 @@ col##5 = col_offset + 24, col##6 = col_offset + 16, col##7 = col_offset + 8, col
     DECLARE_PEG_POS(h, 7),
 #undef DECLARE_PEG_POS
 };
+
+inline std::ostream& operator<<(std::ostream &os, const peg_position &pos)
+{
+    static const std::map<peg_position, std::string> peg_position_names = {
+#define CREATE_MAP_TO_STRING(col) \
+{ peg_position::col##1, #col "1" }, { peg_position::col##2, #col "2" }, \
+{ peg_position::col##3, #col "3" }, { peg_position::col##4, #col "4" }, \
+{ peg_position::col##5, #col "5" }, { peg_position::col##6, #col "6" }, \
+{ peg_position::col##7, #col "7" }, { peg_position::col##8, #col "8" }
+
+        CREATE_MAP_TO_STRING(a),
+        CREATE_MAP_TO_STRING(b),
+        CREATE_MAP_TO_STRING(c),
+        CREATE_MAP_TO_STRING(d),
+        CREATE_MAP_TO_STRING(e),
+        CREATE_MAP_TO_STRING(f),
+        CREATE_MAP_TO_STRING(g),
+        CREATE_MAP_TO_STRING(h),
+#undef CREATE_MAP_TO_STRING
+    };
+
+    static const std::string unknown = "unknown";
+    const auto it = peg_position_names.find(pos);
+    it != peg_position_names.end() ? os << it->second : os << unknown;
+    return os;
+}
 
 /* like vectors in linear algebra */
 enum class jump_dir : int
