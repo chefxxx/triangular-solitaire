@@ -85,10 +85,32 @@ tl::expected<jump_dir, board_error_info> Board::move_peg(const int from, const i
     return move_peg(p_from, p_to);
 }
 
-// TODO: Change move_peg and undo_move, that is directly takes things from Move structure
 tl::expected<jump_dir, board_error_info> Board::move_peg(const Move &move)
 {
-    return move_peg(move.from, move.to);
+    const peg_position from{move.from};
+    const peg_position to{move.to};
+    const jump_dir dir{move.dir};
+
+    if (!CheckBitAtIdx(board_area_mask, peg_to_idx(from)))
+        return tl::unexpected{board_error_info(board_error::out_of_bound, from, to)};
+    if (!CheckBitAtIdx(board_area_mask, peg_to_idx(to)))
+        return tl::unexpected{board_error_info(board_error::out_of_bound, from, to)};
+    if (!CheckBitAtIdx(current_state, peg_to_idx(from)))
+        return tl::unexpected{board_error_info(board_error::peg_does_not_exist, from, to)};
+    if (CheckBitAtIdx(current_state, peg_to_idx(to)))
+        return tl::unexpected{board_error_info(board_error::invalid_jump, from, to)};
+
+    const int erase_idx = peg_to_idx(from) + (dir_to_idx(dir) >> 1);
+    if (!CheckBitAtIdx(current_state, erase_idx))
+        return tl::unexpected{board_error_info(board_error::invalid_jump, from, to)};
+
+    const uint64_t erase = MinMsb << erase_idx | MinMsb << peg_to_idx(from);
+    current_state = ClearIntersect(current_state,erase);
+    current_state |= MinMsb << peg_to_idx(to);
+
+    current_empty = ClearIntersect(board_area_mask, current_state);
+    --this->pegs_left;
+    return{dir};
 }
 
 tl::expected<void, board_error_info> Board::undo_move(const peg_position &from, const peg_position &to, const jump_dir &dir) {
