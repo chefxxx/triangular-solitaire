@@ -12,14 +12,18 @@
 
 inline float evaluateHeuristics(const Board& b)
 {
-    return 0;
+    return static_cast<float>(std::rand() % 100);
 }
 
-inline void corssAndMutate(std::vector<chromosome>& population) {
+inline void evaluatePosition(chromosome &individual) {
+    individual.score = static_cast<float>(individual.board.pegs_left);
+}
+
+inline void crossAndMutate(std::vector<chromosome>& population) {
 
 }
 
-inline std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation) {
+inline std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, int tournament_size) {
 
 }
 
@@ -44,17 +48,33 @@ inline void performSearch(chromosome &chr)
             std::cout << best_res.error().message();
         moves.clear();
         moves = BuildAllMoves(chr.board);
+        best_score = -1;
+    }
+    evaluatePosition(chr);
+}
+
+inline void evalSimple(std::vector<chromosome> &population) {
+    for (chromosome &individual: population) {
+        performSearch(individual);
     }
 }
 
 /* This func evals whole generation */
 inline void evalOneGeneration(std::vector<chromosome> &generation) {
-    std::vector<std::thread> threads;
-    threads.reserve(generation.size());
-    for (chromosome &chr : generation) {
-        threads.emplace_back([&chr] () {
-          performSearch(chr);
+    const unsigned thread_count = std::thread::hardware_concurrency();
+    std::vector<std::thread> threads(thread_count);
+    int thx_idx = 0;
+
+    for (auto &t: threads) {
+        t = std::thread([&, thx_idx]() {
+            size_t i = thx_idx;
+            while (true) {
+                performSearch(generation[i]);
+                i += thread_count;
+                if (i >= generation.size()) break;
+            }
         });
+        thx_idx++;
     }
     for (auto &thread : threads) {
         thread.join();

@@ -6,6 +6,9 @@ file(GLOB LIB_SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
 )
 
+# Ensure mains removed from lib sources
+list(REMOVE_ITEM LIB_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/gen_alg_main.cpp")
+
 #
 #   Define static lib
 #
