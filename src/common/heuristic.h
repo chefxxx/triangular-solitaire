@@ -13,6 +13,18 @@ concept Heuristic = requires(T t, const Board& b)
     { t(b) } -> std::convertible_to<int>;
 };
 
+// ------------------------------
+// Helper functions
+// ------------------------------
+template<std::size_t... Is, typename... A, typename... B>
+requires ((std::convertible_to<A, double> && ...)
+    && (std::convertible_to<B, double> && ...)
+    && (sizeof...(A) == sizeof...(B)))
+static auto multiply_two_tuples(const std::tuple<A...>& a, const std::tuple<B...>& b, std::index_sequence<Is...>)
+{
+    return std::make_tuple((std::get<Is>(a) * std::get<Is>(b))...);
+}
+
 template<Heuristic... Hs>
 struct Heuristics
 {
@@ -34,9 +46,25 @@ struct Heuristics
             }, heuristic_functions
         );
     }
+
+    template<typename... Weights, typename... Values>
+    requires ((std::convertible_to<Weights, double> && ...)
+        && (std::convertible_to<Values, double> && ...)
+        && (sizeof...(Weights) == sizeof...(Values)))
+    auto multiply_with_weights(const std::tuple<Weights...>& weights, const std::tuple<Values...>& values)
+    {
+        return multiply_two_tuples(weights, values, std::index_sequence_for<Weights...>{});
+    }
+
+    template<typename... Weights>
+    requires (std::convertible_to<Weights, double> && ... && (sizeof...(Weights) == sizeof...(Hs)))
+    auto multiply_with_weights(const std::tuple<Weights...>& weights, const Board& b)
+    {
+        auto values = calculate_heuristics(b);
+        return multiply_two_tuples(weights, values, std::index_sequence_for<Weights...>{});
+    }
+
     private:
     std::tuple<Hs...> heuristic_functions;
 };
-
-
 #endif //HEURISTIC_H
