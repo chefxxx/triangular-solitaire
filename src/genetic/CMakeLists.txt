@@ -27,3 +27,15 @@ target_include_directories(${GENETIC_LIB_NAME} PUBLIC
 #
 
 target_link_libraries(${GENETIC_LIB_NAME} PRIVATE ${GAME_LIB_NAME})
+
+#
+#   Define executable
+#
+
+add_executable(gen_alg_main gen_alg_main.cpp)
+
+#
+#   Link with libs
+#
+
+target_link_libraries(gen_alg_main PRIVATE ${GENETIC_LIB_NAME} ${GAME_LIB_NAME})

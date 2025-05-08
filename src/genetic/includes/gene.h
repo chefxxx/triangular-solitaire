@@ -7,8 +7,8 @@
 
 class gene
 {
-    double weight;
 public:
+    double weight;
     explicit gene(double w);
 };
 
