@@ -196,7 +196,7 @@ void perft(Board& board, bool debug)
     std::stack<std::tuple<Move, bool>> moves_stack{};
     auto moves = BuildAllMoves(board);
     for (const auto& m : moves)
-        moves_stack.push(std::make_tuple(m, false));
+        moves_stack.emplace(m, false);
 
     visited_boards.emplace(board.current_state);
 

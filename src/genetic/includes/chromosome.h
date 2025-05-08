@@ -17,6 +17,7 @@ class chromosome
 public:
     Board board;
     std::vector<gene> genes;
+    float score;
     explicit chromosome(int b_size);
 };
 

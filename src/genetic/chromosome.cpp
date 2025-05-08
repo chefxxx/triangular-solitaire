@@ -20,4 +20,5 @@ chromosome::chromosome(const int b_size) : board{b_size}
         weight /= sum;
         genes.emplace_back(weight);
     }
+    score = -1;
 }
