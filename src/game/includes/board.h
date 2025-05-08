@@ -48,6 +48,7 @@ struct Board
     void SetState(uint64_t state);
     [[nodiscard]] uint64_t generate_board() const;
     [[nodiscard]] uint64_t generate_start_state() const;
+    [[nodiscard]] uint64_t center_of_board() const;
 };
 
 // ------------------------------

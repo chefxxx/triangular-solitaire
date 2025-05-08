@@ -50,6 +50,28 @@ uint64_t Board::generate_start_state() const
     return state;
 }
 
+uint64_t Board::center_of_board() const
+{
+    uint64_t state = MinMsb;
+    switch (board_size)
+    {
+        case 5:
+            state <<= peg_to_idx(peg_position::a2);
+            break;
+        case 6:
+            state <<= peg_to_idx(peg_position::b3);
+            break;
+        case 7:
+            state <<= peg_to_idx(peg_position::c3);
+            break;
+        case 8:
+            state <<= peg_to_idx(peg_position::c3);
+        default:
+            state <<= peg_to_idx(peg_position::c3);
+    }
+    return state;
+}
+
 tl::expected<jump_dir, board_error_info> Board::move_peg(const peg_position &from, const peg_position &to)
 {
     if (!CheckBitAtIdx(board_area_mask, peg_to_idx(from)))
