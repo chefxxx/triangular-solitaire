@@ -15,6 +15,15 @@ inline float evaluateHeuristics(const Board& b)
     return 0;
 }
 
+inline void corssAndMutate(std::vector<chromosome>& population) {
+
+}
+
+inline std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation) {
+
+}
+
+/* This func performs heuristic search for one chromosome */
 inline void performSearch(chromosome &chr)
 {
     std::vector<Move> moves = BuildAllMoves(chr.board);
@@ -38,6 +47,7 @@ inline void performSearch(chromosome &chr)
     }
 }
 
+/* This func evals whole generation */
 inline void evalOneGeneration(std::vector<chromosome> &generation) {
     std::vector<std::thread> threads;
     threads.reserve(generation.size());
