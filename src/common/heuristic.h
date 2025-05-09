@@ -67,11 +67,4 @@ struct Heuristics
     private:
     std::tuple<Hs...> heuristic_functions;
 };
-
-struct DistanceToCenterHeuristic
-{
-    static unsigned int DistanceToCenterHeuristic::get_distance(uint64_t peg_pos, uint64_t center, int width);
-    int operator()(const Board& b) const;
-};
-
 #endif //HEURISTIC_H
