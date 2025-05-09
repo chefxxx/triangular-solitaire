@@ -6,17 +6,13 @@
 #include <sstream>
 #include <bitset>
 #include <algorithm>
-#include "board.h"
-
+#include <unordered_set>
 #include <stack>
 #include <tuple>
-#include <unordered_set>
 
+#include "board.h"
 #include "bit_operations.h"
 #include "move.h"
-
-constexpr int MAX_SIZE = 64;
-constexpr int BOARD_SIDE = 8;
 
 Board::Board(const int size)
     : board_size{size},

@@ -35,7 +35,8 @@ target_link_libraries(${GENETIC_LIB_NAME} PUBLIC ${GAME_LIB_NAME})
 #   Define executable
 #
 
-add_executable(gen_alg_main gen_alg_main.cpp)
+add_executable(gen_alg_main gen_alg_main.cpp
+        eval.cpp)
 
 #
 #   Link with libs

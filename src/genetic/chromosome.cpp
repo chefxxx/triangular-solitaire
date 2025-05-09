@@ -22,3 +22,11 @@ chromosome::chromosome(const int b_size) : board{b_size}
     }
     score = -1;
 }
+
+std::ostream & operator<<(std::ostream &os, const chromosome &chromosome) {
+    int i = 1;
+    for (const gene &g: chromosome.genes) {
+        os << "H" << i++ << ": " << g.weight << " ";
+    }
+    return os;
+}

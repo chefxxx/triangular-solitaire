@@ -15,21 +15,30 @@ constexpr int HEURISTIC_COUNT = 4;
 class chromosome
 {
 public:
-    Board board;
-    std::vector<gene> genes;
-    float score;
+    // ------------------------------
+    // Class creation
+    // ------------------------------
     explicit chromosome(int b_size);
+    ~chromosome() = default;
 
+    // ------------------------------
+    // Assignments
+    // ------------------------------
+    chromosome(chromosome&&) = default;
+    chromosome& operator=(chromosome const&&) = default;
+
+    chromosome(chromosome const&) = default;
     chromosome& operator=(chromosome const&) = default;
+
+    // ------------------------------
+    // Class members
+    // ------------------------------
+    std::vector<gene> genes;
+    Board board;
+    float score;
 };
 
-inline std::ostream& operator<<(std::ostream& os, const chromosome& chromosome) {
-    int i = 1;
-    for (const gene &g: chromosome.genes) {
-        os << "H" << i++ << ": " << g.weight << " ";
-    }
-    return os;
-}
+std::ostream& operator<<(std::ostream& os, const chromosome& chromosome);
 
 
 #endif //TRIANGULARSOLITAIRE_CHROMOSOME_H

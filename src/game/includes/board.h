@@ -5,12 +5,15 @@
 #ifndef TRIANGULARSOLITAIRE_BOARD_H
 #define TRIANGULARSOLITAIRE_BOARD_H
 
-#include "tl/expected.hpp"
+#include <cstdint>
+#include <tl/expected.hpp>
+
 #include "board_error.h"
 #include "peg_position.h"
-#include <cstdint>
-
 #include "move.h"
+
+constexpr int MAX_SIZE = 64;
+constexpr int BOARD_SIDE = 8;
 
 struct Move;
 
