@@ -7,8 +7,10 @@
 
 #include <vector>
 #include <thread>
+#include <spdlog/spdlog.h>
 #include "chromosome.h"
 #include "move.h"
+#include "bit_operations.h"
 
 inline float evaluateHeuristics(const Board& b)
 {
@@ -23,8 +25,51 @@ inline void crossAndMutate(std::vector<chromosome>& population) {
 
 }
 
-inline std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, int tournament_size) {
+inline chromosome playTournament(std::vector<chromosome> &players) {
 
+}
+
+inline std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, const int tournament_size) {
+    const size_t tournament_count = generation.size() / tournament_size;
+    if (!IsPowerOfTwo(tournament_size))
+        spdlog::error("Tournament size {} is not a power of 2!", tournament_size);
+
+    std::vector<std::vector<chromosome>> tournaments;
+    tournaments.reserve(tournament_count);
+
+    for (int i = 0; i < tournament_count; i++) {
+        std::vector<chromosome> tr;
+        tr.reserve(tournament_size);
+        const auto start = generation.begin() + i * tournament_size;
+        const auto end = start + tournament_size;
+        std::ranges::copy(start, end, std::back_inserter(tr));
+        tournaments.emplace_back(std::move(tr));
+    }
+
+    std::vector<chromosome> winners;
+    winners.reserve(tournament_count);
+
+    const unsigned thread_count = std::thread::hardware_concurrency();
+    std::vector<std::thread> threads(thread_count);
+    size_t thread_index = 0;
+
+    for (auto& t: threads) {
+        t = std::thread([&, thread_index]() {
+            size_t i = thread_index;
+            while (true) {
+                winners[i] = playTournament(tournaments[i]);
+                i += thread_count;
+                if (i >= tournament_count) break;
+            }
+        });
+        ++thread_index;
+    }
+
+    for (auto &t: threads) {
+        t.join();
+    }
+
+    return winners;
 }
 
 /* This func performs heuristic search for one chromosome */
@@ -74,7 +119,7 @@ inline void evalOneGeneration(std::vector<chromosome> &generation) {
                 if (i >= generation.size()) break;
             }
         });
-        thx_idx++;
+        ++thx_idx;
     }
     for (auto &thread : threads) {
         thread.join();

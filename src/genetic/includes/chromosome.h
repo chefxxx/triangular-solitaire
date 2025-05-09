@@ -19,6 +19,8 @@ public:
     std::vector<gene> genes;
     float score;
     explicit chromosome(int b_size);
+
+    chromosome& operator=(chromosome const&) = default;
 };
 
 inline std::ostream& operator<<(std::ostream& os, const chromosome& chromosome) {

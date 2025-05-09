@@ -32,3 +32,16 @@ TEST(Eval, ParallelComp) {
     std::cout << "(Simple) Elapsed time: " << duration.count() << " ms\n";
 
 }
+
+TEST(Eval, Spdlog) {
+    std::vector<chromosome> population;
+    population.reserve(8192);
+    constexpr int tournament_size = 4;
+
+    /* Initial population */
+    for (int i = 0; i < 8192; i++) {
+        population.emplace_back(8);
+    }
+
+    eliminateWeak(population, tournament_size);
+}

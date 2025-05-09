@@ -6,6 +6,7 @@
 #define TRIANGULARSOLITAIRE_BIT_OPERATIONS_H
 
 #include <cstdint>
+#include <bit>
 
 // ------------------------------
 // Bit specific
@@ -32,6 +33,9 @@ constexpr int GetLbsIdx(const uint64_t a) { return std::countr_zero(a); }
 
 /* retrieves LsbIdx and resets it */
 constexpr int PopLsb(uint64_t& a) { const int ret = GetLbsIdx(a); a &= a - 1; return ret; }
+
+/* checks if a given number is a power of 2 */
+constexpr bool IsPowerOfTwo(const uint64_t a) { return std::has_single_bit(a); }
 
 // ------------------------------
 // Board specific

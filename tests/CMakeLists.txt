@@ -19,7 +19,7 @@ add_executable(${TEST_NAME} ${TEST_SOURCES})
 #
 
 target_link_libraries(
-        ${TEST_NAME} PRIVATE ${GENETIC_LIB_NAME} ${GAME_LIB_NAME} GTest::gtest_main
+        ${TEST_NAME} PRIVATE ${GENETIC_LIB_NAME} ${GAME_LIB_NAME} GTest::gtest_main libSpdlog
 )
 
 include(GoogleTest)

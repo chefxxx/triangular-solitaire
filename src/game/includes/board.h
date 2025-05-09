@@ -25,8 +25,8 @@ struct Board
     // ------------------------------
     // Fields
     // ------------------------------
-    const int board_size;
-    const uint64_t board_area_mask;
+    int board_size;
+    uint64_t board_area_mask;
     uint64_t current_state;
     uint64_t current_empty;
     int pegs_left;
