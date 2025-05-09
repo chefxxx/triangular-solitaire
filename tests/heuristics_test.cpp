@@ -7,6 +7,7 @@
 
 #include "../src/common/distance_to_center.h"
 #include "../src/common/heuristic.h"
+#include "../src/common/number_of_free_positions.h"
 
 TEST(Heuristics, LambdaHeuristicCreation_SatisfiesConcept) {
     auto lambda_heuristic = [](Board b) { return static_cast<int>(2); };
@@ -137,4 +138,84 @@ TEST(Heuristcs, UsingHeuristicDistanceToCenter_TwoBoardsOneHasMorePegsInCenter_B
     int h2 = dhs(centered);
 
     ASSERT_TRUE(h1 < h2);
+}
+
+TEST(Heuristcs, UsingHeuristicNumberOfFreePostions_TestOnlyAFunctor) {
+    NumbersOfFreePositions nofph{};
+
+    Board board{8};
+    board.current_state = 564049499394580; //           a b c d e f g h
+    //                                               1  0
+    //                                               2  0 1
+    //                                               3  1 0 0
+    //                                               4  0 0 0 0
+    //                                               5  0 1 c 0 0
+    //                                               6  0 0 1 1 0 0
+    //                                               7  0 1 0 0 1 0 0
+    //                                               8  0 0 1 0 1 0 0 0
+
+    board.current_empty = board.current_state ^ board.board_area_mask;
+    int res = 27;
+    board.pegs_left = 9;
+
+    ASSERT_EQ(nofph(board), res);
+}
+
+TEST(Heuristcs, UsingHeuristicNumberOfFreePostions_TestWithTwoBoardsWithTheSameNumberOfPegs) {
+    NumbersOfFreePositions nofph{};
+
+    Board first{8};
+    first.current_state = 564049499394580; //           a b c d e f g h
+    //                                               1  0
+    //                                               2  0 1
+    //                                               3  1 0 0
+    //                                               4  0 0 0 0
+    //                                               5  0 1 c 0 0
+    //                                               6  0 0 1 1 0 0
+    //                                               7  0 1 0 0 1 0 0
+    //                                               8  0 0 1 0 1 0 0 0
+
+    first.current_empty = first.current_state ^ first.board_area_mask;
+    first.pegs_left = 9;
+
+    Board second{8};
+    second.current_state = 72057594324260097; //        a b c d e f g h
+    //                                               1  1
+    //                                               2  0 0
+    //                                               3  0 0 0
+    //                                               4  0 0 0 0
+    //                                               5  1 0 c 0 1
+    //                                               6  1 0 0 0 1 0
+    //                                               7  1 0 1 0 1 0 0
+    //                                               8  1 0 0 0 0 0 0 0
+    second.current_empty = second.current_state ^ second.board_area_mask;
+
+    second.pegs_left = 9;
+
+    ASSERT_EQ(nofph(first), nofph(second));
+}
+
+TEST(Heuristics, UsingHeuristicNumberOfFreePostions_TestWithTwoBoardsWithDifferentNumberOfPegs)
+{
+    Board first{5};
+    first.current_state = 72057594054705152; //         a b c d e
+    //                                               1  1
+    //                                               2  0 0
+    //                                               3  0 c 0
+    //                                               4  0 0 0 0
+    //                                               5  1 0 0 0 0
+    first.current_empty = first.current_state ^ first.board_area_mask;
+    first.pegs_left = 2;
+
+    Board second{5};
+    second.current_state = 564058054983680; //        a b c d e
+    //                                               1  0
+    //                                               2  0 1
+    //                                               3  1 c 0
+    //                                               4  0 1 0 0
+    //                                               5  0 0 0 0 0
+    second.current_empty = second.current_state ^ second.board_area_mask;
+    second.pegs_left = 3;
+    NumbersOfFreePositions nofph{};
+    ASSERT_TRUE(nofph(first) > nofph(second));
 }

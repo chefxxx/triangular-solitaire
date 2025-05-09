@@ -16,6 +16,7 @@ add_executable(${EXEC_NAME}_genetic
         common/heuristic.h
         common/distance_to_center.cpp
         common/distance_to_center.h
+        common/number_of_free_positions.h
 )
 
 #
