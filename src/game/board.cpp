@@ -148,10 +148,10 @@ tl::expected<void, board_error_info> Board::undo_move(const Move &move)
 
 uint64_t Board::generate_board() const
 {
-    uint64_t mask = MinMsb << (MAX_SIZE - BOARD_SIDE);
+    uint64_t mask = MinMsb << (MAX_SIZE - MAX_BOARD_SIDE);
     for (int i = 0; i < board_size - 1; ++i)
     {
-        mask = mask | mask >> 7 | mask >> BOARD_SIDE;
+        mask = mask | mask >> 7 | mask >> MAX_BOARD_SIDE;
     }
     return mask;
 }
@@ -163,10 +163,10 @@ void print_current_board(const Board &board)
     const std::bitset<MAX_SIZE> bin_rep(board.current_state);
     const auto bin_num = bin_rep.to_string();
     std::vector<std::string> tmp;
-    tmp.reserve(BOARD_SIDE);
-    for (int i = 0; i < BOARD_SIDE; ++i)
+    tmp.reserve(MAX_BOARD_SIDE);
+    for (int i = 0; i < MAX_BOARD_SIDE; ++i)
     {
-        tmp.push_back(bin_num.substr(i * BOARD_SIDE, BOARD_SIDE));
+        tmp.push_back(bin_num.substr(i * MAX_BOARD_SIDE, MAX_BOARD_SIDE));
         std::ranges::reverse(tmp[i]);
     }
     int level = 1;
@@ -174,7 +174,7 @@ void print_current_board(const Board &board)
     {
         const auto& str = tmp[j];
         std::cout << level <<"| ";
-        for (int i = 0; i < BOARD_SIDE; ++i) {
+        for (int i = 0; i < MAX_BOARD_SIDE; ++i) {
             if (i < level)
                 std::cout << str[i] << " ";
             else

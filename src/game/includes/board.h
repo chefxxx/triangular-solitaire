@@ -13,7 +13,7 @@
 #include "move.h"
 
 constexpr int MAX_SIZE = 64;
-constexpr int BOARD_SIDE = 8;
+constexpr int MAX_BOARD_SIDE = 8;
 
 struct Move;
 

@@ -19,16 +19,8 @@ public:
     // Class creation
     // ------------------------------
     explicit chromosome(int b_size);
+    chromosome() : board(MAX_BOARD_SIDE), score(0.0f) {};
     ~chromosome() = default;
-
-    // ------------------------------
-    // Assignments
-    // ------------------------------
-    chromosome(chromosome&&) = default;
-    chromosome& operator=(chromosome&&) = default;
-
-    chromosome(chromosome const&) = default;
-    chromosome& operator=(chromosome const&) = default;
 
     // ------------------------------
     // Class members
@@ -39,6 +31,5 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& os, const chromosome& chromosome);
-
 
 #endif //TRIANGULARSOLITAIRE_CHROMOSOME_H

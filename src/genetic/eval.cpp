@@ -25,32 +25,23 @@ void crossAndMutate(std::vector<chromosome> &population) {
 
 }
 
-chromosome playTournament(std::vector<chromosome> &players) {
-    if (!IsPowerOfTwo(players.size()))
-        spdlog::error("Tournament size {} is not a power of 2!", players.size());
-    if (players.size() == 2)
-        return std::isgreater(players[0].score, players[1].score) ? players[0] : players[1];
+size_t playTournament(const std::vector<chromosome> &players, const size_t start, const size_t end) {
+    if (!IsPowerOfTwo(end - start + 1))
+        spdlog::error("Tournament size {} is not a power of 2!", end - start + 1);
+    if (end - start == 1)
+        return std::isless(players[start].score, players[end].score) ? start : end;
 
-    /* init variables */
-    std::vector<chromosome> pool1;
-    std::vector<chromosome> pool2;
-    const auto start = players.begin();
-    const auto end = players.end();
-    const auto mid = start + (end - start) / 2;
+    const size_t mid = start + (end - start) / 2;
+    const size_t winner1 = playTournament(players, start, mid);
+    const size_t winner2 = playTournament(players, mid + 1, end);
 
-    /**/
-    std::ranges::copy(start, mid, std::back_inserter(pool1));
-    std::ranges::copy(mid, end, std::back_inserter(pool2));
-
-    auto p1 = playTournament(pool1);
-    auto p2 = playTournament(pool2);
-    return std::isgreater(p1.score, p2.score) ? std::move(p1) : std::move(p2);
+    return std::isless(players[winner1].score, players[winner2].score) ? winner1 : winner2;
 }
 
-std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, const int tournament_size, bool parallel) {
+std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, const int tournament_size, const bool parallel) {
     const size_t tournament_count = generation.size() / tournament_size;
     if (!IsPowerOfTwo(tournament_size))
-        spdlog::error("Tournament size {} is not a power of 2!", tournament_size);
+        spdlog::error("Tournament (eliminateWeak) size {} is not a power of 2!", tournament_size);
 
     std::vector<std::vector<chromosome>> tournaments;
     tournaments.reserve(tournament_count);
@@ -61,20 +52,22 @@ std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, const
         const auto start = generation.begin() + i * tournament_size;
         const auto end = start + tournament_size;
         std::ranges::copy(start, end, std::back_inserter(tr));
-        tournaments.emplace_back(std::move(tr));
+        tournaments.emplace_back(tr);
     }
 
     std::vector<chromosome> winners;
-    winners.reserve(tournament_count);
+    winners.resize(tournament_count);
 
     if (parallel) {
         parallelFor(tournament_count, [&](const size_t i) {
-            winners[i] = playTournament(tournaments[i]);
+            const size_t res = playTournament(tournaments[i], 0, tournaments[i].size() - 1);
+            winners[i] = chromosome(tournaments[i][res]);
         });
     }
     else {
-        for (int i =0; i < tournament_count; i++) {
-            winners[i] = playTournament(tournaments[i]);
+        for (int i = 0; i < tournament_count; i++) {
+            const size_t res = playTournament(tournaments[i], 0, tournaments[i].size() - 1);
+            winners[i] = chromosome(tournaments[i][res]);
         }
     }
 
@@ -108,8 +101,8 @@ void performSearch(chromosome &chr)
 }
 
 /* This func evals whole generation */
-void evalOneGeneration(std::vector<chromosome> &generation, const bool threads) {
-    if (threads) {
+void evalOneGeneration(std::vector<chromosome> &generation, const bool parallel) {
+    if (parallel) {
         parallelFor(generation.size(), [&](const size_t i) {
            performSearch(generation[i]);
         });
