@@ -5,6 +5,7 @@
 #include <vector>
 #include <thread>
 #include <spdlog/spdlog.h>
+#include "threading.h"
 #include "chromosome.h"
 #include "move.h"
 #include "bit_operations.h"
@@ -46,7 +47,7 @@ chromosome playTournament(std::vector<chromosome> &players) {
     return std::isgreater(p1.score, p2.score) ? std::move(p1) : std::move(p2);
 }
 
-std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, const int tournament_size) {
+std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, const int tournament_size, bool parallel) {
     const size_t tournament_count = generation.size() / tournament_size;
     if (!IsPowerOfTwo(tournament_size))
         spdlog::error("Tournament size {} is not a power of 2!", tournament_size);
@@ -66,24 +67,15 @@ std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, const
     std::vector<chromosome> winners;
     winners.reserve(tournament_count);
 
-    const unsigned thread_count = std::thread::hardware_concurrency();
-    std::vector<std::thread> threads(thread_count);
-    size_t thread_index = 0;
-
-    for (auto& t: threads) {
-        t = std::thread([&, thread_index]() {
-            size_t i = thread_index;
-            while (true) {
-                winners[i] = playTournament(tournaments[i]);
-                i += thread_count;
-                if (i >= tournament_count) break;
-            }
+    if (parallel) {
+        parallelFor(tournament_count, [&](const size_t i) {
+            winners[i] = playTournament(tournaments[i]);
         });
-        ++thread_index;
     }
-
-    for (auto &t: threads) {
-        t.join();
+    else {
+        for (int i =0; i < tournament_count; i++) {
+            winners[i] = playTournament(tournaments[i]);
+        }
     }
 
     return winners;
@@ -115,30 +107,16 @@ void performSearch(chromosome &chr)
     evaluatePosition(chr);
 }
 
-void evalSimple(std::vector<chromosome> &population) {
-    for (chromosome &individual: population) {
-        performSearch(individual);
-    }
-}
-
 /* This func evals whole generation */
-void evalOneGeneration(std::vector<chromosome> &generation) {
-    const unsigned thread_count = std::thread::hardware_concurrency();
-    std::vector<std::thread> threads(thread_count);
-    int thx_idx = 0;
-
-    for (auto &t: threads) {
-        t = std::thread([&, thx_idx]() {
-            size_t i = thx_idx;
-            while (true) {
-                performSearch(generation[i]);
-                i += thread_count;
-                if (i >= generation.size()) break;
-            }
+void evalOneGeneration(std::vector<chromosome> &generation, const bool threads) {
+    if (threads) {
+        parallelFor(generation.size(), [&](const size_t i) {
+           performSearch(generation[i]);
         });
-        ++thx_idx;
     }
-    for (auto &thread : threads) {
-        thread.join();
+    else {
+        for (chromosome &individual: generation) {
+            performSearch(individual);
+        }
     }
 }

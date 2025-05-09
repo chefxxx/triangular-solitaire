@@ -28,18 +28,16 @@ target_include_directories(${GENETIC_LIB_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DI
 #   Link game lib so it can be used
 #
 
-target_link_libraries(${GENETIC_LIB_NAME} PUBLIC ${GAME_LIB_NAME})
-
+target_link_libraries(${GENETIC_LIB_NAME} PUBLIC ${GAME_LIB_NAME} spdlog::spdlog)
 
 #
 #   Define executable
 #
 
-add_executable(gen_alg_main gen_alg_main.cpp
-        eval.cpp)
+add_executable(gen_alg_main gen_alg_main.cpp)
 
 #
 #   Link with libs
 #
 
-target_link_libraries(gen_alg_main PRIVATE ${GENETIC_LIB_NAME} ${GAME_LIB_NAME} libSpdlog)
+target_link_libraries(gen_alg_main PRIVATE ${GENETIC_LIB_NAME} ${GAME_LIB_NAME})

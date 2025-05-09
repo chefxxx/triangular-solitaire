@@ -13,9 +13,8 @@ float evaluateHeuristics(const Board &b);
 void evaluatePosition(chromosome &individual);
 void crossAndMutate(std::vector<chromosome> &population);
 chromosome playTournament(std::vector<chromosome> &players);
-std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, int tournament_size);
+std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, int , bool parallel = true);
 void performSearch(chromosome &chr);
-void evalSimple(std::vector<chromosome> &population);
-void evalOneGeneration(std::vector<chromosome> &generation);
+void evalOneGeneration(std::vector<chromosome> &generation, bool threads = true);
 
 #endif //EVAL_H

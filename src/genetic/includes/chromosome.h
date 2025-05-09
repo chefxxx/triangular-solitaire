@@ -25,7 +25,7 @@ public:
     // Assignments
     // ------------------------------
     chromosome(chromosome&&) = default;
-    chromosome& operator=(chromosome const&&) = default;
+    chromosome& operator=(chromosome&&) = default;
 
     chromosome(chromosome const&) = default;
     chromosome& operator=(chromosome const&) = default;
