@@ -56,8 +56,8 @@ std::vector<chromosome> makeBabies(std::vector<chromosome> &parents) {
                 baby2.push_back(mother.genes[i]);
             }
         }
-        babiedPopulation.push_back(chromosome(baby1, mother.genes.size()));
-        babiedPopulation.push_back(chromosome(baby2, mother.genes.size()));
+        babiedPopulation.emplace_back(baby1, mother.board.board_size);
+        babiedPopulation.emplace_back(baby2, mother.board.board_size);
     }
     return babiedPopulation;
 }
@@ -71,7 +71,7 @@ void mutate(std::vector<chromosome> &population, const int mutSize, const float 
     for (int i = 0; i < mutSize; i++) {
         const unsigned chr_idx = chromosome_idx(rng);
         const unsigned g_idx = gene_idx(rng);
-        if (i % 2 == 0)
+        if (i & 1)
             population[chr_idx].genes[g_idx].weight += population[chr_idx].genes[g_idx].weight * mutStrength;
         else
             population[chr_idx].genes[g_idx].weight -= population[chr_idx].genes[g_idx].weight * mutStrength;
