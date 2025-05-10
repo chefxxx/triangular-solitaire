@@ -7,6 +7,7 @@
 
 #include "../src/common/distance_to_center.h"
 #include "../src/common/heuristic.h"
+#include "../src/common/isolated_pegs.h"
 #include "../src/common/number_of_free_positions.h"
 
 TEST(Heuristics, LambdaHeuristicCreation_SatisfiesConcept) {
@@ -218,4 +219,42 @@ TEST(Heuristics, UsingHeuristicNumberOfFreePostions_TestWithTwoBoardsWithDiffere
     second.pegs_left = 3;
     NumbersOfFreePositions nofph{};
     ASSERT_TRUE(nofph(first) > nofph(second));
+}
+
+TEST(Heuristic, FindNeighborsForAPeg)
+{
+    Board board{8};
+    board.current_state = 72057594324260097; //        a b c d e f g h
+    //                                               1  1
+    //                                               2  0 0
+    //                                               3  0 0 0
+    //                                               4  0 0 0 0
+    //                                               5  1 0 0 0 1
+    //                                               6  1 0 0 0 1 0
+    //                                               7  1 0 1 0 1 0 0
+    //                                               8  1 0 0 0 0 0 0 0
+    board.current_empty = board.current_state ^ board.board_area_mask;
+    int index = 8;
+    auto res = IsolatedPegs::find_neighbours(index, board);
+    uint64_t correct_answ = 65537;
+    ASSERT_EQ(correct_answ, res);
+}
+
+TEST(Heuristic, FindNeighborsForAPeg_PegWithOneNeighbor)
+{
+    Board board{8};
+    board.current_state = 72057594324260289; //        a b c d e f g h
+    //                                               1  1
+    //                                               2  0 0
+    //                                               3  0 0 0
+    //                                               4  0 0 0 0
+    //                                               5  1 0 0 0 1
+    //                                               6  1 0 0 0 1 0
+    //                                               7  1 0 1 0 1 0 0
+    //                                               8  1 0 0 0 0 0 1 1
+    board.current_empty = board.current_state ^ board.board_area_mask;
+    int index = 7;
+    auto res = IsolatedPegs::find_neighbours(index, board);
+    uint64_t correct_answ = 64;
+    ASSERT_EQ(correct_answ, res);
 }

@@ -39,6 +39,8 @@ constexpr int PopLsb(uint64_t& a) { const int ret = GetLbsIdx(a); a &= a - 1; re
 
 inline constexpr uint64_t notAB_Files = 0x3F3F3F3F3F3F3F3F;
 inline constexpr uint64_t notGH_Files = 0xFCFCFCFCFCFCFCFC;
+inline constexpr uint64_t notA_Files =  0xFEFEFEFEFEFEFEFE;
+inline constexpr uint64_t notH_Files =  0x7F7F7F7F7F7F7F7F;
 
 constexpr uint64_t shiftNorth(const uint64_t a) { return a << 8; }
 constexpr uint64_t shiftSouth(const uint64_t a) { return a >> 8; }
