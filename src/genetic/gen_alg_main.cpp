@@ -19,7 +19,7 @@ int usage(const std::string& pname) {
 }
 
 int main(const int argc, char *argv[]) {
-    if (argc < 8)
+    if (argc < 7)
         return usage(argv[0]);
 
     /* Read args */
@@ -28,7 +28,7 @@ int main(const int argc, char *argv[]) {
     const int max_generations = std::stoi(argv[3]);
     const int tournament_size = std::stoi(argv[4]);            // must be power of 2
     const int mutation_size = std::stoi(argv[6]);              // can vary
-    const int mutation_strength = std::stoi(argv[7]);          // in [0,1]
+    const float mutation_strength = std::stof(argv[7]);        // in [0,1]
 
     /* Prepare args */
     std::vector<chromosome> population;
@@ -40,13 +40,9 @@ int main(const int argc, char *argv[]) {
     }
 
     /* Print init population */
-    std::cout << "Firs population of size " << init_population_size << "\n";
+    std::cout << "First population of size " << init_population_size << "\n";
     for (chromosome &individual: population) {
         std::cout << individual << "\n";
-    }
-
-    for (const chromosome &individual: population) {
-        std::cout << "score:"<< individual.score << "\n";
     }
 
     /* Start evaluation */

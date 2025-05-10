@@ -22,7 +22,7 @@ void evaluatePosition(chromosome &individual) {
     individual.score = static_cast<float>(individual.board.pegs_left);
 }
 
-std::vector<chromosome> crossAndMutate(std::vector<chromosome> &population, int mutSize, int mutStrength) {
+std::vector<chromosome> crossAndMutate(std::vector<chromosome> &population, int mutSize, float mutStrength) {
     population = makeBabies(population);
 
     return population;
@@ -33,13 +33,15 @@ std::vector<chromosome> makeBabies(std::vector<chromosome> &parents) {
     std::mt19937 rng(dev());
     std::vector<chromosome> babiedPopulation;
     while (parents.empty() == false) {
-        std::uniform_int_distribution<std::mt19937::result_type> m_idx(0, parents.size());
-        std::uniform_int_distribution<std::mt19937::result_type> f_idx(0, parents.size() - 1);
+        std::uniform_int_distribution<std::mt19937::result_type> m_idx(0, parents.size() - 1);
         const unsigned mother_idx = m_idx(rng);
-        unsigned father_idx = mother_idx;
-        while (father_idx == mother_idx) father_idx = f_idx(rng);
         chromosome mother = parents[mother_idx];
+        parents.erase(parents.begin() + mother_idx);
+
+        std::uniform_int_distribution<std::mt19937::result_type> f_idx(0, parents.size() - 1);
+        const unsigned father_idx = f_idx(rng);
         chromosome father = parents[father_idx];
+        parents.erase(parents.begin() + father_idx);
 
         /* MAKE BABIES */
         const unsigned genesSize = mother.genes.size();
@@ -56,11 +58,12 @@ std::vector<chromosome> makeBabies(std::vector<chromosome> &parents) {
         }
         babiedPopulation.push_back(chromosome(baby1, mother.genes.size()));
         babiedPopulation.push_back(chromosome(baby2, mother.genes.size()));
-
-        parents.erase(parents.begin() + mother_idx);
-        parents.erase(parents.begin() + father_idx);
     }
     return babiedPopulation;
+}
+
+std::vector<chromosome> mutate(std::vector<chromosome> &population, int mutSize, float mutStrength) {
+
 }
 
 //TODO it can be done without creating a copy

@@ -7,6 +7,31 @@
 #include "chromosome.h"
 #include "eval.h"
 
+TEST(Eval, babiesTest) {
+    /* Prepare args */
+    constexpr size_t measurement_size = 4;
+    std::vector<chromosome> population1;
+    population1.reserve(measurement_size);
+
+    /* Initial population */
+    for (int i = 0; i < measurement_size; i++) {
+        population1.emplace_back(MAX_BOARD_SIDE);
+    }
+
+    std::cout << "Parents: \n";
+    for (auto &individual : population1) {
+        std::cout << individual << std::endl;
+    }
+
+    population1 = makeBabies(population1);
+
+    std::cout << "Babies: \n";
+    for (auto &individual : population1) {
+        std::cout << individual << std::endl;
+    }
+}
+
+
 TEST(Eval, tournamentTest) {
     /* Prepare args */
     constexpr size_t measurement_size = 128;
