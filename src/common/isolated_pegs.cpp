@@ -16,7 +16,6 @@ uint64_t IsolatedPegs::find_neighbours(int index, const Board& board)
     const uint64_t north = shiftNorth(current_peg) & area & current;
     const uint64_t south = shiftSouth(current_peg) & area & current;
     const uint64_t west = shiftWest(current_peg & notA_Files) & area & current;
-    const uint64_t tmp = current_peg & notH_Files;
     const uint64_t east = shiftEast(current_peg & notH_Files) & area & current;
     const uint64_t northWest = shiftNorthWest(current_peg & notA_Files) & area & current;
     const uint64_t southEast = shiftSouthEast(current_peg & notH_Files) & area & current;
