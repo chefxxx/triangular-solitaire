@@ -2,15 +2,16 @@
 // Created by Mykhailo_Shamrai on 09.05.2025.
 //
 
-#include "distance_to_center.h"
-#include "../game/includes/board.h"
 #include <bit_operations.h>
 #include <cmath>
 #include <cstdint>
 #include <utility>
 
-int DistanceToCenterHeuristic::get_distance(uint64_t peg_pos, uint64_t center,
-                                            int width) {
+#include "distance_to_center.h"
+#include "board.h"
+
+int DistanceToCenterHeuristic::get_distance(const uint64_t peg_pos, const uint64_t center,
+                                            const int width) {
   std::tuple<int, int> c = std::make_pair(center / width, center % width);
   std::tuple<int, int> p = std::make_pair(peg_pos / width, peg_pos % width);
   auto [c1, c2] = c;
@@ -21,11 +22,11 @@ int DistanceToCenterHeuristic::get_distance(uint64_t peg_pos, uint64_t center,
 
 int DistanceToCenterHeuristic::operator()(const Board &b) const {
   int sum = 0;
-  int size = 2 * b.board_size;
+  const int size = 2 * b.board_size;
   uint64_t cur_state = b.current_state;
-  int center_idx = peg_to_idx(b.center_of_board());
+  const int center_idx = peg_to_idx(b.center_of_board());
   while (cur_state) {
-    int index = PopLsb(cur_state);
+    const int index = PopLsb(cur_state);
     sum += size - DistanceToCenterHeuristic::get_distance(index, center_idx,
                                                           MAX_BOARD_SIDE);
   }

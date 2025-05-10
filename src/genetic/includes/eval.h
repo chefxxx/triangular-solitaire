@@ -5,9 +5,9 @@
 #ifndef EVAL_H
 #define EVAL_H
 
+#include <vector>
 #include "chromosome.h"
 #include "move.h"
-#include <vector>
 
 float evaluateHeuristics(const Board &b);
 std::vector<chromosome> crossAndMutate(std::vector<chromosome> &population,

@@ -4,6 +4,7 @@
 
 #ifndef ISOLATED_PEGS_H
 #define ISOLATED_PEGS_H
+
 #include <board.h>
 
 struct IsolatedPegs {

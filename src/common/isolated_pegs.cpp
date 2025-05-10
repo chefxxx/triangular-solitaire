@@ -2,9 +2,9 @@
 // Created by Mykhailo_Shamrai on 10.05.2025.
 //
 
+#include <bit_operations.h>
 #include "isolated_pegs.h"
 
-#include <bit_operations.h>
 
 uint64_t IsolatedPegs::find_neighbours(int index, const Board &board) {
   const uint64_t current_peg = MinMsb << index;

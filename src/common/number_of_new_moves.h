@@ -7,8 +7,8 @@
 #include <board.h>
 
 struct NumberOfNewMoves {
-  inline int operator()(const Board &board) {
-    auto moves = BuildAllMoves(board);
+    unsigned operator()(const Board &board) const {
+    const auto moves = BuildAllMoves(board);
     return moves.size();
   };
 };

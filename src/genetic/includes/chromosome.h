@@ -5,10 +5,10 @@
 #ifndef TRIANGULARSOLITAIRE_CHROMOSOME_H
 #define TRIANGULARSOLITAIRE_CHROMOSOME_H
 
-#include "board.h"
-#include "gene.h"
 #include <iostream>
 #include <vector>
+#include "board.h"
+#include "gene.h"
 
 class chromosome {
 public:

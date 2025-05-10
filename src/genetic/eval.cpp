@@ -2,14 +2,17 @@
 // Created by Mateusz Mikiciuk on 09/05/2025.
 //
 
-#include "eval.h"
-#include "bit_operations.h"
-#include "chromosome.h"
-#include "move.h"
-#include "threading.h"
 #include <random>
 #include <spdlog/spdlog.h>
 #include <vector>
+
+#include "bit_operations.h"
+#include "chromosome.h"
+#include "threading.h"
+#include "heuristic.h"
+#include "eval.h"
+#include "move.h"
+
 
 float evaluateHeuristics(const Board &b) {
   return static_cast<float>(std::rand() % 100);

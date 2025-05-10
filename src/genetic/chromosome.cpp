@@ -2,9 +2,11 @@
 // Created by Mateusz Mikiciuk on 30/03/2025.
 //
 
-#include "includes/chromosome.h"
-#include <__random/random_device.h>
+
+#include <heuristic.h>
 #include <random>
+#include <__random/random_device.h>
+#include "chromosome.h"
 
 chromosome::chromosome(const int b_size) : board{b_size} {
   std::mt19937 rng(std::random_device{}());

@@ -4,7 +4,8 @@
 
 #ifndef HEURISTIC_H
 #define HEURISTIC_H
-#include <../includes/board.h>
+
+#include "board.h"
 #include <complex>
 #include <concepts>
 

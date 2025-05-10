@@ -43,7 +43,7 @@ uint64_t Board::generate_start_state() const {
 }
 
 peg_position Board::center_of_board() const {
-  peg_position center = peg_position::c3;
+  auto center = peg_position::c3;
   switch (board_size) {
   case 5:
   case 6:
@@ -228,7 +228,7 @@ void perft(Board &board, bool debug) {
     moves_stack.pop();
     // If the move is made for the first time
     if (!state) {
-      moves_stack.push(std::make_tuple(move, true));
+      moves_stack.emplace(move, true);
       auto dir = board.move_peg(move);
       if (!dir.has_value())
         std::cout << dir.error().message() << " in move from " << move.from
@@ -243,7 +243,7 @@ void perft(Board &board, bool debug) {
       if (std::get<1>(visited_boards.emplace(board.current_state))) {
         moves = BuildAllMoves(board);
         for (const auto &m : moves)
-          moves_stack.push(std::make_tuple(m, false));
+          moves_stack.emplace(m, false);
       } else {
         std::cout << "This position already was searched!" << "\n";
       }

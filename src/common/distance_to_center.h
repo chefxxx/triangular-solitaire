@@ -5,6 +5,9 @@
 #ifndef DISTANCE_TO_CENTER_H
 #define DISTANCE_TO_CENTER_H
 
+#include <cstdint>
+#include "board.h"
+
 struct DistanceToCenterHeuristic {
   static int get_distance(uint64_t peg_pos, uint64_t center, int width);
   int operator()(const Board &b) const;
