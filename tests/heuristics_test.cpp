@@ -9,6 +9,7 @@
 #include "../src/common/heuristic.h"
 #include "../src/common/isolated_pegs.h"
 #include "../src/common/number_of_free_positions.h"
+#include "../src/common/number_of_new_moves.h"
 
 TEST(Heuristics, LambdaHeuristicCreation_SatisfiesConcept) {
     auto lambda_heuristic = [](Board b) { return static_cast<int>(2); };
@@ -330,4 +331,66 @@ TEST(Heuristic, IsolatedPegsHeuristic_CheckIfNumberOfPegsWithNeighborsIsDifferen
 
     IsolatedPegs iph{};
     ASSERT_TRUE(iph(first) < iph(second));
+}
+
+TEST(Heuristic, NumberOfNewMoves_OneBoardWithKnownNumberOfMoves)
+{
+    Board board{8};
+    board.current_state = 72057594324260289; //         a b c d e f g h
+    //                                               1  1
+    //                                               2  0 0
+    //                                               3  0 0 0
+    //                                               4  0 0 0 0
+    //                                               5  1 0 0 0 1
+    //                                               6  1 0 0 0 1 0
+    //                                               7  1 0 1 0 1 0 0
+    //                                               8  1 0 0 0 0 0 1 1
+    board.current_empty = board.current_state ^ board.board_area_mask;
+
+    int number_of_moves = 3;
+    NumberOfNewMoves nonmh{};
+    ASSERT_EQ(nonmh(board), number_of_moves);
+}
+
+TEST(Heuristic, NumberOfNewMoves_FirstBoardHasLessMovesThanSecond)
+{
+    Board first{6};
+    first.current_state = 72059801738346496; //         a b c d e f // 5
+    //                                               1  1
+    //                                               2  0 0
+    //                                               3  0 1 0
+    //                                               4  0 1 0 0
+    //                                               5  1 0 1 0 0
+    //                                               6  1 1 0 0 1 1
+    first.current_empty = first.current_state ^ first.board_area_mask;
+
+    Board second{6};
+    second.current_state = 72058702526480384; //         a b c d e f // 3
+    //                                               1  1
+    //                                               2  0 0
+    //                                               3  1 0 0
+    //                                               4  0 1 0 0
+    //                                               5  1 1 1 0 1
+    //                                               6  1 0 0 0 1 0
+    second.current_empty = second.current_state ^ second.board_area_mask;
+
+    NumberOfNewMoves nonmh{};
+    ASSERT_TRUE(nonmh(first) > nonmh(second));
+}
+
+TEST(Heuristic, NumberOfNewMoves_BoardHasntMoves)
+{
+    Board board{7};
+    board.current_state = 72059793130459648; //         a b c d e f g // 0
+    //                                               1  1
+    //                                               2  0 0
+    //                                               3  0 1 0
+    //                                               4  0 0 0 0
+    //                                               5  0 0 1 0 0
+    //                                               6  1 0 0 0 0 1
+    //                                               6  0 1 0 0 1 0 0
+    board.current_empty = board.current_state ^ board.board_area_mask;
+
+    NumberOfNewMoves nonmh{};
+    ASSERT_EQ(0, nonmh(board));
 }

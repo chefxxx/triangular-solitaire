@@ -19,6 +19,7 @@ add_executable(${EXEC_NAME}_genetic
         common/number_of_free_positions.h
         common/isolated_pegs.h
         common/isolated_pegs.cpp
+        common/number_of_new_moves.h
 )
 
 #
