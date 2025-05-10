@@ -143,7 +143,7 @@ TEST(Heuristcs, UsingHeuristicDistanceToCenter_TwoBoardsOneHasMorePegsInCenter_B
 }
 
 TEST(Heuristcs, UsingHeuristicNumberOfFreePostions_TestOnlyAFunctor) {
-    NumbersOfFreePositions nofph{};
+    NumberOfFreePositions nofph{};
 
     Board board{8};
     board.current_state = 564049499394580; //           a b c d e f g h
@@ -164,7 +164,7 @@ TEST(Heuristcs, UsingHeuristicNumberOfFreePostions_TestOnlyAFunctor) {
 }
 
 TEST(Heuristcs, UsingHeuristicNumberOfFreePostions_TestWithTwoBoardsWithTheSameNumberOfPegs) {
-    NumbersOfFreePositions nofph{};
+    NumberOfFreePositions nofph{};
 
     Board first{8};
     first.current_state = 564049499394580; //           a b c d e f g h
@@ -218,7 +218,7 @@ TEST(Heuristics, UsingHeuristicNumberOfFreePostions_TestWithTwoBoardsWithDiffere
     //                                               5  0 0 0 0 0
     second.current_empty = second.current_state ^ second.board_area_mask;
     second.pegs_left = 3;
-    NumbersOfFreePositions nofph{};
+    NumberOfFreePositions nofph{};
     ASSERT_TRUE(nofph(first) > nofph(second));
 }
 
@@ -393,4 +393,50 @@ TEST(Heuristic, NumberOfNewMoves_BoardHasntMoves)
 
     NumberOfNewMoves nonmh{};
     ASSERT_EQ(0, nonmh(board));
+}
+
+TEST(Heristic, SumOfATuple)
+{
+    auto t = std::make_tuple(1, 2, 3, 10, 11);
+    auto res = get_sum_of_tuple_elements(t);
+    std::cout << res << std::endl;
+}
+
+TEST(Heuristic, EuqlidianNormOfATuple)
+{
+    auto t = std::make_tuple(1, 2, 3, 10, 11);
+    auto res = get_euclidian_norm(t);
+    std::cout << res << std::endl;
+}
+
+TEST(Heuristic, TestAllHeuristicsAtOneInOneHeuristicsStructure)
+{
+    Board board{8};
+    board.current_state = 72057594324260289; //         a b c d e f g h
+    //                                               1  1
+    //                                               2  0 0
+    //                                               3  0 0 0
+    //                                               4  0 0 0 0
+    //                                               5  1 0 0 0 1
+    //                                               6  1 0 0 0 1 0
+    //                                               7  1 0 1 0 1 0 0
+    //                                               8  1 0 0 0 0 0 1 1
+    board.current_empty = board.current_state ^ board.board_area_mask;
+    board.pegs_left = 11;
+    DistanceToCenterHeuristic dtch{};
+    IsolatedPegs iph{};
+    NumberOfNewMoves nonmh{};
+    NumberOfFreePositions nofp{};
+
+
+    Heuristics h{dtch, iph, nonmh, nofp};
+    auto evaluation = h.calculate_heuristics(board);
+    std::cout << std::get<0>(evaluation) <<
+                " " << std::get<1>(evaluation) <<
+                    " " << std::get<2>(evaluation) <<
+                        " " << std::get<3>(evaluation) << std::endl;
+    auto sum = get_sum_of_tuple_elements(evaluation);
+    std::cout << sum << std::endl;
+    auto norm = get_euclidian_norm(evaluation);
+    std::cout << norm << std::endl;
 }

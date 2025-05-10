@@ -6,7 +6,7 @@
 #define NUMBER_OF_FREE_POSITIONS_H
 #include <board.h>
 
-struct NumbersOfFreePositions
+struct NumberOfFreePositions
 {
     inline int operator()(const Board& board) { int size = board.board_size;
         return (size * size - (size * size - size) / 2) - board.pegs_left;}

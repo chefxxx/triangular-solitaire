@@ -4,6 +4,7 @@
 
 #ifndef HEURISTIC_H
 #define HEURISTIC_H
+#include <complex>
 #include <../includes/board.h>
 #include <concepts>
 
@@ -23,6 +24,26 @@ requires ((std::convertible_to<A, double> && ...)
 static auto multiply_two_tuples(const std::tuple<A...>& a, const std::tuple<B...>& b, std::index_sequence<Is...>)
 {
     return std::make_tuple((std::get<Is>(a) * std::get<Is>(b))...);
+}
+
+template<typename... TupleArgs>
+requires (std::convertible_to<TupleArgs, double> && ...)
+static double get_sum_of_tuple_elements(const std::tuple<TupleArgs...>& tuple)
+{
+    return std::apply([](auto&& ... args)
+    {
+        return (0.0 + ... + static_cast<double>(args));
+    }, tuple);
+}
+
+template<typename... TupleArgs>
+requires (std::convertible_to<TupleArgs, double> && ...)
+static double get_euclidian_norm(const std::tuple<TupleArgs...>& tuple)
+{
+    return std::apply([](auto&& ... args)
+    {
+        return std::sqrt((0.0 + ... + (static_cast<double>(args) * static_cast<double>(args))));
+    }, tuple);
 }
 
 template<Heuristic... Hs>
