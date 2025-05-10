@@ -5,10 +5,10 @@
 #include <cstdint>
 #include <cmath>
 #include <utility>
+#include <bit_operations.h>
 #include "../game/includes/board.h"
 #include "distance_to_center.h"
 
-#include <bit_operations.h>
 
 int DistanceToCenterHeuristic::get_distance(uint64_t peg_pos, uint64_t center, int width)
 {
@@ -29,7 +29,7 @@ int DistanceToCenterHeuristic::operator()(const Board& b) const
     while (cur_state)
     {
         int index = PopLsb(cur_state);
-        sum += size - DistanceToCenterHeuristic::get_distance(index, center_idx, BOARD_SIDE);
+        sum += size - DistanceToCenterHeuristic::get_distance(index, center_idx, MAX_BOARD_SIDE);
     }
     return sum;
 }
