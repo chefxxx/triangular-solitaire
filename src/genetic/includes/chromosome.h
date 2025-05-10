@@ -10,7 +10,6 @@
 #include "gene.h"
 #include "board.h"
 
-constexpr int HEURISTIC_COUNT = 4;
 
 class chromosome
 {

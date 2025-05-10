@@ -8,6 +8,8 @@
 #include <../includes/board.h>
 #include <concepts>
 
+constexpr int HEURISTIC_COUNT = 4;
+
 template<typename T>
 concept Heuristic = requires(T t, const Board& b)
 {

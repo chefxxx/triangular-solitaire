@@ -47,7 +47,7 @@ std::vector<chromosome> makeBabies(std::vector<chromosome> &parents) {
         const unsigned genesSize = mother.genes.size();
         std::vector<gene> baby1, baby2;
         for (int i = 0; i < genesSize; i++) {
-            if (i < (genesSize >>1)) {
+            if (i < (genesSize >> 1)) {
                 baby1.push_back(mother.genes[i]);
                 baby2.push_back(father.genes[i]);
             }
