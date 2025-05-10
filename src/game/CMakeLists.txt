@@ -3,8 +3,9 @@
 #
 
 file(GLOB GAME_SOURCES
-        "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/../common/*cpp"
 )
+
 
 #
 #   Remove game.cpp manually
@@ -50,5 +51,5 @@ target_link_libraries(Game PUBLIC ${GAME_LIB_NAME})
 #   Add include directories to executable
 #
 target_include_directories(Game PUBLIC
-        "${CMAKE_CURRENT_SOURCE_DIR}/includes"
+        "${CMAKE_CURRENT_SOURCE_DIR}/includes" "${CMAKE_CURRENT_SOURCE_DIR}/../common"
 )

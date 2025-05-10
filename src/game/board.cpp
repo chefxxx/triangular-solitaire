@@ -15,9 +15,6 @@
 #include "bit_operations.h"
 #include "move.h"
 
-constexpr int MAX_SIZE = 64;
-constexpr int BOARD_SIDE = 8;
-
 Board::Board(const int size)
     : board_size{size},
       board_area_mask{generate_board()},
@@ -48,6 +45,23 @@ uint64_t Board::generate_start_state() const
             state <<= peg_to_idx(peg_position::a1);
     }
     return state;
+}
+
+peg_position Board::center_of_board() const
+{
+    peg_position center = peg_position::c3;
+    switch (board_size)
+    {
+        case 5: case 6:
+            center = peg_position::b2;
+            break;
+        case 7: case 8:
+            center = peg_position::c3;
+            break;
+        default:
+            center = peg_position::c3;
+    }
+    return center;
 }
 
 tl::expected<jump_dir, board_error_info> Board::move_peg(const peg_position &from, const peg_position &to)

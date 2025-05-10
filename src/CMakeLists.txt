@@ -13,6 +13,13 @@ add_subdirectory(game)
 
 add_executable(${EXEC_NAME}_genetic
         genetic_main.cpp
+        common/heuristic.h
+        common/distance_to_center.cpp
+        common/distance_to_center.h
+        common/number_of_free_positions.h
+        common/isolated_pegs.h
+        common/isolated_pegs.cpp
+        common/number_of_new_moves.h
 )
 
 #

@@ -11,7 +11,8 @@
 #include <cstdint>
 
 #include "move.h"
-
+constexpr int MAX_SIZE = 64;
+constexpr int BOARD_SIDE = 8;
 struct Move;
 
 struct Board
@@ -48,6 +49,7 @@ struct Board
     void SetState(uint64_t state);
     [[nodiscard]] uint64_t generate_board() const;
     [[nodiscard]] uint64_t generate_start_state() const;
+    [[nodiscard]] peg_position center_of_board() const;
 };
 
 // ------------------------------
