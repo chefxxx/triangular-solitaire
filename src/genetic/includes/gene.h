@@ -5,11 +5,10 @@
 #ifndef TRIANGULARSOLITAIRE_GENE_H
 #define TRIANGULARSOLITAIRE_GENE_H
 
-class gene
-{
+class gene {
 public:
-    float weight;
-    explicit gene(const float w) : weight(w) {};
+  float weight;
+  explicit gene(const float w) : weight(w) {};
 };
 
-#endif //TRIANGULARSOLITAIRE_GENE_H
+#endif // TRIANGULARSOLITAIRE_GENE_H

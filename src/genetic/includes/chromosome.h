@@ -5,31 +5,32 @@
 #ifndef TRIANGULARSOLITAIRE_CHROMOSOME_H
 #define TRIANGULARSOLITAIRE_CHROMOSOME_H
 
+#include "board.h"
+#include "gene.h"
 #include <iostream>
 #include <vector>
-#include "gene.h"
-#include "board.h"
 
-
-class chromosome
-{
+class chromosome {
 public:
-    // ------------------------------
-    // Class creation
-    // ------------------------------
-    chromosome() : board(MAX_BOARD_SIDE), score(0.0f) {};
-    ~chromosome() = default;
-    explicit chromosome(int b_size);
-    explicit chromosome(const std::vector<gene> &genes, int b_size);
+  // ------------------------------
+  // Class creation
+  // ------------------------------
+  chromosome() : board(MAX_BOARD_SIDE), score(0.0f) {};
 
-    // ------------------------------
-    // Class members
-    // ------------------------------
-    std::vector<gene> genes;
-    Board board;
-    float score;
+  ~chromosome() = default;
+
+  explicit chromosome(int b_size);
+
+  explicit chromosome(const std::vector<gene> &genes, int b_size);
+
+  // ------------------------------
+  // Class members
+  // ------------------------------
+  std::vector<gene> genes;
+  Board board;
+  float score;
 };
 
-std::ostream& operator<<(std::ostream& os, const chromosome& chromosome);
+std::ostream &operator<<(std::ostream &os, const chromosome &chromosome);
 
-#endif //TRIANGULARSOLITAIRE_CHROMOSOME_H
+#endif // TRIANGULARSOLITAIRE_CHROMOSOME_H
