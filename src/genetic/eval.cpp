@@ -22,9 +22,9 @@ void evaluatePosition(chromosome &individual) {
     individual.score = static_cast<float>(individual.board.pegs_left);
 }
 
-std::vector<chromosome> crossAndMutate(std::vector<chromosome> &population, int mutSize, float mutStrength) {
+std::vector<chromosome> crossAndMutate(std::vector<chromosome> &population, const int mutSize, const float mutStrength) {
     population = makeBabies(population);
-
+    mutate(population, mutSize, mutStrength);
     return population;
 }
 
@@ -62,8 +62,20 @@ std::vector<chromosome> makeBabies(std::vector<chromosome> &parents) {
     return babiedPopulation;
 }
 
-std::vector<chromosome> mutate(std::vector<chromosome> &population, int mutSize, float mutStrength) {
+void mutate(std::vector<chromosome> &population, const int mutSize, const float mutStrength) {
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> chromosome_idx(0, population.size() - 1);
+    std::uniform_int_distribution<std::mt19937::result_type> gene_idx(0, HEURISTIC_COUNT);
 
+    for (int i = 0; i < mutSize; i++) {
+        const unsigned chr_idx = chromosome_idx(rng);
+        const unsigned g_idx = gene_idx(rng);
+        if (i % 2 == 0)
+            population[chr_idx].genes[g_idx].weight += population[chr_idx].genes[g_idx].weight * mutStrength;
+        else
+            population[chr_idx].genes[g_idx].weight -= population[chr_idx].genes[g_idx].weight * mutStrength;
+    }
 }
 
 //TODO it can be done without creating a copy

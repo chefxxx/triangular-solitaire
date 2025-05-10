@@ -8,8 +8,8 @@
 class gene
 {
 public:
-    double weight;
-    explicit gene(const double w) : weight(w) {};
+    float weight;
+    explicit gene(const float w) : weight(w) {};
 };
 
 #endif //TRIANGULARSOLITAIRE_GENE_H

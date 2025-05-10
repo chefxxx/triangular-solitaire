@@ -12,7 +12,7 @@
 float evaluateHeuristics(const Board &b);
 std::vector<chromosome> crossAndMutate(std::vector<chromosome> &population, int mutSize, float mutStrength);
 std::vector<chromosome> makeBabies(std::vector<chromosome> &parents);
-std::vector<chromosome> mutate(std::vector<chromosome> &population, int mutSize, float mutStrength);
+void mutate(std::vector<chromosome> &population, int mutSize, float mutStrength);
 std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, int , bool parallel = true);
 void evaluatePosition(chromosome &individual);
 void performSearch(chromosome &chr);
