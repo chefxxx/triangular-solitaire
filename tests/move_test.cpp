@@ -69,7 +69,7 @@ TEST(Move, TestAllTreeOfMoves) {
 // Move to east
 // ------------------------------
 
-Move, MoveTest_LegalMoveEast_expectedHasValue)
+TEST(Move, MoveTest_LegalMoveEast_expectedHasValue)
 {
     Board board{5};
     board.current_state = 287003119714304; //    a b c d e
@@ -286,4 +286,10 @@ TEST(Move, MoveTest_LegalMoveWestBiggerBoard_expectedHasValue3)
     board.current_empty = board.current_state ^ board.board_area_mask;
     auto result = board.move_peg(peg_position::c3, peg_position::a3);
     ASSERT_EQ(result.has_value(), true);
-}§
+}
+
+TEST(Move, Perft)
+{
+    Board board{5};
+    perft(board, false);
+}

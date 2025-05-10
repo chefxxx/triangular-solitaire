@@ -219,8 +219,10 @@ void perft(Board& board, bool debug)
             else
                 std::cout <<  "Move with parameters: dir:"<< move.dir << ", from: "
                 << move.from << ", to: " << move.to << "\n";
-            if (board.pegs_left == 1)
+            if (board.pegs_left == 1) {
                 std::cout << "GRATS you win" << "\n";
+                break;
+            }
             if (std::get<1>(visited_boards.emplace(board.current_state)))
             {
                 moves = BuildAllMoves(board);

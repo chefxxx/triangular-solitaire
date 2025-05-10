@@ -42,8 +42,8 @@ inline constexpr uint64_t notGH_Files = 0x3F3F3F3F3F3F3F3F;
 
 constexpr uint64_t shiftNorth(const uint64_t a) { return a << 8; }
 constexpr uint64_t shiftSouth(const uint64_t a) { return a >> 8; }
-constexpr uint64_t shiftEast(const uint64_t a) { return a >> 1; }
-constexpr uint64_t shiftWest(const uint64_t a) { return a << 1; }
+constexpr uint64_t shiftEast(const uint64_t a) { return a << 1; }
+constexpr uint64_t shiftWest(const uint64_t a) { return a >> 1; }
 constexpr uint64_t shiftNorthWest(const uint64_t a) { return a << 7; }
 constexpr uint64_t shiftSouthEast(const uint64_t a) { return a >> 7; }
 
