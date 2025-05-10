@@ -258,3 +258,76 @@ TEST(Heuristic, FindNeighborsForAPeg_PegWithOneNeighbor)
     uint64_t correct_answ = 64;
     ASSERT_EQ(correct_answ, res);
 }
+
+TEST(Heuristic, FindNeighborsForAPeg_PegWithTwoNeighbors)
+{
+    Board board{8};
+    board.current_state = 72057594324260289; //        a b c d e f g h
+    //                                               1  1
+    //                                               2  0 0
+    //                                               3  0 0 0
+    //                                               4  0 0 0 0
+    //                                               5  1 0 0 0 1
+    //                                               6  1 0 0 0 1 0
+    //                                               7  1 0 1 0 1 0 0
+    //                                               8  1 0 0 0 0 0 1 1
+    board.current_empty = board.current_state ^ board.board_area_mask;
+    int index = 20;
+    auto res = IsolatedPegs::find_neighbours(index, board);
+    uint64_t correct_answ = 268439552;
+    ASSERT_EQ(correct_answ, res);
+}
+
+TEST(Heuristic, IsolatedPegsHeuristic_CheckIfNumberOfPegsWithNeighborsIsTheSame)
+{
+    Board first{5};
+
+    first.current_state = 520093696;//          a b c d e
+    //                                               1  0
+    //                                               2  0 0
+    //                                               3  0 0 0
+    //                                               4  0 0 0 0
+    //                                               5  1 1 1 1 1
+    first.current_empty = first.current_state ^ first.board_area_mask;
+
+    Board second{5};
+
+    second.current_state = 72624976666034176;//         a b c d e
+    //                                               1  1
+    //                                               2  0 1
+    //                                               3  0 0 1
+    //                                               4  0 0 0 1
+    //                                               5  0 0 0 0 1
+
+    second.current_empty = second.current_state ^ second.board_area_mask;
+
+    IsolatedPegs iph{};
+    ASSERT_EQ(iph(first), iph(second));
+}
+
+TEST(Heuristic, IsolatedPegsHeuristic_CheckIfNumberOfPegsWithNeighborsIsDifferent)
+{
+    Board first{5};
+
+    first.current_state = 72057594524467200;//          a b c d e
+    //                                               1  1
+    //                                               2  0 0
+    //                                               3  0 0 0
+    //                                               4  0 0 0 0
+    //                                               5  1 0 1 1 1
+    first.current_empty = first.current_state ^ first.board_area_mask;
+
+    Board second{5};
+
+    second.current_state = 72627141128224768;//         a b c d e
+    //                                               1  1
+    //                                               2  0 1
+    //                                               3  0 1 1
+    //                                               4  0 0 0 0
+    //                                               5  0 0 1 0 0
+
+    second.current_empty = second.current_state ^ second.board_area_mask;
+
+    IsolatedPegs iph{};
+    ASSERT_TRUE(iph(first) < iph(second));
+}
