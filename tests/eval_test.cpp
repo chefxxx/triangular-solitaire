@@ -7,7 +7,6 @@
 #include "chromosome.h"
 #include "eval.h"
 
-
 TEST(Eval, tournamentTest) {
     /* Prepare args */
     constexpr size_t measurement_size = 128;

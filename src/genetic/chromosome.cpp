@@ -23,6 +23,12 @@ chromosome::chromosome(const int b_size) : board{b_size}
     score = -1;
 }
 
+chromosome::chromosome(const std::vector<gene> &genes, const int b_size): board(b_size) {
+    this->genes = genes;
+    this->score = 0.0f;
+}
+
+
 std::ostream & operator<<(std::ostream &os, const chromosome &chromosome) {
     int i = 1;
     for (const gene &g: chromosome.genes) {

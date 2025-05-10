@@ -10,11 +10,12 @@
 #include "move.h"
 
 float evaluateHeuristics(const Board &b);
-void evaluatePosition(chromosome &individual);
-void crossAndMutate(std::vector<chromosome> &population);
-size_t playTournament(const std::vector<chromosome> &players, size_t start, size_t end);
+std::vector<chromosome> crossAndMutate(std::vector<chromosome> &population, int mutSize,int mutStrength);
+std::vector<chromosome> makeBabies(std::vector<chromosome> &parents);
 std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation, int , bool parallel = true);
+void evaluatePosition(chromosome &individual);
 void performSearch(chromosome &chr);
 void evalOneGeneration(std::vector<chromosome> &generation, bool parallel = true);
+size_t playTournament(const std::vector<chromosome> &players, size_t start, size_t end);
 
 #endif //EVAL_H

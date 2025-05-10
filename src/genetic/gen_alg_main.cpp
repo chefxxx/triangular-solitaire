@@ -14,7 +14,7 @@ constexpr int MIN_POPULATION_SIZE = 10;
 
 int usage(const std::string& pname) {
     std::cout << "Usage: " << pname << " [population size] [board size] [max generations] [tournament size]"
-                                       " [chromosome division points] [mutation size] [mutation strength]" << std::endl;
+                                       " [mutation size] [mutation strength]" << std::endl;
     return 0;
 }
 
@@ -27,7 +27,6 @@ int main(const int argc, char *argv[]) {
     const int board_size = std::stoi(argv[2]);
     const int max_generations = std::stoi(argv[3]);
     const int tournament_size = std::stoi(argv[4]);            // must be power of 2
-    const int chromosome_division_points = std::stoi(argv[5]); // must be less than HEURISTIC_COUNT
     const int mutation_size = std::stoi(argv[6]);              // can vary
     const int mutation_strength = std::stoi(argv[7]);          // in [0,1]
 
@@ -51,11 +50,11 @@ int main(const int argc, char *argv[]) {
     }
 
     /* Start evaluation */
-    // for (int i = 0; i < max_generations || population.size() < MIN_POPULATION_SIZE; i++) {
-    //     evalOneGeneration(population);
-    //     population = eliminateWeak(population, tournament_size);
-    //     crossAndMutate(population);
-    // }
+    for (int i = 0; i < max_generations || population.size() <= MIN_POPULATION_SIZE; i++) {
+        evalOneGeneration(population);
+        population = eliminateWeak(population, tournament_size);
+        crossAndMutate(population, mutation_size,  mutation_strength);
+    }
 
     return 1;
 }

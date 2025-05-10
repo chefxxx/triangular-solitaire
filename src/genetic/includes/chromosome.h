@@ -18,9 +18,10 @@ public:
     // ------------------------------
     // Class creation
     // ------------------------------
-    explicit chromosome(int b_size);
     chromosome() : board(MAX_BOARD_SIDE), score(0.0f) {};
     ~chromosome() = default;
+    explicit chromosome(int b_size);
+    explicit chromosome(const std::vector<gene> &genes, int b_size);
 
     // ------------------------------
     // Class members

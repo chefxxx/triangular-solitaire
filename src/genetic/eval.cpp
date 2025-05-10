@@ -2,14 +2,15 @@
 // Created by Mateusz Mikiciuk on 09/05/2025.
 //
 
+#include <random>
 #include <vector>
-#include <thread>
 #include <spdlog/spdlog.h>
 #include "threading.h"
 #include "chromosome.h"
 #include "move.h"
 #include "bit_operations.h"
 #include "eval.h"
+
 
 float evaluateHeuristics(const Board& b)
 {
@@ -21,17 +22,55 @@ void evaluatePosition(chromosome &individual) {
     individual.score = static_cast<float>(individual.board.pegs_left);
 }
 
-void crossAndMutate(std::vector<chromosome> &population) {
+std::vector<chromosome> crossAndMutate(std::vector<chromosome> &population, int mutSize, int mutStrength) {
+    population = makeBabies(population);
 
+    return population;
 }
 
+std::vector<chromosome> makeBabies(std::vector<chromosome> &parents) {
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::vector<chromosome> babiedPopulation;
+    while (parents.empty() == false) {
+        std::uniform_int_distribution<std::mt19937::result_type> m_idx(0, parents.size());
+        std::uniform_int_distribution<std::mt19937::result_type> f_idx(0, parents.size() - 1);
+        const unsigned mother_idx = m_idx(rng);
+        unsigned father_idx = mother_idx;
+        while (father_idx == mother_idx) father_idx = f_idx(rng);
+        chromosome mother = parents[mother_idx];
+        chromosome father = parents[father_idx];
+
+        /* MAKE BABIES */
+        const unsigned genesSize = mother.genes.size();
+        std::vector<gene> baby1, baby2;
+        for (int i = 0; i < genesSize; i++) {
+            if (i < (genesSize >>1)) {
+                baby1.push_back(mother.genes[i]);
+                baby2.push_back(father.genes[i]);
+            }
+            else {
+                baby1.push_back(father.genes[i]);
+                baby2.push_back(mother.genes[i]);
+            }
+        }
+        babiedPopulation.push_back(chromosome(baby1, mother.genes.size()));
+        babiedPopulation.push_back(chromosome(baby2, mother.genes.size()));
+
+        parents.erase(parents.begin() + mother_idx);
+        parents.erase(parents.begin() + father_idx);
+    }
+    return babiedPopulation;
+}
+
+//TODO it can be done without creating a copy
 size_t playTournament(const std::vector<chromosome> &players, const size_t start, const size_t end) {
     if (!IsPowerOfTwo(end - start + 1))
         spdlog::error("Tournament size {} is not a power of 2!", end - start + 1);
     if (end - start == 1)
         return std::isless(players[start].score, players[end].score) ? start : end;
 
-    const size_t mid = start + (end - start) / 2;
+    const size_t mid = start + ((end - start) >> 1);
     const size_t winner1 = playTournament(players, start, mid);
     const size_t winner2 = playTournament(players, mid + 1, end);
 
