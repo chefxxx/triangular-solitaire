@@ -53,8 +53,8 @@ enum class jump_dir : int
     INVALID    = 0,
     NORTH      = 16,
     SOUTH      = -16,
-    WEST       = 2,
-    EAST       = -2,
+    WEST       = -2,
+    EAST       = 2,
     NORTH_WEST = 14,
     SOUTH_EAST = -14,
 };
@@ -82,8 +82,8 @@ inline jump_dir calculate_jump_dir(const peg_position &from, const peg_position 
     switch (int delta = peg_to_idx(to) - peg_to_idx(from)) {
         case 16:  return jump_dir::NORTH;
         case -16: return jump_dir::SOUTH;
-        case 2:   return jump_dir::WEST;
-        case -2:  return jump_dir::EAST;
+        case -2:   return jump_dir::WEST;
+        case 2:  return jump_dir::EAST;
         case 14:  return jump_dir::NORTH_WEST;
         case -14: return jump_dir::SOUTH_EAST;
         default:
