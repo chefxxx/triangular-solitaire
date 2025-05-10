@@ -12,7 +12,8 @@ file(GLOB TEST_SOURCES
 #   Define executable
 #
 
-add_executable(${TEST_NAME} ${TEST_SOURCES})
+add_executable(${TEST_NAME} ${TEST_SOURCES}
+        heuristics_test.cpp)
 
 #
 #   Link with libs and gtest

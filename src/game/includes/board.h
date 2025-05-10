@@ -7,7 +7,6 @@
 
 #include <cstdint>
 #include <tl/expected.hpp>
-
 #include "board_error.h"
 #include "peg_position.h"
 #include "move.h"
@@ -51,6 +50,7 @@ struct Board
     void SetState(uint64_t state);
     [[nodiscard]] uint64_t generate_board() const;
     [[nodiscard]] uint64_t generate_start_state() const;
+    [[nodiscard]] peg_position center_of_board() const;
 };
 
 // ------------------------------
