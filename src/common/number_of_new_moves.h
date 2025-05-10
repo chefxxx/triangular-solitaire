@@ -6,13 +6,11 @@
 #define NUMBER_OF_NEW_MOVES_H
 #include <board.h>
 
-struct NumberOfNewMoves
-{
-    inline int operator()(const Board& board)
-    {
-        auto moves = BuildAllMoves(board);
-        return moves.size();
-    };
+struct NumberOfNewMoves {
+  inline int operator()(const Board &board) {
+    auto moves = BuildAllMoves(board);
+    return moves.size();
+  };
 };
 
-#endif //NUMBER_OF_NEW_MOVES_H
+#endif // NUMBER_OF_NEW_MOVES_H
