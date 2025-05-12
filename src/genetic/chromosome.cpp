@@ -5,7 +5,6 @@
 
 #include <heuristic.h>
 #include <random>
-#include <__random/random_device.h>
 #include "chromosome.h"
 
 chromosome::chromosome(const int b_size) : board{b_size} {
