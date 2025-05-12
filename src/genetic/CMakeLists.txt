@@ -40,4 +40,4 @@ add_executable(gen_alg_main gen_alg_main.cpp)
 #   Link with libs
 #
 
-target_link_libraries(gen_alg_main PRIVATE ${GENETIC_LIB_NAME} ${GAME_LIB_NAME})
+target_link_libraries(gen_alg_main PRIVATE ${GENETIC_LIB_NAME})
