@@ -12,10 +12,9 @@
 Chromosome::Chromosome(const int b_size) : board{b_size} {
   std::mt19937 rng(std::random_device{}());
   std::uniform_real_distribution<float> dist(0, 100);
-  std::vector<float> weights;
-  weights.reserve(HEURISTIC_COUNT);
+  genes.reserve(HEURISTIC_COUNT);
   for (int i = 0; i < HEURISTIC_COUNT; i++) {
-    weights.push_back(dist(rng));
+    genes.push_back(dist(rng));
   }
   normalizeGenes();
   score = 0.0f;
@@ -28,9 +27,13 @@ Chromosome::Chromosome(const std::vector<float> &genes, const int b_size)
 }
 
 void Chromosome::normalizeGenes() {
-  const auto sum = std::accumulate(genes.begin(), genes.end(), 0.0f);
+  auto norm = std::accumulate(genes.begin(), genes.end(), 0.0f,
+    [](const float acc, const float x) {
+      return acc + x * x;
+    });
+  norm = std::sqrt(norm);
   for (auto &gene : genes) {
-    gene /= sum;
+    gene /= norm;
   }
 }
 

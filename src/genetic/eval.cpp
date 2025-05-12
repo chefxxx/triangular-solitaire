@@ -85,9 +85,8 @@ void mutate(std::vector<Chromosome> &population, const int mutSize,
     else
       population[chr_idx].genes[g_idx] -=
           population[chr_idx].genes[g_idx] * mutStrength;
+    population[chr_idx].normalizeGenes();
   }
-
-
 }
 
 // TODO it can be done without creating a copy
