@@ -29,11 +29,11 @@ int main(const int argc, char *argv[]) {
   const int board_size = std::stoi(argv[2]);
   const int max_generations = std::stoi(argv[3]);
   const int tournament_size = std::stoi(argv[4]);     // must be power of 2
-  const int mutation_size = std::stoi(argv[6]);       // can vary
-  const float mutation_strength = std::stof(argv[7]); // in [0,1]
+  const int mutation_size = std::stoi(argv[5]);       // can vary
+  const float mutation_strength = std::stof(argv[6]); // in [0,1]
 
   /* Prepare args */
-  std::vector<chromosome> population;
+  std::vector<Chromosome> population;
   population.reserve(init_population_size);
 
   /* Initial population */
@@ -41,19 +41,15 @@ int main(const int argc, char *argv[]) {
     population.emplace_back(board_size);
   }
 
-  /* Print init population */
-  std::cout << "First population of size " << init_population_size << "\n";
-  for (chromosome &individual : population) {
-    std::cout << individual << "\n";
-  }
-
   /* Start evaluation */
-  for (int i = 0;
-       i < max_generations || population.size() <= MIN_POPULATION_SIZE; i++) {
+  // for (int i = 0;
+  //      i < max_generations || population.size() <= MIN_POPULATION_SIZE; i++) {
     evalOneGeneration(population);
-    population = eliminateWeak(population, tournament_size);
+    /* Print init population */
+    printPopulation(population);
+    population = eliminateWeak(population, tournament_size, false);
     crossAndMutate(population, mutation_size, mutation_strength);
-  }
+  //}
 
   return 1;
 }

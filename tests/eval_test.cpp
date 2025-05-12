@@ -10,7 +10,7 @@
 TEST(Eval, babiesTest) {
   /* Prepare args */
   constexpr size_t measurement_size = 4;
-  std::vector<chromosome> population1;
+  std::vector<Chromosome> population1;
   population1.reserve(measurement_size);
 
   /* Initial population */
@@ -35,7 +35,7 @@ TEST(Eval, tournamentTest) {
   /* Prepare args */
   constexpr size_t measurement_size = 128;
   constexpr size_t tournament_size = 16;
-  std::vector<chromosome> population1;
+  std::vector<Chromosome> population1;
   population1.reserve(measurement_size);
 
   /* Initial population */
@@ -44,12 +44,12 @@ TEST(Eval, tournamentTest) {
   }
 
   evalOneGeneration(population1);
-  for (const chromosome &individual : population1) {
+  for (const Chromosome &individual : population1) {
     std::cout << "score:" << individual.score << "\n";
   }
   const auto winners1 = eliminateWeak(population1, tournament_size);
   std::cout << "\nWEENERS \n";
-  for (const chromosome &individual : winners1) {
+  for (const Chromosome &individual : winners1) {
     std::cout << "score:" << individual.score << "\n";
   }
 }
@@ -58,7 +58,7 @@ TEST(Eval, ParallelComp) {
   /* Prepare args */
   constexpr size_t measurement_size = 32768;
   constexpr size_t tournament_size = 32;
-  std::vector<chromosome> population1, population2;
+  std::vector<Chromosome> population1, population2;
   population1.reserve(measurement_size);
   population2.reserve(measurement_size);
 
@@ -79,7 +79,7 @@ TEST(Eval, ParallelComp) {
             << " ms\n";
 
   start = std::chrono::high_resolution_clock::now();
-  const std::vector<chromosome> winners1 =
+  const std::vector<Chromosome> winners1 =
       eliminateWeak(population1, tournament_size);
   end = std::chrono::high_resolution_clock::now();
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
@@ -93,7 +93,7 @@ TEST(Eval, ParallelComp) {
   std::cout << "(Simple evalGen) Elapsed time: " << duration.count() << " ms\n";
 
   start = std::chrono::high_resolution_clock::now();
-  const std::vector<chromosome> winners2 =
+  const std::vector<Chromosome> winners2 =
       eliminateWeak(population2, tournament_size, false);
   end = std::chrono::high_resolution_clock::now();
   duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);

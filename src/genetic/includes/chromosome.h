@@ -10,18 +10,17 @@
 #include "board.h"
 #include "gene.h"
 
-class chromosome {
-public:
+struct Chromosome {
   // ------------------------------
   // Class creation
   // ------------------------------
-  chromosome() : board(MAX_BOARD_SIDE), score(0.0f) {};
+  Chromosome() : board(MAX_BOARD_SIDE), score(0.0f) {};
 
-  ~chromosome() = default;
+  ~Chromosome() = default;
 
-  explicit chromosome(int b_size);
+  explicit Chromosome(int b_size);
 
-  explicit chromosome(const std::vector<gene> &genes, int b_size);
+  explicit Chromosome(const std::vector<gene> &genes, int b_size);
 
   // ------------------------------
   // Class members
@@ -31,6 +30,7 @@ public:
   float score;
 };
 
-std::ostream &operator<<(std::ostream &os, const chromosome &chromosome);
+void printPopulation(const std::vector<Chromosome> &population);
+std::ostream &operator<<(std::ostream &os, const Chromosome &chromosome);
 
 #endif // TRIANGULARSOLITAIRE_CHROMOSOME_H

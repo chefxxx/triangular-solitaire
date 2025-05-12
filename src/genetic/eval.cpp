@@ -19,11 +19,11 @@ float evaluateHeuristics(const Board &b) {
 }
 
 // TODO: define real evaluation function
-void evaluatePosition(chromosome &individual) {
+void evaluatePosition(Chromosome &individual) {
   individual.score = static_cast<float>(individual.board.pegs_left);
 }
 
-std::vector<chromosome> crossAndMutate(std::vector<chromosome> &population,
+std::vector<Chromosome> crossAndMutate(std::vector<Chromosome> &population,
                                        const int mutSize,
                                        const float mutStrength) {
   population = makeBabies(population);
@@ -31,21 +31,21 @@ std::vector<chromosome> crossAndMutate(std::vector<chromosome> &population,
   return population;
 }
 
-std::vector<chromosome> makeBabies(std::vector<chromosome> &parents) {
+std::vector<Chromosome> makeBabies(std::vector<Chromosome> &parents) {
   std::random_device dev;
   std::mt19937 rng(dev());
-  std::vector<chromosome> babiedPopulation;
+  std::vector<Chromosome> babiedPopulation;
   while (parents.empty() == false) {
     std::uniform_int_distribution<std::mt19937::result_type> m_idx(
         0, parents.size() - 1);
     const unsigned mother_idx = m_idx(rng);
-    chromosome mother = parents[mother_idx];
+    Chromosome mother = parents[mother_idx];
     parents.erase(parents.begin() + mother_idx);
 
     std::uniform_int_distribution<std::mt19937::result_type> f_idx(
         0, parents.size() - 1);
     const unsigned father_idx = f_idx(rng);
-    chromosome father = parents[father_idx];
+    Chromosome father = parents[father_idx];
     parents.erase(parents.begin() + father_idx);
 
     /* MAKE BABIES */
@@ -66,7 +66,7 @@ std::vector<chromosome> makeBabies(std::vector<chromosome> &parents) {
   return babiedPopulation;
 }
 
-void mutate(std::vector<chromosome> &population, const int mutSize,
+void mutate(std::vector<Chromosome> &population, const int mutSize,
             const float mutStrength) {
   std::random_device dev;
   std::mt19937 rng(dev());
@@ -88,7 +88,7 @@ void mutate(std::vector<chromosome> &population, const int mutSize,
 }
 
 // TODO it can be done without creating a copy
-size_t playTournament(const std::vector<chromosome> &players,
+size_t playTournament(const std::vector<Chromosome> &players,
                       const size_t start, const size_t end) {
   if (!IsPowerOfTwo(end - start + 1))
     spdlog::error("Tournament size {} is not a power of 2!", end - start + 1);
@@ -103,7 +103,7 @@ size_t playTournament(const std::vector<chromosome> &players,
                                                                      : winner2;
 }
 
-std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation,
+std::vector<Chromosome> eliminateWeak(std::vector<Chromosome> &generation,
                                       const int tournament_size,
                                       const bool parallel) {
   const size_t tournament_count = generation.size() / tournament_size;
@@ -111,11 +111,11 @@ std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation,
     spdlog::error("Tournament (eliminateWeak) size {} is not a power of 2!",
                   tournament_size);
 
-  std::vector<std::vector<chromosome>> tournaments;
+  std::vector<std::vector<Chromosome>> tournaments;
   tournaments.reserve(tournament_count);
 
   for (int i = 0; i < tournament_count; i++) {
-    std::vector<chromosome> tr;
+    std::vector<Chromosome> tr;
     tr.reserve(tournament_size);
     const auto start = generation.begin() + i * tournament_size;
     const auto end = start + tournament_size;
@@ -123,20 +123,20 @@ std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation,
     tournaments.emplace_back(tr);
   }
 
-  std::vector<chromosome> winners;
+  std::vector<Chromosome> winners;
   winners.resize(tournament_count);
 
   if (parallel) {
     parallelFor(tournament_count, [&](const size_t i) {
       const size_t res =
           playTournament(tournaments[i], 0, tournaments[i].size() - 1);
-      winners[i] = chromosome(tournaments[i][res]);
+      winners[i] = Chromosome(tournaments[i][res]);
     });
   } else {
     for (int i = 0; i < tournament_count; i++) {
       const size_t res =
           playTournament(tournaments[i], 0, tournaments[i].size() - 1);
-      winners[i] = chromosome(tournaments[i][res]);
+      winners[i] = Chromosome(tournaments[i][res]);
     }
   }
 
@@ -144,7 +144,7 @@ std::vector<chromosome> eliminateWeak(std::vector<chromosome> &generation,
 }
 
 /* This func performs heuristic search for one chromosome */
-void performSearch(chromosome &chr) {
+void performSearch(Chromosome &chr) {
   std::vector<Move> moves = BuildAllMoves(chr.board);
   float best_score = -1;
   Move best_move = moves[0];
@@ -170,13 +170,13 @@ void performSearch(chromosome &chr) {
 }
 
 /* This func evals whole generation */
-void evalOneGeneration(std::vector<chromosome> &generation,
+void evalOneGeneration(std::vector<Chromosome> &generation,
                        const bool parallel) {
   if (parallel) {
     parallelFor(generation.size(),
                 [&](const size_t i) { performSearch(generation[i]); });
   } else {
-    for (chromosome &individual : generation) {
+    for (Chromosome &individual : generation) {
       performSearch(individual);
     }
   }

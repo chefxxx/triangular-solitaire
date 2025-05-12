@@ -3,12 +3,15 @@
 //
 
 
-#include <heuristic.h>
+#include <fstream>
 #include <random>
+#include <iomanip>
 #include <__random/random_device.h>
+#include "heuristic.h"
 #include "chromosome.h"
 
-chromosome::chromosome(const int b_size) : board{b_size} {
+
+Chromosome::Chromosome(const int b_size) : board{b_size} {
   std::mt19937 rng(std::random_device{}());
   std::uniform_real_distribution<float> dist(0, 100);
   std::vector<float> weights;
@@ -21,19 +24,48 @@ chromosome::chromosome(const int b_size) : board{b_size} {
     weight /= sum;
     genes.emplace_back(weight);
   }
-  score = -1;
+  score = 0.0f;
 }
 
-chromosome::chromosome(const std::vector<gene> &genes, const int b_size)
+Chromosome::Chromosome(const std::vector<gene> &genes, const int b_size)
     : board(b_size) {
   this->genes = genes;
   this->score = 0.0f;
 }
 
-std::ostream &operator<<(std::ostream &os, const chromosome &chromosome) {
-  int i = 1;
-  for (const gene &g : chromosome.genes) {
-    os << "H" << i++ << ": " << g.weight << " ";
+void printPopulation(const std::vector<Chromosome> &population) {
+  /* File creation/opening */
+  std::ofstream outFile("Analysis.txt");
+  if (!outFile) {
+    std::cerr << "Failed to open file for writing." << std::endl;
+    return;
   }
+
+  for (int i{0}; i < population.size(); ++i) {
+    outFile << i + 1 << "." << population[i] << " ";
+    if (i % 3 == 2)
+      outFile << "\n";
+  }
+
+  const auto best_individual = std::ranges::min_element(population,
+                                                        [](const Chromosome &lhs, const Chromosome &rhs) { return lhs.score < rhs.score; });
+
+  outFile << "\nBest in population: \n";
+  outFile << *best_individual << "\n";
+  print_current_board(best_individual->board, outFile);
+  outFile.close();
+}
+
+std::ostream &operator<<(std::ostream &os, const Chromosome &chromosome) {
+  os << std::fixed << std::setprecision(2);
+  os << "genes: {";
+  for (int i{0}; i < chromosome.genes.size(); ++i) {
+    if (i != chromosome.genes.size() - 1)
+      os << chromosome.genes[i].weight << ", ";
+    else
+      os << chromosome.genes[i].weight;
+  }
+  os << "} score: " << chromosome.score << " ";
+  os << std::setprecision(os.precision());
   return os;
 }

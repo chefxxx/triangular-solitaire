@@ -183,9 +183,9 @@ uint64_t Board::generate_board() const {
   return mask;
 }
 
-void print_current_board(const Board &board) {
-  std::cout << "*---CURRENT BOARD---*\n";
-  std::cout << "*--a-b-c-d-e-f-g-h--*\n";
+void print_current_board(const Board &board, std::ostream &os) {
+  os << "*---CURRENT BOARD---*\n";
+  os << "*--a-b-c-d-e-f-g-h--*\n";
   const std::bitset<MAX_SIZE> bin_rep(board.current_state);
   const auto bin_num = bin_rep.to_string();
   std::vector<std::string> tmp;
@@ -197,17 +197,17 @@ void print_current_board(const Board &board) {
   int level = 1;
   for (int j = 0; j < board.board_size; ++j) {
     const auto &str = tmp[j];
-    std::cout << level << "| ";
+    os << level << "| ";
     for (int i = 0; i < MAX_BOARD_SIDE; ++i) {
       if (i < level)
-        std::cout << str[i] << " ";
+        os << str[i] << " ";
       else
-        std::cout << "  ";
+        os << "  ";
     }
-    std::cout << "|" << level++ << "\n";
+    os << "|" << level++ << "\n";
   }
-  std::cout << "*--a-b-c-d-e-f-g-h--*\n";
-  std::cout << "*-------------------*\n";
+  os << "*--a-b-c-d-e-f-g-h--*\n";
+  os << "*-------------------*\n";
 }
 
 void perft(Board &board, bool debug) {
@@ -220,7 +220,7 @@ void perft(Board &board, bool debug) {
   visited_boards.emplace(board.current_state);
 
   while (!moves_stack.empty()) {
-    print_current_board(board);
+    print_current_board(board, std::cout);
     if (debug)
       getchar();
 
