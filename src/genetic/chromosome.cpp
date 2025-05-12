@@ -3,7 +3,6 @@
 //
 
 
-#include <fstream>
 #include <random>
 #include <iomanip>
 #include <__random/random_device.h>
@@ -33,27 +32,19 @@ Chromosome::Chromosome(const std::vector<gene> &genes, const int b_size)
   this->score = 0.0f;
 }
 
-void printPopulation(const std::vector<Chromosome> &population) {
-  /* File creation/opening */
-  std::ofstream outFile("Analysis.txt");
-  if (!outFile) {
-    std::cerr << "Failed to open file for writing." << std::endl;
-    return;
-  }
-
+void printPopulation(const std::vector<Chromosome> &population, std::ostream &os) {
   for (int i{0}; i < population.size(); ++i) {
-    outFile << i + 1 << "." << population[i] << " ";
+    os << i + 1 << "." << population[i] << " ";
     if (i % 3 == 2)
-      outFile << "\n";
+      os << "\n";
   }
 
   const auto best_individual = std::ranges::min_element(population,
                                                         [](const Chromosome &lhs, const Chromosome &rhs) { return lhs.score < rhs.score; });
 
-  outFile << "\nBest in population: \n";
-  outFile << *best_individual << "\n";
-  print_current_board(best_individual->board, outFile);
-  outFile.close();
+  os << "\nBest in population: \n";
+  os << *best_individual << "\n";
+  print_current_board(best_individual->board, os);
 }
 
 std::ostream &operator<<(std::ostream &os, const Chromosome &chromosome) {

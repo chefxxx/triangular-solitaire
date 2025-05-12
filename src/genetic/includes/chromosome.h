@@ -30,7 +30,7 @@ struct Chromosome {
   float score;
 };
 
-void printPopulation(const std::vector<Chromosome> &population);
+void printPopulation(const std::vector<Chromosome> &population, std::ostream &os);
 std::ostream &operator<<(std::ostream &os, const Chromosome &chromosome);
 
 #endif // TRIANGULARSOLITAIRE_CHROMOSOME_H

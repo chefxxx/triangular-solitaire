@@ -73,7 +73,7 @@ void mutate(std::vector<Chromosome> &population, const int mutSize,
   std::uniform_int_distribution<std::mt19937::result_type> chromosome_idx(
       0, population.size() - 1);
   std::uniform_int_distribution<std::mt19937::result_type> gene_idx(
-      0, HEURISTIC_COUNT);
+      0, HEURISTIC_COUNT - 1);
 
   for (int i = 0; i < mutSize; i++) {
     const unsigned chr_idx = chromosome_idx(rng);

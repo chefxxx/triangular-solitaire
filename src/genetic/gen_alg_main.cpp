@@ -2,6 +2,7 @@
 // Created by Mateusz Mikiciuk on 30/03/2025.
 //
 
+#include <fstream>
 #include <iostream>
 #include <ostream>
 #include <string>
@@ -19,6 +20,8 @@ int usage(const std::string &pname) {
       << std::endl;
   return 0;
 }
+
+std::ofstream createTimestampedAnalysisFile();
 
 int main(const int argc, char *argv[]) {
   if (argc < 7)
@@ -41,15 +44,38 @@ int main(const int argc, char *argv[]) {
     population.emplace_back(board_size);
   }
 
+  /* File creation/opening */
+  auto outFile = createTimestampedAnalysisFile();
+
   /* Start evaluation */
-  // for (int i = 0;
-  //      i < max_generations || population.size() <= MIN_POPULATION_SIZE; i++) {
+  for (int i = 0; i < max_generations && population.size() > MIN_POPULATION_SIZE; i++) {
     evalOneGeneration(population);
     /* Print init population */
-    printPopulation(population);
+    printPopulation(population, outFile);
     population = eliminateWeak(population, tournament_size, false);
     crossAndMutate(population, mutation_size, mutation_strength);
-  //}
+  }
 
+  printPopulation(population, outFile);
+  outFile.close();
   return 1;
+}
+
+std::ofstream createTimestampedAnalysisFile() {
+  auto now = std::chrono::system_clock::now();
+  std::time_t timeNow = std::chrono::system_clock::to_time_t(now);
+
+  std::tm* tmNow = std::localtime(&timeNow);
+  std::ostringstream oss;
+  oss << "Analysis_"
+      << std::put_time(tmNow, "%Y-%m-%d__%H:%M:%S")
+      << ".txt";
+
+  std::ofstream file(oss.str());
+  if (!file) {
+    std::cerr << "Failed to create file: " << oss.str() << std::endl;
+  } else {
+    std::cout << "Created file: " << oss.str() << std::endl;
+  }
+  return file;
 }
