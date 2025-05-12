@@ -5,6 +5,7 @@
 #include <random>
 #include <spdlog/spdlog.h>
 #include <vector>
+#include <iostream>
 
 #include "bit_operations.h"
 #include "chromosome.h"
@@ -50,7 +51,7 @@ std::vector<Chromosome> makeBabies(std::vector<Chromosome> &parents) {
 
     /* MAKE BABIES */
     const unsigned genesSize = mother.genes.size();
-    std::vector<gene> baby1, baby2;
+    std::vector<float> baby1, baby2;
     for (int i = 0; i < genesSize; i++) {
       if (i < (genesSize >> 1)) {
         baby1.push_back(mother.genes[i]);
@@ -79,12 +80,14 @@ void mutate(std::vector<Chromosome> &population, const int mutSize,
     const unsigned chr_idx = chromosome_idx(rng);
     const unsigned g_idx = gene_idx(rng);
     if (i & 1)
-      population[chr_idx].genes[g_idx].weight +=
-          population[chr_idx].genes[g_idx].weight * mutStrength;
+      population[chr_idx].genes[g_idx] +=
+          population[chr_idx].genes[g_idx] * mutStrength;
     else
-      population[chr_idx].genes[g_idx].weight -=
-          population[chr_idx].genes[g_idx].weight * mutStrength;
+      population[chr_idx].genes[g_idx] -=
+          population[chr_idx].genes[g_idx] * mutStrength;
   }
+
+
 }
 
 // TODO it can be done without creating a copy
@@ -151,17 +154,17 @@ void performSearch(Chromosome &chr) {
   while (moves.empty() == false) {
     for (const auto &m : moves) {
       if (auto mv_res = chr.board.move_peg(m); !mv_res.has_value())
-        std::cout << mv_res.error().message();
+        std::cerr << mv_res.error().message();
       if (const float curr_score = evaluateHeuristics(chr.board);
           std::isgreater(curr_score, best_score)) {
         best_score = curr_score;
         best_move = m;
       }
       if (auto un_res = chr.board.undo_move(m); !un_res.has_value())
-        std::cout << un_res.error().message();
+        std::cerr << un_res.error().message();
     }
     if (auto best_res = chr.board.move_peg(best_move); !best_res.has_value())
-      std::cout << best_res.error().message();
+      std::cerr << best_res.error().message();
     moves.clear();
     moves = BuildAllMoves(chr.board);
     best_score = -1;

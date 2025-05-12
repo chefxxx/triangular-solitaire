@@ -9,7 +9,7 @@
 #include <complex>
 #include <concepts>
 
-constexpr int HEURISTIC_COUNT = 4;
+constexpr int HEURISTIC_COUNT = 3;
 
 template <typename T>
 concept Heuristic = requires(T t, const Board &b) {

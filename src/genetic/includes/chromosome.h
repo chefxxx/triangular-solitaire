@@ -5,7 +5,6 @@
 #ifndef TRIANGULARSOLITAIRE_CHROMOSOME_H
 #define TRIANGULARSOLITAIRE_CHROMOSOME_H
 
-#include <iostream>
 #include <vector>
 #include "board.h"
 #include "gene.h"
@@ -20,12 +19,14 @@ struct Chromosome {
 
   explicit Chromosome(int b_size);
 
-  explicit Chromosome(const std::vector<gene> &genes, int b_size);
+  explicit Chromosome(const std::vector<float> &genes, int b_size);
+
+  void normalizeGenes();
 
   // ------------------------------
   // Class members
   // ------------------------------
-  std::vector<gene> genes;
+  std::vector<float> genes;
   Board board;
   float score;
 };

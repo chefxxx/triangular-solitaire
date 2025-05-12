@@ -9,7 +9,6 @@
 #include "heuristic.h"
 #include "chromosome.h"
 
-
 Chromosome::Chromosome(const int b_size) : board{b_size} {
   std::mt19937 rng(std::random_device{}());
   std::uniform_real_distribution<float> dist(0, 100);
@@ -18,18 +17,21 @@ Chromosome::Chromosome(const int b_size) : board{b_size} {
   for (int i = 0; i < HEURISTIC_COUNT; i++) {
     weights.push_back(dist(rng));
   }
-  const float sum = std::accumulate(weights.begin(), weights.end(), 0.0f);
-  for (float &weight : weights) {
-    weight /= sum;
-    genes.emplace_back(weight);
-  }
+  normalizeGenes();
   score = 0.0f;
 }
 
-Chromosome::Chromosome(const std::vector<gene> &genes, const int b_size)
+Chromosome::Chromosome(const std::vector<float> &genes, const int b_size)
     : board(b_size) {
   this->genes = genes;
   this->score = 0.0f;
+}
+
+void Chromosome::normalizeGenes() {
+  const auto sum = std::accumulate(genes.begin(), genes.end(), 0.0f);
+  for (auto &gene : genes) {
+    gene /= sum;
+  }
 }
 
 void printPopulation(const std::vector<Chromosome> &population, std::ostream &os) {
@@ -52,9 +54,9 @@ std::ostream &operator<<(std::ostream &os, const Chromosome &chromosome) {
   os << "genes: {";
   for (int i{0}; i < chromosome.genes.size(); ++i) {
     if (i != chromosome.genes.size() - 1)
-      os << chromosome.genes[i].weight << ", ";
+      os << chromosome.genes[i] << ", ";
     else
-      os << chromosome.genes[i].weight;
+      os << chromosome.genes[i];
   }
   os << "} score: " << chromosome.score << " ";
   os << std::setprecision(os.precision());
