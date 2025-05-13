@@ -16,8 +16,6 @@
 #include "number_of_free_positions.h"
 #include "number_of_new_moves.h"
 
-constexpr int MIN_POPULATION_SIZE = 10;
-
 int usage(const std::string &pname) {
   std::cout << "Usage: " << pname
             << " [population size] [board size] [max generations]"
@@ -50,6 +48,12 @@ auto main(const int argc, char *argv[]) -> int {
 
   /* File creaexprtion/opening */
   auto outFile = createTimestampedAnalysisFile();
+  outFile << "Program params: \n";
+  outFile << "Population size: " << init_population_size << "\n";
+  outFile << "Board size: " << board_size << "\n";
+  outFile << "Max generations: " << max_generations << "\n";
+  outFile << "Mutation size: " << mutation_size << "\n";
+  outFile << "Mutation strength: " << mutation_strength << "\n";
 
   constexpr DistanceToCenterHeuristic disToCenter{};
   constexpr IsolatedPegs isolatedPegs{};
@@ -60,8 +64,7 @@ auto main(const int argc, char *argv[]) -> int {
   Heuristics evalFunc{freePositions, disToCenter};
 
   /* Start evaluation */
-  for (int i = 0;
-       i < max_generations && population.size() > MIN_POPULATION_SIZE; i++) {
+  for (int i = 0; i < max_generations; i++) {
     std::cout << i + 1 << " Population is being under evaluation...\n";
     evalOneGeneration(population, h, evalFunc);
     /* Print init population */
@@ -75,7 +78,7 @@ auto main(const int argc, char *argv[]) -> int {
   }
 
   evalOneGeneration(population, h, evalFunc);
-  printPopulation(population, outFile);
+  printPopulation(population, outFile, true);
   outFile.close();
   return 0;
 }

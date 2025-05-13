@@ -37,12 +37,16 @@ void Chromosome::normalizeGenes() {
 }
 
 void printPopulation(const std::vector<Chromosome> &population,
-                     std::ostream &os) {
-  // for (int i{0}; i < population.size(); ++i) {
-  //   os << i + 1 << "." << population[i] << " ";
-  //   if (i % 3 == 2)
-  //     os << "\n";
-  // }
+                     std::ostream &os, const bool final) {
+  if (final) {
+    for (int i{0}; i < population.size(); ++i) {
+      os << i + 1 << "." << population[i] << " ";
+      if (i % 3 == 2)
+        os << "\n";
+    }
+  }
+
+
 
   const auto best_individual = std::ranges::max_element(
       population, [](const Chromosome &lhs, const Chromosome &rhs) {
