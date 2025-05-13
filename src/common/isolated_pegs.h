@@ -8,7 +8,7 @@
 #include <board.h>
 
 struct IsolatedPegs {
-  int operator()(const Board &b) const;
+  int operator()(const Board &board) const;
   static uint64_t find_neighbours(int index, const Board &board);
 };
 

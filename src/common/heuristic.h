@@ -9,7 +9,7 @@
 #include <complex>
 #include <concepts>
 
-constexpr int HEURISTIC_COUNT = 4;
+constexpr int HEURISTIC_COUNT = 3;
 
 template <typename T>
 concept Heuristic = requires(T t, const Board &b) {
@@ -27,6 +27,17 @@ static auto multiply_two_tuples(const std::tuple<A...> &a,
                                 const std::tuple<B...> &b,
                                 std::index_sequence<Is...>) {
   return std::make_tuple((std::get<Is>(a) * std::get<Is>(b))...);
+}
+
+template <typename T, std::size_t... Indices>
+auto vectorToTupleHelper(const std::vector<T>& v, std::index_sequence<Indices...>) {
+  return std::make_tuple(v[Indices]...);
+}
+
+template <std::size_t N, typename T>
+auto vectorToTuple(const std::vector<T>& v) {
+  assert(v.size() >= N);
+  return vectorToTupleHelper(v, std::make_index_sequence<N>());
 }
 
 template <typename... TupleArgs>
