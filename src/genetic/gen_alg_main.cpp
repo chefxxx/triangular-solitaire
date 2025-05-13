@@ -36,7 +36,7 @@ int main(const int argc, char *argv[]) {
   const int init_population_size = std::stoi(argv[1]);
   const int board_size = std::stoi(argv[2]);
   const int max_generations = std::stoi(argv[3]);
-  const int tournament_size = std::stoi(argv[4]);     // must be power of 2
+  //const int tournament_size = std::stoi(argv[4]);     // must be power of 2
   int mutation_size = std::stoi(argv[5]);       // can vary
   float mutation_strength = std::stof(argv[6]); // in [0,1]
 

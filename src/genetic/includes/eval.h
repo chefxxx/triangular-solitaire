@@ -183,13 +183,13 @@ inline std::vector<Chromosome> eliminateWeak2(std::vector<Chromosome> &generatio
 }
 
 //TODO: mby look into it
-inline std::vector<Chromosome> eliminateWeak3(std::vector <Chromosome> &generation) {
-  std::ranges::sort(generation, [](const Chromosome &a, const Chromosome &b) {
-    return a.score > b.score;
-});
-  auto mid_value = generation[generation.size() / 2].score;
-
-}
+// inline std::vector<Chromosome> eliminateWeak3(std::vector <Chromosome> &generation) {
+//   std::ranges::sort(generation, [](const Chromosome &a, const Chromosome &b) {
+//     return a.score > b.score;
+// });
+//   auto mid_value = generation[generation.size() / 2].score;
+//
+// }
 
 /* This func performs heuristic search for one chromosome */
 template <typename ...Hs, typename ...Hs2>

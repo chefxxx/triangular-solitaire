@@ -32,10 +32,13 @@ void revert_moves(const std::shared_ptr<AlgNode>& nodeSptr) {
         tmpPointer = tmpPointer->parent;
     }
     Board tmp = Board(tmpPointer->board.board_size);
-    print_current_board(tmp);
+    print_current_board(tmp, std::cout);
+    std::ranges::reverse(moves);
     for (auto move: moves) {
-        tmp.move_peg(move);
-        print_current_board(tmp);
+        const auto res = tmp.move_peg(move);
+        if (!res.has_value())
+            std::cerr << res.error().message() << "\n";
+        print_current_board(tmp, std::cout);
         std::cout << "Move with parameters: dir:" << move.dir
                   << ", from: " << move.from << ", to: " << move.to << "\n";
     }
