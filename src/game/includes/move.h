@@ -7,6 +7,7 @@
 
 #include "board.h"
 #include "peg_position.h"
+#include <cstdint>
 #include <vector>
 
 struct Board;

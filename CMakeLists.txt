@@ -25,6 +25,7 @@ ENDIF ()
 #
 
 set(GENETIC_LIB_NAME ${LIB_NAME}_genetic)
+set(GREEDY_DFS_LIB_NAME ${LIB_NAME}_greedy_dfs)
 set(GAME_LIB_NAME ${LIB_NAME}_game)
 
 #

@@ -30,7 +30,6 @@ uint64_t Board::generate_start_state() const {
   uint64_t state = MinMsb;
   switch (board_size) {
   case 6:
-  case 8:
     state <<= peg_to_idx(peg_position::c5);
     break;
   case 7:
