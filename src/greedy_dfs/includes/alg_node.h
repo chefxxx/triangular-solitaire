@@ -4,8 +4,10 @@
 
 #ifndef ALG_NODE_H
 #define ALG_NODE_H
+
 #include <memory>
-#include <board.h>
+#include "board.h"
+
 struct AlgNode
 {
     AlgNode(const std::shared_ptr<AlgNode>& parent, const Board& board, double priority, const Move& move):
@@ -18,8 +20,8 @@ struct AlgNode
 
 struct AlgNodeComparator
 {
-    inline bool operator()(const std::shared_ptr<AlgNode>& lhs, const std::shared_ptr<AlgNode>& rhs) const
-    {return std::less<double>()(lhs->priority, rhs->priority);}
+    bool operator()(const std::shared_ptr<AlgNode>& lhs, const std::shared_ptr<AlgNode>& rhs) const
+    {return std::isless(lhs->priority, rhs->priority);}
 };
 
 #endif //ALG_NODE_H

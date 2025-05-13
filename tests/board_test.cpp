@@ -1,8 +1,9 @@
 //
 // Created by Mateusz Mikiciuk on 31/03/2025.
 //
-#include "board.h"
+
 #include <gtest/gtest.h>
+#include "board.h"
 
 TEST(BoardTest, printCurrBoards) {
   const std::vector<Board> boards{Board(5), Board(6), Board(7), Board(8)};

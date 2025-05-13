@@ -5,9 +5,9 @@
 #ifndef HEURISTIC_H
 #define HEURISTIC_H
 
-#include "board.h"
 #include <complex>
 #include <concepts>
+#include "board.h"
 
 constexpr int HEURISTIC_COUNT = 3;
 

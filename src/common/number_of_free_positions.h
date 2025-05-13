@@ -4,6 +4,7 @@
 
 #ifndef NUMBER_OF_FREE_POSITIONS_H
 #define NUMBER_OF_FREE_POSITIONS_H
+
 #include <board.h>
 
 struct NumberOfFreePositions {

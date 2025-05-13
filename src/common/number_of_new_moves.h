@@ -4,6 +4,7 @@
 
 #ifndef NUMBER_OF_NEW_MOVES_H
 #define NUMBER_OF_NEW_MOVES_H
+
 #include <board.h>
 
 struct NumberOfNewMoves {

@@ -2,9 +2,9 @@
 // Created by Mateusz Mikiciuk on 29/04/2025.
 //
 
-#include "includes/move.h"
+#include "move.h"
 #include "board.h"
-#include <bit_operations.h>
+#include "bit_operations.h"
 
 Move::Move(const int from, const int to, const jump_dir dir) {
   this->from = IdxToPos(from);

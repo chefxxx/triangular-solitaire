@@ -2,11 +2,11 @@
 // Created by Mykhailo_Shamrai on 09.05.2025.
 //
 
-#include <bit_operations.h>
 #include <cmath>
 #include <cstdint>
 #include <utility>
 
+#include "bit_operations.h"
 #include "distance_to_center.h"
 #include "board.h"
 

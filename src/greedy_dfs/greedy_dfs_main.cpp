@@ -1,19 +1,20 @@
 //
 // Created by Mykhailo_Shamrai on 12.05.2025.
 //
+
 #include <iostream>
-#include <heuristic.h>
-#include <isolated_pegs.h>
-#include <number_of_free_positions.h>
-#include <number_of_new_moves.h>
-#include <distance_to_center.h>
-#include <board.h>
-#include <memory>
-#include <move.h>
-#include <alg_node.h>
-#include <float.h>
+#include <cfloat>
 #include <queue>
 #include <unordered_set>
+#include <memory>
+#include "heuristic.h"
+#include "isolated_pegs.h"
+#include "number_of_free_positions.h"
+#include "number_of_new_moves.h"
+#include "distance_to_center.h"
+#include "board.h"
+#include "move.h"
+#include "alg_node.h"
 
 int usage(const std::string &pname) {
     std::cout
@@ -31,7 +32,7 @@ void revert_moves(const std::shared_ptr<AlgNode>& nodeSptr) {
         moves.push_back(tmp_move);
         tmpPointer = tmpPointer->parent;
     }
-    Board tmp = Board(tmpPointer->board.board_size);
+    auto tmp = Board(tmpPointer->board.board_size);
     print_current_board(tmp, std::cout);
     std::ranges::reverse(moves);
     for (auto move: moves) {
@@ -66,7 +67,7 @@ int main(const int argc, const char *argv[]) {
                             isolated_pegs_heuristic,
                             number_of_new_moves_heuristic};
 
-    Board main_board = Board(boardSize);
+    auto main_board = Board(boardSize);
     /* Initialisation of priority queue */
     std::priority_queue<std::shared_ptr<AlgNode>, std::vector<std::shared_ptr<AlgNode>>, AlgNodeComparator> pq{};
     pq.emplace(std::make_shared<AlgNode>(nullptr, main_board, DBL_MAX, Move{-1, -1, jump_dir::EAST}));

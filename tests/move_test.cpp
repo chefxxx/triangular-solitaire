@@ -2,10 +2,10 @@
 // Created by Mateusz Mikiciuk on 29/04/2025.
 //
 
+#include <gtest/gtest.h>
 #include "bit_operations.h"
 #include "board.h"
 #include "move.h"
-#include <gtest/gtest.h>
 
 TEST(Move, MoveSimple) {
   const Board board{5};

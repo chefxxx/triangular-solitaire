@@ -5,11 +5,11 @@
 #include <board.h>
 #include <gtest/gtest.h>
 
-#include "../src/common/distance_to_center.h"
-#include "../src/common/heuristic.h"
-#include "../src/common/isolated_pegs.h"
-#include "../src/common/number_of_free_positions.h"
-#include "../src/common/number_of_new_moves.h"
+#include "distance_to_center.h"
+#include "heuristic.h"
+#include "isolated_pegs.h"
+#include "number_of_free_positions.h"
+#include "number_of_new_moves.h"
 
 TEST(Heuristics, LambdaHeuristicCreation_SatisfiesConcept) {
   auto lambda_heuristic = [](Board b) { return static_cast<int>(2); };

@@ -2,16 +2,17 @@
 // Created by Mateusz Mikiciuk on 30/03/2025.
 //
 
-#include <distance_to_center.h>
 #include <fstream>
-#include <heuristic.h>
 #include <iostream>
-#include <isolated_pegs.h>
-#include <number_of_free_positions.h>
-#include <number_of_new_moves.h>
 #include <ostream>
 #include <string>
 #include <vector>
+
+#include "heuristic.h"
+#include "isolated_pegs.h"
+#include "number_of_free_positions.h"
+#include "number_of_new_moves.h"
+#include "distance_to_center.h"
 #include "chromosome.h"
 #include "eval.h"
 
@@ -20,25 +21,24 @@ constexpr int MIN_POPULATION_SIZE = 10;
 int usage(const std::string &pname) {
   std::cout
       << "Usage: " << pname
-      << " [population size] [board size] [max generations] [tournament size]"
+      << " [population size] [board size] [max generations]"
          " [mutation size] [mutation strength]"
-      << std::endl;
+      << "\n";
   return 0;
 }
 
 std::ofstream createTimestampedAnalysisFile();
 
-int main(const int argc, char *argv[]) {
-  if (argc < 7)
+auto main(const int argc, char *argv[]) -> int {
+  if (argc < 6)
     return usage(argv[0]);
 
   /* Read args */
   const int init_population_size = std::stoi(argv[1]);
   const int board_size = std::stoi(argv[2]);
   const int max_generations = std::stoi(argv[3]);
-  //const int tournament_size = std::stoi(argv[4]);     // must be power of 2
-  int mutation_size = std::stoi(argv[5]);       // can vary
-  float mutation_strength = std::stof(argv[6]); // in [0,1]
+  int mutation_size = std::stoi(argv[4]);
+  float mutation_strength = std::stof(argv[5]);
 
   /* Prepare args */
   std::vector<Chromosome> population;

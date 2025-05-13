@@ -5,11 +5,11 @@
 #ifndef TRIANGULARSOLITAIRE_BOARD_H
 #define TRIANGULARSOLITAIRE_BOARD_H
 
+#include <cstdint>
+#include <tl/expected.hpp>
 #include "board_error.h"
 #include "move.h"
 #include "peg_position.h"
-#include <cstdint>
-#include <tl/expected.hpp>
 
 constexpr int MAX_SIZE = 64;
 constexpr int MAX_BOARD_SIDE = 8;
