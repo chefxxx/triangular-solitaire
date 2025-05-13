@@ -8,22 +8,21 @@
 #include <string>
 #include <vector>
 
+#include "chromosome.h"
+#include "distance_to_center.h"
+#include "eval.h"
 #include "heuristic.h"
 #include "isolated_pegs.h"
 #include "number_of_free_positions.h"
 #include "number_of_new_moves.h"
-#include "distance_to_center.h"
-#include "chromosome.h"
-#include "eval.h"
 
 constexpr int MIN_POPULATION_SIZE = 10;
 
 int usage(const std::string &pname) {
-  std::cout
-      << "Usage: " << pname
-      << " [population size] [board size] [max generations]"
-         " [mutation size] [mutation strength]"
-      << "\n";
+  std::cout << "Usage: " << pname
+            << " [population size] [board size] [max generations]"
+               " [mutation size] [mutation strength]"
+            << "\n";
   return 0;
 }
 
@@ -61,7 +60,8 @@ auto main(const int argc, char *argv[]) -> int {
   Heuristics evalFunc{freePositions, disToCenter};
 
   /* Start evaluation */
-  for (int i = 0; i < max_generations && population.size() > MIN_POPULATION_SIZE; i++) {
+  for (int i = 0;
+       i < max_generations && population.size() > MIN_POPULATION_SIZE; i++) {
     std::cout << i + 1 << " Population is being under evaluation...\n";
     evalOneGeneration(population, h, evalFunc);
     /* Print init population */
@@ -84,11 +84,9 @@ std::ofstream createTimestampedAnalysisFile() {
   auto now = std::chrono::system_clock::now();
   std::time_t timeNow = std::chrono::system_clock::to_time_t(now);
 
-  std::tm* tmNow = std::localtime(&timeNow);
+  std::tm *tmNow = std::localtime(&timeNow);
   std::ostringstream oss;
-  oss << "Analysis_"
-      << std::put_time(tmNow, "%Y-%m-%d__%H:%M:%S")
-      << ".txt";
+  oss << "Analysis_" << std::put_time(tmNow, "%Y-%m-%d__%H:%M:%S") << ".txt";
 
   std::ofstream file(oss.str());
   if (!file) {

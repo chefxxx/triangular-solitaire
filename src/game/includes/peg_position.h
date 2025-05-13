@@ -4,8 +4,8 @@
 #ifndef PEG_POSITION_H
 #define PEG_POSITION_H
 
-#include <ostream>
 #include <map>
+#include <ostream>
 
 enum class peg_position : int {
 #define DECLARE_PEG_POS(col, col_offset)                                       \
@@ -58,7 +58,7 @@ enum class jump_dir : int {
 /* debugging utility */
 inline std::ostream &operator<<(std::ostream &os, const jump_dir &dir) {
   switch (dir) {
-    case jump_dir::NORTH:
+  case jump_dir::NORTH:
     os << "NORTH";
     break;
   case jump_dir::SOUTH:

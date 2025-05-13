@@ -7,10 +7,11 @@
 #include <utility>
 
 #include "bit_operations.h"
-#include "distance_to_center.h"
 #include "board.h"
+#include "distance_to_center.h"
 
-int DistanceToCenterHeuristic::get_distance(const uint64_t peg_pos, const uint64_t center,
+int DistanceToCenterHeuristic::get_distance(const uint64_t peg_pos,
+                                            const uint64_t center,
                                             const int width) {
   std::tuple<int, int> c = std::make_pair(center / width, center % width);
   std::tuple<int, int> p = std::make_pair(peg_pos / width, peg_pos % width);

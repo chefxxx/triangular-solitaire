@@ -3,8 +3,8 @@
 //
 
 #include "move.h"
-#include "board.h"
 #include "bit_operations.h"
+#include "board.h"
 
 Move::Move(const int from, const int to, const jump_dir dir) {
   this->from = IdxToPos(from);

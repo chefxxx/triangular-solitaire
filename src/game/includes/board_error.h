@@ -5,9 +5,9 @@
 #ifndef BOARD_ERROR_H
 #define BOARD_ERROR_H
 
+#include "peg_position.h"
 #include <ostream>
 #include <sstream>
-#include "peg_position.h"
 
 enum class board_error {
   peg_does_not_exist,

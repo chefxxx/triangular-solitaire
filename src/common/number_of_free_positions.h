@@ -8,7 +8,7 @@
 #include <board.h>
 
 struct NumberOfFreePositions {
-    int operator()(const Board &board) const {
+  int operator()(const Board &board) const {
     const int size = board.board_size;
     return (size * size - (size * size - size) / 2) - board.pegs_left;
   }

@@ -5,8 +5,8 @@
 #ifndef TRIANGULARSOLITAIRE_CHROMOSOME_H
 #define TRIANGULARSOLITAIRE_CHROMOSOME_H
 
-#include <vector>
 #include "board.h"
+#include <vector>
 
 struct Chromosome {
   // ------------------------------
@@ -30,7 +30,8 @@ struct Chromosome {
   float score;
 };
 
-void printPopulation(const std::vector<Chromosome> &population, std::ostream &os);
+void printPopulation(const std::vector<Chromosome> &population,
+                     std::ostream &os);
 std::ostream &operator<<(std::ostream &os, const Chromosome &chromosome);
 
 #endif // TRIANGULARSOLITAIRE_CHROMOSOME_H

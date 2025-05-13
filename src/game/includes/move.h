@@ -5,10 +5,10 @@
 #ifndef MOVE_H
 #define MOVE_H
 
-#include <cstdint>
-#include <vector>
 #include "board.h"
 #include "peg_position.h"
+#include <cstdint>
+#include <vector>
 
 struct Board;
 

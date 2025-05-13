@@ -3,48 +3,50 @@
 //
 
 #pragma once
+#include <algorithm>
+#include <iostream>
 #include <random>
 #include <spdlog/spdlog.h>
 #include <vector>
-#include <iostream>
-#include <algorithm>
 
 #include "bit_operations.h"
 #include "chromosome.h"
-#include "threading.h"
 #include "heuristic.h"
 #include "move.h"
+#include "threading.h"
 
-template <typename ...Hs>
-float evaluateHeuristics(const Board &b, const Chromosome &chr, Heuristics<Hs...> &h) {
+template <typename... Hs>
+float evaluateHeuristics(const Board &b, const Chromosome &chr,
+                         Heuristics<Hs...> &h) {
   std::tuple<float, float, float> scores = h.calculate_heuristics(b);
   auto norm = get_euclidian_norm(scores);
   std::get<0>(scores) *= 0.05;
 
   /* normalize scores */
-  scores = std::apply([&norm](auto&&... elems) {
-      return std::make_tuple((elems / norm)...);
-  }, scores);
-
+  scores = std::apply(
+      [&norm](auto &&...elems) { return std::make_tuple((elems / norm)...); },
+      scores);
 
   auto weights = vectorToTuple<HEURISTIC_COUNT>(chr.genes);
-  scores = multiply_two_tuples(scores, weights, std::make_index_sequence<HEURISTIC_COUNT>{});
+  scores = multiply_two_tuples(scores, weights,
+                               std::make_index_sequence<HEURISTIC_COUNT>{});
   return get_sum_of_tuple_elements(scores);
 }
 
-template <typename ...Hs>
+template <typename... Hs>
 void evaluatePosition(Chromosome &individual, Heuristics<Hs...> &evalFunc) {
-  std::tuple<float, float> scores = evalFunc.calculate_heuristics(individual.board);
+  std::tuple<float, float> scores =
+      evalFunc.calculate_heuristics(individual.board);
   auto norm = get_euclidian_norm(scores);
 
   /* normalize scores */
-  scores = std::apply([&norm](auto&&... elems) {
-      return std::make_tuple((elems / norm)...);
-  }, scores);
+  scores = std::apply(
+      [&norm](auto &&...elems) { return std::make_tuple((elems / norm)...); },
+      scores);
 
   const auto weights = std::make_tuple(10.0, 0.05);
   scores = multiply_two_tuples(scores, weights, std::make_index_sequence<2>{});
-  individual.score =  get_sum_of_tuple_elements(scores);
+  individual.score = get_sum_of_tuple_elements(scores);
 }
 
 inline std::vector<Chromosome> makeBabies(std::vector<Chromosome> &parents) {
@@ -110,9 +112,9 @@ void mutate(std::vector<Chromosome> &population, const int mutSize,
   }
 }
 
-inline std::vector<Chromosome> crossAndMutate(std::vector<Chromosome> &population,
-                                              const int mutSize,
-                                              const float mutStrength) {
+inline std::vector<Chromosome>
+crossAndMutate(std::vector<Chromosome> &population, const int mutSize,
+               const float mutStrength) {
   population = makeBabies(population);
   mutate(population, mutSize, mutStrength);
   return population;
@@ -124,19 +126,21 @@ inline size_t playTournament(const std::vector<Chromosome> &players,
   if (!IsPowerOfTwo(end - start + 1))
     spdlog::error("Tournament size {} is not a power of 2!", end - start + 1);
   if (end - start == 1)
-    return std::isgreater(players[start].score, players[end].score) ? start : end;
+    return std::isgreater(players[start].score, players[end].score) ? start
+                                                                    : end;
 
   const size_t mid = start + ((end - start) >> 1);
   const size_t winner1 = playTournament(players, start, mid);
   const size_t winner2 = playTournament(players, mid + 1, end);
 
-  return std::isgreater(players[winner1].score, players[winner2].score) ? winner1
-                                                                     : winner2;
+  return std::isgreater(players[winner1].score, players[winner2].score)
+             ? winner1
+             : winner2;
 }
 
-inline std::vector<Chromosome> eliminateWeak(std::vector<Chromosome> &generation,
-                                             const int tournament_size,
-                                             const bool parallel) {
+inline std::vector<Chromosome>
+eliminateWeak(std::vector<Chromosome> &generation, const int tournament_size,
+              const bool parallel) {
   const size_t tournament_count = generation.size() / tournament_size;
   if (!IsPowerOfTwo(tournament_size))
     spdlog::error("Tournament (eliminateWeak) size {} is not a power of 2!",
@@ -174,26 +178,30 @@ inline std::vector<Chromosome> eliminateWeak(std::vector<Chromosome> &generation
   return winners;
 }
 
-inline std::vector<Chromosome> eliminateWeak2(std::vector<Chromosome> &generation) {
+inline std::vector<Chromosome>
+eliminateWeak2(std::vector<Chromosome> &generation) {
   std::ranges::sort(generation, [](const Chromosome &a, const Chromosome &b) {
-      return a.score > b.score;
+    return a.score > b.score;
   });
   generation.resize(generation.size() / 2);
   return generation;
 }
 
-//TODO: mby look into it
-// inline std::vector<Chromosome> eliminateWeak3(std::vector <Chromosome> &generation) {
-//   std::ranges::sort(generation, [](const Chromosome &a, const Chromosome &b) {
-//     return a.score > b.score;
-// });
-//   auto mid_value = generation[generation.size() / 2].score;
+// TODO: mby look into it
+//  inline std::vector<Chromosome> eliminateWeak3(std::vector <Chromosome>
+//  &generation) {
+//    std::ranges::sort(generation, [](const Chromosome &a, const Chromosome &b)
+//    {
+//      return a.score > b.score;
+//  });
+//    auto mid_value = generation[generation.size() / 2].score;
 //
-// }
+//  }
 
 /* This func performs heuristic search for one chromosome */
-template <typename ...Hs, typename ...Hs2>
-void performSearch(Chromosome &chr, Heuristics<Hs...> &heuristics, Heuristics<Hs2...> &evalFunc) {
+template <typename... Hs, typename... Hs2>
+void performSearch(Chromosome &chr, Heuristics<Hs...> &heuristics,
+                   Heuristics<Hs2...> &evalFunc) {
   std::vector<Move> moves = BuildAllMoves(chr.board);
   float best_score = -1;
   Move best_move = moves[0];
@@ -201,7 +209,8 @@ void performSearch(Chromosome &chr, Heuristics<Hs...> &heuristics, Heuristics<Hs
     for (const auto &m : moves) {
       if (auto mv_res = chr.board.move_peg(m); !mv_res.has_value())
         std::cerr << mv_res.error().message();
-      if (const float curr_score = evaluateHeuristics(chr.board, chr, heuristics);
+      if (const float curr_score =
+              evaluateHeuristics(chr.board, chr, heuristics);
           std::isgreater(curr_score, best_score)) {
         best_score = curr_score;
         best_move = m;
@@ -219,12 +228,15 @@ void performSearch(Chromosome &chr, Heuristics<Hs...> &heuristics, Heuristics<Hs
 }
 
 /* This func evals whole generation */
-template <typename ...Hs1, typename ...Hs2>
-void evalOneGeneration(std::vector<Chromosome> &generation, Heuristics<Hs1...> &heuristics, Heuristics<Hs2...> &evalFunc,
+template <typename... Hs1, typename... Hs2>
+void evalOneGeneration(std::vector<Chromosome> &generation,
+                       Heuristics<Hs1...> &heuristics,
+                       Heuristics<Hs2...> &evalFunc,
                        const bool parallel = true) {
   if (parallel) {
-    parallelFor(generation.size(),
-                [&](const size_t i) { performSearch(generation[i], heuristics, evalFunc); });
+    parallelFor(generation.size(), [&](const size_t i) {
+      performSearch(generation[i], heuristics, evalFunc);
+    });
   } else {
     for (Chromosome &individual : generation) {
       performSearch(individual, heuristics, evalFunc);

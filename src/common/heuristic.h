@@ -5,9 +5,9 @@
 #ifndef HEURISTIC_H
 #define HEURISTIC_H
 
+#include "board.h"
 #include <complex>
 #include <concepts>
-#include "board.h"
 
 constexpr int HEURISTIC_COUNT = 3;
 
@@ -30,12 +30,13 @@ static auto multiply_two_tuples(const std::tuple<A...> &a,
 }
 
 template <typename T, std::size_t... Indices>
-auto vectorToTupleHelper(const std::vector<T>& v, std::index_sequence<Indices...>) {
+auto vectorToTupleHelper(const std::vector<T> &v,
+                         std::index_sequence<Indices...>) {
   return std::make_tuple(v[Indices]...);
 }
 
 template <std::size_t N, typename T>
-auto vectorToTuple(const std::vector<T>& v) {
+auto vectorToTuple(const std::vector<T> &v) {
   assert(v.size() >= N);
   return vectorToTupleHelper(v, std::make_index_sequence<N>());
 }
