@@ -7,7 +7,6 @@
 
 #include <vector>
 #include "board.h"
-#include "gene.h"
 
 struct Chromosome {
   // ------------------------------

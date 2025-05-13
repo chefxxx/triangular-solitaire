@@ -6,7 +6,7 @@
 #include "isolated_pegs.h"
 
 
-uint64_t IsolatedPegs::find_neighbours(int index, const Board &board) {
+uint64_t IsolatedPegs::find_neighbours(const int index, const Board &board) {
   const uint64_t current_peg = MinMsb << index;
 
   const uint64_t current = board.current_state;
@@ -28,7 +28,7 @@ int IsolatedPegs::operator()(const Board &board) const {
   int sum = 0;
   uint64_t current_state = board.current_state;
   while (current_state) {
-    int index = PopLsb(current_state);
+    const int index = PopLsb(current_state);
     sum += find_neighbours(index, board) > 0 ? 1 : 0;
   }
   return sum;

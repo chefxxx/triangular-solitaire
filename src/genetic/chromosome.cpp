@@ -2,7 +2,6 @@
 // Created by Mateusz Mikiciuk on 30/03/2025.
 //
 
-
 #include <random>
 #include <iomanip>
 #include <__random/random_device.h>
@@ -44,7 +43,7 @@ void printPopulation(const std::vector<Chromosome> &population, std::ostream &os
       os << "\n";
   }
 
-  const auto best_individual = std::ranges::min_element(population,
+  const auto best_individual = std::ranges::max_element(population,
                                                         [](const Chromosome &lhs, const Chromosome &rhs) { return lhs.score < rhs.score; });
 
   os << "\nBest in population: \n";
@@ -61,7 +60,7 @@ std::ostream &operator<<(std::ostream &os, const Chromosome &chromosome) {
     else
       os << chromosome.genes[i];
   }
-  os << "} score: " << chromosome.score << " ";
+  os << "} score: " << chromosome.score << ", left: " << chromosome.board.pegs_left << " ";
   os << std::setprecision(os.precision());
   return os;
 }
