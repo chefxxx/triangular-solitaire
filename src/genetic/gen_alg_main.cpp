@@ -68,8 +68,10 @@ int main(const int argc, char *argv[]) {
     printPopulation(population, outFile);
     population = eliminateWeak2(population);
     crossAndMutate(population, mutation_size, mutation_strength);
-    mutation_size >>= 1;
-    mutation_strength -= mutation_strength * 0.2f;
+    if (i & 1) {
+      mutation_size >>= 1;
+      mutation_strength -= mutation_strength * 0.2f;
+    }
   }
 
   evalOneGeneration(population, h, evalFunc);

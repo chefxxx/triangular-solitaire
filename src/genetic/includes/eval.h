@@ -42,7 +42,7 @@ void evaluatePosition(Chromosome &individual, Heuristics<Hs...> &evalFunc) {
       return std::make_tuple((elems / norm)...);
   }, scores);
 
-  const auto weights = std::make_tuple(10.0, 0.2);
+  const auto weights = std::make_tuple(10.0, 0.05);
   scores = multiply_two_tuples(scores, weights, std::make_index_sequence<2>{});
   individual.score =  get_sum_of_tuple_elements(scores);
 }
@@ -66,18 +66,24 @@ inline std::vector<Chromosome> makeBabies(std::vector<Chromosome> &parents) {
 
     /* MAKE BABIES */
     const unsigned genesSize = mother.genes.size();
-    std::vector<float> baby1, baby2;
+    std::vector<float> baby1, baby2, baby3, baby4;
     for (int i = 0; i < genesSize; i++) {
       if (i < (genesSize >> 1)) {
         baby1.push_back(mother.genes[i]);
         baby2.push_back(father.genes[i]);
+        baby3.push_back(mother.genes[(i + 1) % genesSize]);
+        baby4.push_back(father.genes[(i + 1) % genesSize]);
       } else {
         baby1.push_back(father.genes[i]);
         baby2.push_back(mother.genes[i]);
+        baby3.push_back(father.genes[(i + 1) % genesSize]);
+        baby4.push_back(mother.genes[(i + 1) % genesSize]);
       }
     }
     babiedPopulation.emplace_back(baby1, mother.board.board_size);
     babiedPopulation.emplace_back(baby2, mother.board.board_size);
+    babiedPopulation.emplace_back(baby3, mother.board.board_size);
+    babiedPopulation.emplace_back(baby4, mother.board.board_size);
   }
   return babiedPopulation;
 }

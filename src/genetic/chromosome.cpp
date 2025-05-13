@@ -4,6 +4,7 @@
 
 #include <random>
 #include <iomanip>
+#include <algorithm>
 #include <__random/random_device.h>
 #include "heuristic.h"
 #include "chromosome.h"
@@ -37,11 +38,11 @@ void Chromosome::normalizeGenes() {
 }
 
 void printPopulation(const std::vector<Chromosome> &population, std::ostream &os) {
-  for (int i{0}; i < population.size(); ++i) {
-    os << i + 1 << "." << population[i] << " ";
-    if (i % 3 == 2)
-      os << "\n";
-  }
+  // for (int i{0}; i < population.size(); ++i) {
+  //   os << i + 1 << "." << population[i] << " ";
+  //   if (i % 3 == 2)
+  //     os << "\n";
+  // }
 
   const auto best_individual = std::ranges::max_element(population,
                                                         [](const Chromosome &lhs, const Chromosome &rhs) { return lhs.score < rhs.score; });
@@ -49,6 +50,10 @@ void printPopulation(const std::vector<Chromosome> &population, std::ostream &os
   os << "\nBest in population: \n";
   os << *best_individual << "\n";
   print_current_board(best_individual->board, os);
+  const int count = std::count_if(population.begin(), population.end(), [](const Chromosome &c) {
+    return c.board.pegs_left == 1;
+  });
+  os << "Found solutions: " << count << " / " << population.size() << "\n";
 }
 
 std::ostream &operator<<(std::ostream &os, const Chromosome &chromosome) {
