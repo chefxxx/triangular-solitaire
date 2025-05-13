@@ -60,7 +60,7 @@ struct Board {
 // ------------------------------
 // Helper functions
 // ------------------------------
-void print_current_board(const Board &board);
+void print_current_board(const Board &board, std::ostream &os);
 void perft(Board &board, bool debug);
 
 #endif // TRIANGULARSOLITAIRE_BOARD_H

@@ -8,7 +8,7 @@ TEST(BoardTest, printCurrBoards) {
   const std::vector<Board> boards{Board(5), Board(6), Board(7), Board(8)};
 
   for (auto const &b : boards) {
-    print_current_board(b);
+    print_current_board(b, std::cout);
   }
 }
 

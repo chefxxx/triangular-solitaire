@@ -2,37 +2,70 @@
 // Created by Mateusz Mikiciuk on 30/03/2025.
 //
 
-
-#include <heuristic.h>
 #include <random>
+#include <iomanip>
+#include <algorithm>
+#include <__random/random_device.h>
+#include "heuristic.h"
 #include "chromosome.h"
 
-chromosome::chromosome(const int b_size) : board{b_size} {
+Chromosome::Chromosome(const int b_size) : board{b_size} {
   std::mt19937 rng(std::random_device{}());
   std::uniform_real_distribution<float> dist(0, 100);
-  std::vector<float> weights;
-  weights.reserve(HEURISTIC_COUNT);
+  genes.reserve(HEURISTIC_COUNT);
   for (int i = 0; i < HEURISTIC_COUNT; i++) {
-    weights.push_back(dist(rng));
+    genes.push_back(dist(rng));
   }
-  const float sum = std::accumulate(weights.begin(), weights.end(), 0.0f);
-  for (float &weight : weights) {
-    weight /= sum;
-    genes.emplace_back(weight);
-  }
-  score = -1;
+  normalizeGenes();
+  score = 0.0f;
 }
 
-chromosome::chromosome(const std::vector<gene> &genes, const int b_size)
+Chromosome::Chromosome(const std::vector<float> &genes, const int b_size)
     : board(b_size) {
   this->genes = genes;
   this->score = 0.0f;
 }
 
-std::ostream &operator<<(std::ostream &os, const chromosome &chromosome) {
-  int i = 1;
-  for (const gene &g : chromosome.genes) {
-    os << "H" << i++ << ": " << g.weight << " ";
+void Chromosome::normalizeGenes() {
+  auto norm = std::accumulate(genes.begin(), genes.end(), 0.0f,
+    [](const float acc, const float x) {
+      return acc + x * x;
+    });
+  norm = std::sqrt(norm);
+  for (auto &gene : genes) {
+    gene /= norm;
   }
+}
+
+void printPopulation(const std::vector<Chromosome> &population, std::ostream &os) {
+  // for (int i{0}; i < population.size(); ++i) {
+  //   os << i + 1 << "." << population[i] << " ";
+  //   if (i % 3 == 2)
+  //     os << "\n";
+  // }
+
+  const auto best_individual = std::ranges::max_element(population,
+                                                        [](const Chromosome &lhs, const Chromosome &rhs) { return lhs.score < rhs.score; });
+
+  os << "\nBest in population: \n";
+  os << *best_individual << "\n";
+  print_current_board(best_individual->board, os);
+  const int count = std::count_if(population.begin(), population.end(), [](const Chromosome &c) {
+    return c.board.pegs_left == 1;
+  });
+  os << "Found solutions: " << count << " / " << population.size() << "\n";
+}
+
+std::ostream &operator<<(std::ostream &os, const Chromosome &chromosome) {
+  os << std::fixed << std::setprecision(2);
+  os << "genes: {";
+  for (int i{0}; i < chromosome.genes.size(); ++i) {
+    if (i != chromosome.genes.size() - 1)
+      os << chromosome.genes[i] << ", ";
+    else
+      os << chromosome.genes[i];
+  }
+  os << "} score: " << chromosome.score << ", left: " << chromosome.board.pegs_left << " ";
+  os << std::setprecision(os.precision());
   return os;
 }
